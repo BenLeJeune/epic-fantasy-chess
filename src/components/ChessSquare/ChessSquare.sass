@@ -1,0 +1,21 @@
+@use '../../modules/colours'
+
+div.chessSquare
+  position: relative
+  &.light
+    background-color: colours.$lightsquare
+    div.sqLabel
+      color: colours.$darksquare
+  &.dark
+    background-color: colours.$darksquare
+    div.sqLabel
+      color: colours.$lightsquare
+  div.sqLabel
+    position: absolute
+    font-weight: 800
+    &.bottom
+      bottom: .5rem
+      right: .5rem
+    &.left
+      top: .5rem
+      left: .5rem
