@@ -4,12 +4,13 @@ import {Colour, PieceCategory} from "../types";
 
 export default abstract class Piece {
 
-    //protected abstract values
+    //protected abstract values, set explicitly in children
     protected abstract value : number;
     protected abstract shortName : string;
     protected abstract longName : string;
     protected abstract categories : PieceCategory[];
     protected abstract valueGrid : Square[];
+
     protected square : Square;
     protected hasMoved : boolean;
     protected id : string;
@@ -51,12 +52,17 @@ export default abstract class Piece {
         this.colour = _colour;
     }
 
+    public getImg() : string {
+        return `/Assets/Pieces/${ this.longName }_${ this.colour }.svg`;
+    }
+
     //Accessor Methods
     public getShortName : () => string = () => this.shortName;
     public getLongName : () => string = () => this.longName;
     public getColour : () => Colour = () => this.colour;
     public getHasMoved : () => boolean = () => this.hasMoved;
     public getId : () => string = () => this.id;
+    public getSquare : () => Square = () => this.square;
 
     public setColour : ( c:Colour ) => void = ( _colour : Colour ) => { this.colour = _colour };
 

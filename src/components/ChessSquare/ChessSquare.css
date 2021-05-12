@@ -4,24 +4,25 @@ div.chessSquare {
 div.chessSquare.light {
   background-color: #F8DC97;
 }
-div.chessSquare.light div.sqLabel {
+div.chessSquare.light span.sqLabel {
   color: #3A4377;
 }
 div.chessSquare.dark {
   background-color: #3A4377;
 }
-div.chessSquare.dark div.sqLabel {
+div.chessSquare.dark span.sqLabel {
   color: #F8DC97;
 }
-div.chessSquare div.sqLabel {
+div.chessSquare span.sqLabel {
   position: absolute;
   font-weight: 800;
+  display: inline;
 }
-div.chessSquare div.sqLabel.bottom {
+div.chessSquare span.sqLabel.bottom {
   bottom: 0.5rem;
   right: 0.5rem;
 }
-div.chessSquare div.sqLabel.left {
+div.chessSquare span.sqLabel.left {
   top: 0.5rem;
   left: 0.5rem;
 }

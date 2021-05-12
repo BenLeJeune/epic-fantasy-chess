@@ -4,15 +4,16 @@ div.chessSquare
   position: relative
   &.light
     background-color: colours.$lightsquare
-    div.sqLabel
+    span.sqLabel
       color: colours.$darksquare
   &.dark
     background-color: colours.$darksquare
-    div.sqLabel
+    span.sqLabel
       color: colours.$lightsquare
-  div.sqLabel
+  span.sqLabel
     position: absolute
     font-weight: 800
+    display: inline
     &.bottom
       bottom: .5rem
       right: .5rem
