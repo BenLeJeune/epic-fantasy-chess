@@ -26,27 +26,31 @@ export default abstract class Piece {
         return this.categories.indexOf( category ) !== -1;
     }
 
-    public move ( _square : Square ) : void {
+    public move ( _square : Square, board : Board ) : void {
         //If the move is a legal move
-        if ( this.isLegalMove( _square ) ) {
+        if ( this.isLegalMove( _square, board ) ) {
             //Remove this piece from the square it's currently on
             this.square.removePiece();
             //Add it to the square we're moving it to
             _square.setPiece(this);
             this.square = _square;
+            this.hasMoved = true;
         }
         //If the move is a legal capture
         else if ( this.isLegalCapture( _square ) ) {
             //Do some capturing logic
+            this.hasMoved = true;
         }
     }
 
-    public getLegalMoves() : Square[] {
+    public getLegalMoves( board : Board ) : Square[] {
+        let squares = board.getSquaresLinear();
+        let otherSquares = squares.filter( sq => this.isLegalMove( sq, board ) );
         //placeholder, will be extended in children
-        return new Board().getSquaresLinear();
+        return otherSquares
     }
 
-    public isLegalMove( _square : Square ) : boolean {
+    public isLegalMove( _square : Square, board : Board ) : boolean {
         //placeholder, will be extended in children
         return true;
     }

@@ -53,5 +53,6 @@ export default class Board {
 
     //Accessor Methods
     public getHistory : () => BoardState[] = () => this.history;
+    public getBoardState: () => BoardState = () => this.state;
 
 }

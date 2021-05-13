@@ -23,5 +23,8 @@ div#ChessBoardWrapper div#ChessBoardOuter div.board {
   grid-template-columns: repeat(8, 12.5%);
   grid-template-rows: repeat(8, 12.5%);
 }
+div#ChessBoardWrapper div#ChessBoardOuter div.board#ChessBoardPieces {
+  pointer-events: none;
+}
 
 /*# sourceMappingURL=ChessBoard.css.map */

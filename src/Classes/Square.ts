@@ -1,5 +1,6 @@
 import {SquareFile} from "../types";
 import Piece from "../Pieces/Piece";
+import {FILES} from "../constants/consts";
 
 export default class Square {
 
@@ -9,6 +10,10 @@ export default class Square {
 
     public getSquareName() : string {
         return this.file + this.rank
+    }
+
+    public getSquareNumber() : number {
+        return ( 8 * ( this.rank - 1 ) ) + FILES.indexOf( this.file ) + 1
     }
 
     public isEmpty() : boolean {

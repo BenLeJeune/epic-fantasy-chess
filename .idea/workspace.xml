@@ -20,11 +20,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSquare.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers/BoardTools.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Classes/Board.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Board.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Classes/Square.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Square.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/Piece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Piece.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,9 +50,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
         <option value="Sass File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -109,7 +124,7 @@
       <workItem from="1620735658529" duration="580000" />
       <workItem from="1620736272989" duration="177000" />
       <workItem from="1620736463629" duration="11699000" />
-      <workItem from="1620843852566" duration="14241000" />
+      <workItem from="1620843852566" duration="29707000" />
     </task>
     <servers />
   </component>
@@ -137,9 +152,10 @@
       <screen x="-1920" y="-313" width="1920" height="1080" />
     </state>
     <state x="-1304" y="94" key="run.anything.popup/0.0.1366.768/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1620856476331" />
-    <state x="-1297" y="-78" width="672" height="678" key="search.everywhere.popup" timestamp="1620854461941">
-      <screen x="-1920" y="-313" width="1920" height="1080" />
+    <state x="443" y="158" width="672" height="458" key="search.everywhere.popup" timestamp="1620948746308">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="-1297" y="-78" width="672" height="678" key="search.everywhere.popup/0.0.1366.768/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1620854461941" />
+    <state x="443" y="158" width="672" height="458" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1620948746308" />
+    <state x="-1297" y="-78" width="672" height="678" key="search.everywhere.popup/0.0.1366.768/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1620919764111" />
   </component>
 </project>
