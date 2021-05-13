@@ -20,32 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/bishop_black.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/bishop_white.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/king__white.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/king_black.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/knight_black.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/knight_white.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/pawn_black.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/pawn_white.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/queen_black.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/queen_white.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/rook_black.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/Assets/Pieces/rook_white.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Classes/Square.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Square.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/Piece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Piece.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +109,7 @@
       <workItem from="1620735658529" duration="580000" />
       <workItem from="1620736272989" duration="177000" />
       <workItem from="1620736463629" duration="11699000" />
-      <workItem from="1620843852566" duration="8473000" />
+      <workItem from="1620843852566" duration="14241000" />
     </task>
     <servers />
   </component>
@@ -153,6 +133,10 @@
       <screen x="-1920" y="-313" width="1920" height="1080" />
     </state>
     <state x="-1137" y="137" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1620853267537" />
+    <state x="-1304" y="94" key="run.anything.popup" timestamp="1620856476331">
+      <screen x="-1920" y="-313" width="1920" height="1080" />
+    </state>
+    <state x="-1304" y="94" key="run.anything.popup/0.0.1366.768/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1620856476331" />
     <state x="-1297" y="-78" width="672" height="678" key="search.everywhere.popup" timestamp="1620854461941">
       <screen x="-1920" y="-313" width="1920" height="1080" />
     </state>

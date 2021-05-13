@@ -18,7 +18,7 @@ export default function ChessPiece({piece}:props) {
         }
     }
 
-    return <div className="piece" style={ getStyle() }>
+    return <div className="piece" style={ getStyle() } key={ piece.getId() }>
         <img src={ piece.getImg() } alt={ piece.getId() } className="pieceImg"/>
     </div>
 

@@ -1,6 +1,7 @@
 import BoardState from "../Classes/BoardState";
 import Square from "../Classes/Square";
 import {Colour, PieceCategory} from "../types";
+import Board from "../Classes/Board";
 
 export default abstract class Piece {
 
@@ -25,14 +26,24 @@ export default abstract class Piece {
         return this.categories.indexOf( category ) !== -1;
     }
 
-    public move ( _square : Square ) : BoardState {
-        //placeholder, will be extended in children
-        return new BoardState();
+    public move ( _square : Square ) : void {
+        //If the move is a legal move
+        if ( this.isLegalMove( _square ) ) {
+            //Remove this piece from the square it's currently on
+            this.square.removePiece();
+            //Add it to the square we're moving it to
+            _square.setPiece(this);
+            this.square = _square;
+        }
+        //If the move is a legal capture
+        else if ( this.isLegalCapture( _square ) ) {
+            //Do some capturing logic
+        }
     }
 
     public getLegalMoves() : Square[] {
         //placeholder, will be extended in children
-        return [ new Square( "a", 1, null ) ]
+        return new Board().getSquaresLinear();
     }
 
     public isLegalMove( _square : Square ) : boolean {
@@ -50,6 +61,14 @@ export default abstract class Piece {
         this.hasMoved = false;
         this.square = _square;
         this.colour = _colour;
+
+        //Whenever you create a piece on a square, we will update that square.
+        if ( this.square.isEmpty() ) {
+            //If the square is empty, we will update it to include this square.
+            this.square.setPiece( this );
+        } else {
+            console.error("ERR: Attempted to create piece on non-empty square");
+        }
     }
 
     public getImg() : string {

@@ -26,6 +26,7 @@ export default class Square {
     public getFile : () => SquareFile = () => this.file;
     public getPiece : () => Piece | null = () => this.piece;
 
-    public setPiece : ( _piece : Piece ) => void = ( _piece : Piece ) => { this.piece = _piece }
+    public setPiece : ( _piece : Piece ) => void = ( _piece : Piece ) => { this.piece = _piece };
+    public removePiece : () => void = () => { this.piece = null };
 
 }

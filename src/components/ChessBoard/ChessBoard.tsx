@@ -7,27 +7,47 @@ import Pawn from "../../Pieces/FIDE/Pawn";
 import Rook from "../../Pieces/FIDE/Rook";
 import ChessPiece from "../ChessPiece/ChessPiece";
 import Knight from "../../Pieces/FIDE/Knight";
+import Board from "../../Classes/Board";
 
 export default function ChessBoard() {
 
-    const [ game, updateGame ] = useState( new Game() );
+    const [ game, setGame ] = useState( new Game() );
+
+    const updateGame = ( callback : ( g:Game ) => Game ) => {
+        //Used for simplifying the setGame() process
+        let newGame = callback( game );
+        setGame( Object.assign( {}, newGame ) )
+    }
 
     useEffect(() => {
         //This runs when the page starts
-        updateGame( _game => {
+        setGame( _game => {
 
-            for (let i = 0; i <= 7; i++) {
-                let whiteSquare = _game.getBoard().getSquare(FILES[i], 2);
-                let wPawn = new Pawn(whiteSquare);
-                whiteSquare.setPiece( wPawn );
-                let blackSquare = _game.getBoard().getSquare(FILES[i], 7);
-                let bPawn = new Pawn(blackSquare, BLACK);
-                blackSquare.setPiece(bPawn);
+            let board = _game.getBoard()
 
-            }
+            let square = board.getSquare("b", 1);
+            new Knight( square );
+
+            console.log( board.getSquaresLinear() )
 
             return Object.assign({}, _game);
-        } )
+        } );
+
+        setInterval(() =>{
+            updateGame( g => {
+                let board = g.getBoard();
+                let knight = board.getPieces()[0];
+                let bSquare = board.getSquare("b", 1);
+                let cSquare = board.getSquare("c", 3);
+                    if ( knight.getSquare() === bSquare ) {
+                        knight.move( cSquare )
+                    }
+                    else if ( knight.getSquare() === cSquare ) {
+                        knight.move( bSquare );
+                    }
+                return g;
+            } )
+        }, 1000)
     }, []);
 
     const getSquares = () => { //Gets the squares
