@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -20,27 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.sass" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSquare.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/helpers/BoardTools.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Board.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Board.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Square.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Square.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/Piece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Piece.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/BoardTools.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardTools.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,9 +71,9 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.TypeScript Additions" />
-    <property name="ts.external.directory.path" value="C:\Users\benja\WebstormProjects\epic-fantasy-chess\node_modules\typescript\lib" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
+    <property name="ts.external.directory.path" value="U:\Computer Science\Epic Fantasy Chess\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -102,12 +87,33 @@
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\constants" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="npm run start" />
+    </option>
+  </component>
+  <component name="RunManager" selected="npm.start">
     <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
       <method v="2" />
     </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <package-manager value="npm" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+      </list>
+    </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -125,11 +131,13 @@
       <workItem from="1620736272989" duration="177000" />
       <workItem from="1620736463629" duration="11699000" />
       <workItem from="1620843852566" duration="29707000" />
+      <workItem from="1620987162665" duration="95000" />
+      <workItem from="1620987292245" duration="2157000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -143,19 +151,8 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="-1137" y="137" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1620853267537">
-      <screen x="-1920" y="-313" width="1920" height="1080" />
-    </state>
-    <state x="-1137" y="137" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.768/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1620853267537" />
-    <state x="-1304" y="94" key="run.anything.popup" timestamp="1620856476331">
-      <screen x="-1920" y="-313" width="1920" height="1080" />
-    </state>
-    <state x="-1304" y="94" key="run.anything.popup/0.0.1366.768/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1620856476331" />
-    <state x="443" y="158" width="672" height="458" key="search.everywhere.popup" timestamp="1620948746308">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="443" y="158" width="672" height="458" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1620948746308" />
-    <state x="-1297" y="-78" width="672" height="678" key="search.everywhere.popup/0.0.1366.768/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1620919764111" />
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

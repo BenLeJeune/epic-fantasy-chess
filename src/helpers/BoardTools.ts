@@ -92,6 +92,34 @@ const isObstructed : ( sq1 : Square, sq2 : Square, board : Board ) => boolean
 
 }
 
+//Recursively checking if the riding is obstructed
+const isRidingObstructed : ( sq1 : Square, sq2 : Square, f : ( sq : Square ) => Square, depth : number ) => boolean
+    = ( start, end, moveFunction, depth = 8 ) => {
+    //Checking to see if the riding is obstructed
+
+    //If we've reached the final square
+    if ( depth === 0 ) return true;
+
+    //First, let's find the next square
+    let passingSquare = moveFunction( start );
+    if (!passingSquare) return true;
+
+
+    //If this is the final square, then there is nothing between.
+    if ( passingSquare === end ) return !end.isEmpty();
+    else {
+        //If not, is the square empty?
+        if ( passingSquare.isEmpty() ) {
+            return isRidingObstructed( passingSquare, end, moveFunction, depth - 1 );
+        }
+        else {
+            //If the square is full, there is an obstruction
+            return true;
+        }
+    }
+}
+
 export {
-    isObstructed
+    isObstructed,
+    isRidingObstructed
 }
