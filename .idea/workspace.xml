@@ -24,8 +24,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Classes/Square.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Square.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/BoardTools.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardTools.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,8 +132,16 @@
       <workItem from="1620736463629" duration="11699000" />
       <workItem from="1620843852566" duration="29707000" />
       <workItem from="1620987162665" duration="95000" />
-      <workItem from="1620987292245" duration="2157000" />
+      <workItem from="1620987292245" duration="2784000" />
     </task>
+    <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
+      <created>1620989524827</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1620989524827</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +158,10 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added isRidingObstructed function to recursively check piece movement for obstruction." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added isRidingObstructed function to recursively check piece movement for obstruction." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -20,6 +20,7 @@ export default class Square {
         return this.piece === null
     }
 
+
     constructor(  _file : SquareFile, _rank : number, _piece : Piece | null = null ) {
         this.rank = _rank;
         this.file = _file;
@@ -29,6 +30,7 @@ export default class Square {
     //Accessor Methods
     public getRank : () => number = () => this.rank;
     public getFile : () => SquareFile = () => this.file;
+    public getFileN : () => number = () => FILES.indexOf( this.file );
     public getPiece : () => Piece | null = () => this.piece;
 
     public setPiece : ( _piece : Piece ) => void = ( _piece : Piece ) => { this.piece = _piece };

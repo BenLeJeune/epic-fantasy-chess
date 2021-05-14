@@ -23,18 +23,10 @@ export default class Rook extends Piece {
             return false;
         }
 
-        // //If is unobstructed
-        // if ( !isObstructed( this.square, _square, board ) ) {
-        //     return this.square.getRank() === _square.getRank() ||
-        //         this.square.getFile() === _square.getFile();
-        // }
-
-        if ( this.square.getRank() === _square.getRank() || this.square.getFile() === _square.getFile() ) {
-            let u = !isRidingObstructed( this.square, _square, sq => board.getSquare( sq.getFile(), Math.min(sq.getRank() + 1, 7) ) , 8 )
-            let d = !isRidingObstructed( this.square, _square, sq => board.getSquare( sq.getFile(), Math.max(sq.getRank() - 1, 0) ) , 8 )
-            let l = !isRidingObstructed( this.square, _square, sq => board.getSquare( FILES[Math.max(FILES.indexOf( sq.getFile() ) - 1, 0)], sq.getRank() ) , 8 )
-            let r = !isRidingObstructed( this.square, _square, sq => board.getSquare( FILES[Math.min(FILES.indexOf( sq.getFile() ) + 1, 7)], sq.getRank() ) , 8 )
-            return u || d || l || r;
+        //If is unobstructed
+        if ( !isObstructed( this.square, _square, board ) ) {
+            return this.square.getRank() === _square.getRank() ||
+                this.square.getFile() === _square.getFile();
         }
 
         return false
