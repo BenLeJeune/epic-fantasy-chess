@@ -10,3 +10,11 @@ div.piece
 
     &:active
       cursor: grabbing
+
+div#ChessBoardPieces.targeting
+  &> div.piece
+    opacity: 0.5
+    pointer-events: inherit
+    &.active
+      pointer-events: all
+      opacity: 1.0

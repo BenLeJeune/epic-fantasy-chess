@@ -7,7 +7,7 @@ import ChessBoard from "./components/ChessBoard/ChessBoard";
 function App() {
 
   return <div className="app">
-    <div className="chessBoardContainer">
+    <div className="chessBoardColumn">
       <ChessBoard/>
     </div>
   </div>

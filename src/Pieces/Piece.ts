@@ -1,4 +1,3 @@
-import BoardState from "../Classes/BoardState";
 import Square from "../Classes/Square";
 import {Colour, PieceCategory} from "../types";
 import Board from "../Classes/Board";
@@ -26,7 +25,7 @@ export default abstract class Piece {
         return this.categories.indexOf( category ) !== -1;
     }
 
-    public move ( _square : Square, board : Board ) : void {
+    public move( _square : Square, board : Board ) : void {
         //If the move is a legal move
         if ( this.isLegalMove( _square, board ) ) {
             //Remove this piece from the square it's currently on
@@ -36,28 +35,36 @@ export default abstract class Piece {
             this.square = _square;
             this.hasMoved = true;
         }
-        //If the move is a legal capture
-        else if ( this.isLegalCapture( _square ) ) {
-            //Do some capturing logic
+        //Captures are handled in the capture() function
+    }
+
+    public capture( _square : Square, board : Board, cb : ( p : Piece ) => void ) {
+        if ( this.isLegalCapture( _square, board ) && !_square.isEmpty() ) {
             this.hasMoved = true;
+            //Remove this piece from it's current square
+            this.square.removePiece();
+            //Remove the piece from the target square, trigger the callback
+            cb( _square.getPiece() as Piece );
+            _square.removePiece();
+            //Move this piece to the new square
+            _square.setPiece(this)
+            this.square = _square;
         }
     }
 
     public getLegalMoves( board : Board ) : Square[] {
         let squares = board.getSquaresLinear();
-        let otherSquares = squares.filter( sq => this.isLegalMove( sq, board ) );
-        //placeholder, will be extended in children
-        return otherSquares
+        return squares.filter(sq => this.isLegalMove(sq, board) || this.isLegalCapture(sq, board))
     }
 
-    public isLegalMove( _square : Square, board : Board ) : boolean {
+    public isLegalMove( _square : Square, board : Board, capturing : boolean = false ) : boolean {
         //placeholder, will be extended in children
         return true;
     }
 
-    public isLegalCapture( _square : Square ) : boolean {
+    public isLegalCapture( _square : Square, board : Board ) : boolean {
         //placeholder, will be extended in children
-        return true;
+        return this.isLegalMove( _square, board, true );
     }
 
     protected constructor( _square : Square, _colour : Colour, _shortName : string ) {
@@ -86,6 +93,7 @@ export default abstract class Piece {
     public getHasMoved : () => boolean = () => this.hasMoved;
     public getId : () => string = () => this.id;
     public getSquare : () => Square = () => this.square;
+    public getMaterialValue : () => number = () => this.value;
 
     public setColour : ( c:Colour ) => void = ( _colour : Colour ) => { this.colour = _colour };
 

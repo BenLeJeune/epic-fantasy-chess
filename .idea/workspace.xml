@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -23,9 +20,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers/Evaluation.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Square.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Square.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/Piece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Piece.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.sass" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSquare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSquare.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/BoardTools.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardTools.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,8 +51,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript JSX File" />
         <option value="Sass File" />
+        <option value="TypeScript JSX File" />
         <option value="TypeScript File" />
       </list>
     </option>
@@ -77,14 +93,14 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\public\Assets\Pieces" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\ChessSquare" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\ChessBoard" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\Pieces\FIDE" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\constants" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\public\Assets\Pieces" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -113,7 +129,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -162,6 +178,37 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added isRidingObstructed function to recursively check piece movement for obstruction." />
     <option name="LAST_COMMIT_MESSAGE" value="Added isRidingObstructed function to recursively check piece movement for obstruction." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="460" y="154" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1621122871197">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="460" y="154" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1621122871197" />
+    <state width="1345" height="21" key="GridCell.Tab.0.bottom" timestamp="1621122885450">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1920" height="11" key="GridCell.Tab.0.bottom/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621100482513" />
+    <state width="1345" height="21" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1621122885450" />
+    <state width="1345" height="21" key="GridCell.Tab.0.center" timestamp="1621122885450">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1920" height="11" key="GridCell.Tab.0.center/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621100482513" />
+    <state width="1345" height="21" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1621122885450" />
+    <state width="1345" height="21" key="GridCell.Tab.0.left" timestamp="1621122885450">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1920" height="11" key="GridCell.Tab.0.left/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621100482512" />
+    <state width="1345" height="21" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1621122885450" />
+    <state width="1345" height="21" key="GridCell.Tab.0.right" timestamp="1621122885450">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1920" height="11" key="GridCell.Tab.0.right/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621100482513" />
+    <state width="1345" height="21" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1621122885450" />
+    <state x="438" y="121" width="672" height="474" key="search.everywhere.popup" timestamp="1621123655559">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="-1304" y="-140" width="672" height="676" key="search.everywhere.popup/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621103250457" />
+    <state x="438" y="121" width="672" height="474" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1621123655559" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

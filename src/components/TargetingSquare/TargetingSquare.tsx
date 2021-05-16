@@ -6,10 +6,12 @@ import Piece from "../../Pieces/Piece";
 
 interface props {
     square : Square,
-    onDrop : ( e : React.DragEvent ) => void
+    onDrop : ( e : React.DragEvent ) => void,
+    isMove : boolean,
+    isCapture : boolean
 }
 
-export default function TargetingSquare( { square, onDrop } : props ) {
+export default function TargetingSquare( { square, onDrop, isMove, isCapture } : props ) {
 
     const getStyle = () => {
         return {
@@ -22,7 +24,7 @@ export default function TargetingSquare( { square, onDrop } : props ) {
 
     return <div
         style={ getStyle() }
-        className="targetingSquare"
+        className={`targetingSquare ${ isMove ? "move" : "" } ${ isCapture ? "capture" : "" }`}
         id={`target_${ square.getSquareName() }`}
         onDrop={ onDrop }
         onDragOver={ e => {

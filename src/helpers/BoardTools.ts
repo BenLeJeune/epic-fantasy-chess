@@ -1,6 +1,7 @@
 import Square from "../Classes/Square";
 import Board from "../Classes/Board";
 import {FILES} from "../constants/consts";
+import Piece from "../Pieces/Piece";
 
 ///THIS DETERMINES IF THE PATH BETWEEN TWO SQUARES IS CLEAR
 const isObstructed : ( sq1 : Square, sq2 : Square, board : Board ) => boolean
@@ -19,7 +20,7 @@ const isObstructed : ( sq1 : Square, sq2 : Square, board : Board ) => boolean
         let endFile = Math.max(file1, file2); //Simplifies the ordering
         for ( let f = startFile; f <= endFile; f++ ) {
             let square = board.getSquare( FILES[f], start.getRank() );
-            if ( !square.isEmpty() && f !== file1 ) obstruction = true;
+            if ( !square.isEmpty() && f !== file1 && square !== end ) obstruction = true;
         }
         return obstruction
     }
@@ -33,7 +34,7 @@ const isObstructed : ( sq1 : Square, sq2 : Square, board : Board ) => boolean
         let endRank = Math.max(rank1, rank2);
         for ( let rank = startRank; rank <= endRank; rank++ ) {
             let square = board.getSquare( start.getFile(), rank );
-            if ( !square.isEmpty() && rank !== rank1) obstruction = true;
+            if ( !square.isEmpty() && rank !== rank1 && square !== end) obstruction = true;
         }
         return obstruction;
     }
@@ -55,14 +56,14 @@ const isObstructed : ( sq1 : Square, sq2 : Square, board : Board ) => boolean
                 //We're going up (left to right)
                 for ( let x = 1; x <= Math.abs( rankDifference ); x++ ) {
                     let square = board.getSquare( FILES[ FILES.indexOf(start.getFile()) + x ], start.getRank() + x );
-                    if ( !square.isEmpty() ) obstruction = true;
+                    if ( !square.isEmpty() && square !== end  ) obstruction = true;
                 }
             }
             else {
                 //We're going down (right to left)
                 for ( let x = -1; x >= -rankDifference; x-- ) {
                     let square = board.getSquare( FILES[ FILES.indexOf(start.getFile()) + x ], start.getRank() + x );
-                    if ( !square.isEmpty() ) obstruction = true;
+                    if ( !square.isEmpty() && square !== end ) obstruction = true;
                 }
             }
         }
@@ -72,14 +73,14 @@ const isObstructed : ( sq1 : Square, sq2 : Square, board : Board ) => boolean
                 //We're going down (left to right)
                 for ( let x = -1; x >= -rankDifference; x-- ) {
                     let square = board.getSquare( FILES[ FILES.indexOf(start.getFile()) - x ], start.getRank() + x );
-                        if ( !square.isEmpty() ) obstruction = true;
+                        if ( !square.isEmpty() && square !== end ) obstruction = true;
                 }
             }
             else {
                 //We're going up (right to left)
                 for ( let x = 1; x <= Math.abs( rankDifference ); x++ ) {
                     let square = board.getSquare( FILES[ FILES.indexOf(start.getFile()) - x ], start.getRank() + x );
-                    if ( !square.isEmpty() ) obstruction = true;
+                    if ( !square.isEmpty() && square !== end ) obstruction = true;
                 }
             }
         }
@@ -119,7 +120,12 @@ const isRidingObstructed : ( sq1 : Square, sq2 : Square, f : ( sq : Square ) => 
     }
 }
 
+const isOpposingCapture : ( sq : Square, p : Piece ) => boolean
+    = ( sq, p ) => !sq.isEmpty() && sq.getPiece()?.getColour() !== p.getColour()
+
+
 export {
     isObstructed,
-    isRidingObstructed
+    isRidingObstructed,
+    isOpposingCapture
 }

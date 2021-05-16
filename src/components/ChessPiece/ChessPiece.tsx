@@ -6,10 +6,11 @@ import "./ChessPiece.css";
 interface props {
     piece : Piece,
     target: ( piece : Piece ) => void,
-    unTarget: ( piece : Piece ) => void
+    unTarget: ( piece : Piece ) => void,
+    active : boolean
 }
 
-export default function ChessPiece({piece, target, unTarget}:props) {
+export default function ChessPiece({piece, target, unTarget, active}:props) {
 
     const onDragStart: ( e : React.DragEvent ) => void = e => {
         //This is fired when the dragging starts
@@ -30,7 +31,7 @@ export default function ChessPiece({piece, target, unTarget}:props) {
         }
     }
 
-    return <div className="piece"
+    return <div className={`piece ${ active ? "active" : "" }`}
                 style={ getStyle() }
                 key={ piece.getId() }
                 draggable

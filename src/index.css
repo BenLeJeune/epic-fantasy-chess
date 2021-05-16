@@ -17,13 +17,17 @@ code {
 }
 
 div.app {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
-  margin: 2.5rem 0;
   display: grid;
   grid-template-columns: 1fr 60% 1fr;
 }
 
-div.chessBoardContainer {
+div.chessBoardColumn {
   grid-column: 2/3;
+  width: 100%;
+  max-width: 80vh;
+  justify-self: center;
+  display: flex;
+  flex-flow: column nowrap;
 }

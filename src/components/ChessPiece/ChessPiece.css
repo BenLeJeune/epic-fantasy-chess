@@ -12,4 +12,13 @@ div.piece img.pieceImg:active {
   cursor: grabbing;
 }
 
+div#ChessBoardPieces.targeting > div.piece {
+  opacity: 0.5;
+  pointer-events: inherit;
+}
+div#ChessBoardPieces.targeting > div.piece.active {
+  pointer-events: all;
+  opacity: 1;
+}
+
 /*# sourceMappingURL=ChessPiece.css.map */

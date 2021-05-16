@@ -1,7 +1,12 @@
 div.targetingSquare {
   position: relative;
   opacity: 0.5;
-  background-color: green;
+}
+div.targetingSquare.move {
+  background-color: limegreen;
+}
+div.targetingSquare.capture {
+  background-color: crimson;
 }
 
 /*# sourceMappingURL=TargetingSqaure.css.map */

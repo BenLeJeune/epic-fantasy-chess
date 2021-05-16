@@ -1,0 +1,20 @@
+div.infoBar {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  min-height: 2.5rem;
+}
+div.infoBar p.materialEval {
+  font-weight: 600;
+  color: #666666;
+  margin: 0;
+  align-self: center;
+}
+div.infoBar div.capturedPiece {
+  height: 2.5rem;
+}
+div.infoBar div.capturedPiece img {
+  height: 100%;
+}
+
+/*# sourceMappingURL=InfoBar.css.map */
