@@ -6,12 +6,8 @@ const materialEvaluation : ( board : Board ) => number = board => {
     let sum = 0;
     let whitePieces = board.getPieces().filter( p => p.getColour() === WHITE );
     let blackPieces = board.getPieces().filter( p => p.getColour() === BLACK );
-
-    //Add up the white pieces
     sum += whitePieces.reduce(( prev, next ) => prev + next.getMaterialValue(), 0);
-    console.log(whitePieces, sum)
     sum -= blackPieces.reduce(( prev, next ) => prev + next.getMaterialValue(), 0);
-    console.log(blackPieces, sum)
 
     return sum;
 }
