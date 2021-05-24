@@ -1,13 +1,13 @@
 import GamePiece from "../GamePiece";
 import {Move} from "../../types";
 
-export default class Knight extends GamePiece {
+export default class King extends GamePiece {
 
     //eval
-    public static materialValue = 3;
+    public static materialValue = 999;
 
     //naming & display
-    public static shortName = "n";
+    public static shortName = "k";
     public static longName = "Knight";
 
 }

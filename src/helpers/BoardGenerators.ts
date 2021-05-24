@@ -1,46 +1,59 @@
-import Board from "../Classes/Board";
-import {BLACK, FILES} from "../constants/consts";
-import Pawn from "../Pieces/FIDE/Pawn";
-import Rook from "../Pieces/FIDE/Rook";
-import Knight from "../Pieces/FIDE/Knight";
-import Bishop from "../Pieces/FIDE/Bishop";
-import Queen from "../Pieces/FIDE/Queen";
+///
+/// BOARD GENERATION FUNCTIONS
+///
 
-const GenerateFIDEBoard = () => {
-    //First of all, the pawns.
-    let board = new Board();
-    for ( let file = 0; file <= 7; file++ ) {
-        //Add a pawn on each file
-        let lightSquare = board.getSquare(FILES[file], 2);
-        let darkSquare = board.getSquare(FILES[file], 7);
-        new Pawn(lightSquare);
-        new Pawn(darkSquare, BLACK);
+//An Empty Board
+import Piece from "../Classes/Piece";
+
+const generateEmptyBoard : () => number[] = () => {
+    let board = [];
+    for ( let i = 0; i <= 63; i++ ) {
+        board.push(0); //Fills the board with 0s
     }
-    //Then rooks
-    new Rook( board.getSquare("a", 1) );
-    new Rook( board.getSquare("h", 1) );
-    new Rook( board.getSquare("a", 8), BLACK );
-    new Rook( board.getSquare("h", 8), BLACK );
+    return board;
+}
+
+//The Standard FIDE Board
+const generateFIDEBoard : () => number[] = () => {
+    let board = generateEmptyBoard();
+
+    //Add the pawns
+    for (let i = 8; i <= 15; i++) {
+        board[i] = Piece.Pawn;
+        board[63 - i] = -Piece.Pawn;
+    }
+
+    //Rooks
+    board[0] = Piece.Rook;
+    board[7] = Piece.Rook;
+    board[56] = -Piece.Rook;
+    board[63] = -Piece.Rook;
 
     //Knights
-    new Knight( board.getSquare("b", 1) );
-    new Knight( board.getSquare("g", 1) );
-    new Knight(board.getSquare("b", 8), BLACK);
-    new Knight(board.getSquare("g", 8), BLACK);
+    board[1] = Piece.Knight;
+    board[6] = Piece.Knight;
+    board[57] = -Piece.Knight;
+    board[62] = -Piece.Knight;
 
     //Bishops
-    new Bishop(board.getSquare("c", 1));
-    new Bishop(board.getSquare("f", 1));
-    new Bishop(board.getSquare("c", 8), BLACK);
-    new Bishop(board.getSquare("f", 8), BLACK);
+    board[2] = Piece.Bishop;
+    board[5] = Piece.Bishop;
+    board[58] = -Piece.Bishop;
+    board[61] = -Piece.Bishop;
 
     //Queens
-    new Queen(board.getSquare("d", 1));
-    new Queen(board.getSquare("d", 8), BLACK);
+    board[3] = Piece.Queen;
+    board[59] = -Piece.Queen;
 
-    return board.getBoardState();
+    //Kings
+    board[4] = Piece.King;
+    board[60] = -Piece.King;
+
+    return board;
+
 }
 
 export {
-    GenerateFIDEBoard
-};
+    generateEmptyBoard,
+    generateFIDEBoard
+}

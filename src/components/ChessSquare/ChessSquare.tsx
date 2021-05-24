@@ -1,32 +1,33 @@
-import {SquareFile} from "../../types";
-import {FILES} from "../../constants/consts";
 import "./ChessSquare.css";
+import React from 'react';
+import {FILES} from "../../types";
+import Piece from "../../Classes/Piece";
 
 interface props {
-    file : number,
-    rank : number
+    position: number
 }
 
-export default function ChessSquare( { file, rank } : props ) {
+export default function ChessSquare( { position } : props ) {
 
-    const getStyle = () => {
-        if ( ( (7 * rank) + file ) % 2 === 1 ) return "light";
+    const getCol = () => {
+        if ( ( 7 * Piece.getRank(position) + Piece.getFile(position) ) % 2 === 1 ) return "light";
         else return "dark"
     }
 
     const getLabel = () => {
         const labels = [];
-        if ( rank === 1 ) { //We show the file if on the first rank
-            labels.push( <span className="sqLabel bottom" key="file">{ FILES[file - 1] }</span> )
+        if ( Piece.getRank(position) === 0 ) { //We show the file if on the first rank
+            labels.push( <span className="sqLabel bottom" key="file">{ FILES[ Piece.getFile(position) ] }</span> )
         }
-        if ( file === 1 ) { //And we show the rank if on the first file
-            labels.push( <span className="sqLabel left" key="rank">{rank}</span> )
+        if ( Piece.getFile(position) === 0 ) { //And we show the rank if on the first file
+            labels.push( <span className="sqLabel left" key="rank">{ Piece.getRank(position) }</span> )
         }
 
         return labels;
     }
 
-    return <div className={`chessSquare ${ getStyle() }`} id={ `square-${ FILES[file - 1] }${ rank }` }>
+    return <div style={Piece.getStyle( position )} className={`chessSquare ${ getCol() }`}
+                id={ `square-${ FILES[Piece.getFile(position)] }${ Piece.getRank(position) }` }>
         {
             getLabel()
         }
