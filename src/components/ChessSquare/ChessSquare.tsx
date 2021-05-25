@@ -4,10 +4,11 @@ import {FILES} from "../../types";
 import Piece from "../../Classes/Piece";
 
 interface props {
-    position: number
+    position: number,
+    highlight : boolean
 }
 
-export default function ChessSquare( { position } : props ) {
+export default function ChessSquare( { position, highlight } : props ) {
 
     const getCol = () => {
         if ( ( 7 * Piece.getRank(position) + Piece.getFile(position) ) % 2 === 1 ) return "light";
@@ -30,6 +31,9 @@ export default function ChessSquare( { position } : props ) {
                 id={ `square-${ FILES[Piece.getFile(position)] }${ Piece.getRank(position) }` }>
         {
             getLabel()
+        }
+        {
+            highlight ? <div className="highlight"/> : null
         }
     </div>
 

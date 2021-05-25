@@ -31,7 +31,7 @@ function App() {
 
     </div>
     <div className="chessBoardColumn">
-      <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } />
+      <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves} />
     </div>
     <div className="boardRightColumn">
       <MovesDisplay moves={ moves } unMove={ unMove }/>

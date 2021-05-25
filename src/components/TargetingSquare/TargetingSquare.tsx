@@ -7,7 +7,7 @@ interface props {
     position : number,
     onDrop : ( e : React.DragEvent ) => void,
     isMove : boolean,
-    isCapture : boolean
+    isCapture : boolean,
 }
 
 export default function TargetingSquare( { position, onDrop, isMove, isCapture } : props ) {

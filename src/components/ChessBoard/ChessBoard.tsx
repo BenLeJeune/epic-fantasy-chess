@@ -8,15 +8,17 @@ import TargetingSquare from "../TargetingSquare/TargetingSquare";
 import GamePiece from "../../Pieces/GamePiece";
 import InfoBar from "../InfoBar/InfoBar";
 import {materialEvaluation} from "../../helpers/Evaluation";
+import ActualMove from "../../Classes/Move";
 
 interface Props {
     board : number[],
     currentTurn : number,
     move : ( from : number, to : number ) => void,
-    unMove : () => void
+    unMove : () => void,
+    moves : ActualMove[]
 }
 
-export default function ChessBoard({ board, currentTurn, move, unMove } : Props) {
+export default function ChessBoard({ board, currentTurn, move, unMove, moves } : Props) {
 
     ///
     /// MOVING & CAPTURING
@@ -31,7 +33,6 @@ export default function ChessBoard({ board, currentTurn, move, unMove } : Props)
 
     //THIS HANDLES MOVING
     const onDrop = ( ev : React.DragEvent, destination : number ) => {
-
         let [ piece, position ] = JSON.parse( ev.dataTransfer.getData("text/plain") ) as [number, number];
         let captured = board[destination];
         if ( captured !== Piece.None ) capturePiece( captured )
@@ -44,7 +45,8 @@ export default function ChessBoard({ board, currentTurn, move, unMove } : Props)
     /// GENERATING UI ELEMENTS
     ///
 
-    const getSquares = () => board.map( (piece, pos) => <ChessSquare position={pos} /> )
+    const getSquares = () => board.map( (piece, pos) => <ChessSquare position={pos}
+                                         highlight={ moves.length >= 1 && ( pos === moves[moves.length - 1].to || pos === moves[moves.length - 1].from ) } /> )
 
     const getPieces = () => board.map( ( piece, pos ) => piece === 0 ? null :
         <ChessPiece position={ pos }
