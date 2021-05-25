@@ -3,6 +3,7 @@ import ChessBoard from "./components/ChessBoard/ChessBoard";
 import Game from "./Classes/Game";
 import MovesDisplay from "./components/MovesDisplay/MovesDisplay";
 import ActualMove from "./Classes/Move";
+import {SpecialMove} from "./types";
 
 //The main component
 function App() {
@@ -14,8 +15,9 @@ function App() {
   const [ moves, setMoves ] = useState<ActualMove[]>( game.current.getMoves() );
 
 
-  const move = ( from : number, to : number ) => {
-    game.current.Move( from, to );
+  const move = ( from : number, to : number, special?: SpecialMove  ) => {
+    if (special) console.log(special);
+    game.current.Move( from, to, special );
     setBoard( [...game.current.getBoard()] );
     setMoves( [...game.current.getMoves()] );
   }

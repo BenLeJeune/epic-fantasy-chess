@@ -1,4 +1,4 @@
-import {FILES, Move} from "../types";
+import {FILES, Move, SpecialMove} from "../types";
 import Piece from "./Piece";
 import GamePiece from "../Pieces/GamePiece";
 import Pawn from "../Pieces/FIDE/Pawn";
@@ -10,6 +10,8 @@ export default class ActualMove {
     public readonly moving : number;
     public readonly captured : number;
     public readonly specify : number;
+
+    public readonly special : SpecialMove | undefined
 
     public static NONE = 0;
     public static RANK = 1;
@@ -37,13 +39,14 @@ export default class ActualMove {
         return `${ pieceName }${ specification }${ captureText }${ destination }`
     }
 
-    constructor( _from : number, _to : number, _moving : number, _captured : number, _specify : number = ActualMove.NONE) {
+    constructor( _from : number, _to : number, _moving : number, _captured : number, _specify : number = ActualMove.NONE, _special?: SpecialMove) {
 
         this.from = _from;
         this.to = _to;
         this.moving = _moving;
         this.captured = _captured;
         this.specify = _specify;
+        this.special = _special;
 
     }
 

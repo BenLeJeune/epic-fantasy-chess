@@ -1,5 +1,5 @@
-import GamePiece, {legalMove} from "../GamePiece";
-import {Move} from "../../types";
+import GamePiece from "../GamePiece";
+import {Move, legalMove} from "../../types";
 import {getLegalRiderMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 

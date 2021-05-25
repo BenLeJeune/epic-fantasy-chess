@@ -2,9 +2,9 @@
 /// MOVES
 ///
 
-import {legalMove} from "../Pieces/GamePiece";
 import Piece from "../Classes/Piece";
 import {isOpposingCapture} from "./IsOpposingCapture";
+import {legalMove} from "../types";
 
 const getLegalSingleMoves : ( board : number[], position : number, piece : number, callbacks: ((p : number) => number)[], mode : "all" | "moves" | "captures" ) => legalMove[]
 = ( b, pos, p, cb, m ) =>  getLegalRiderMoves( b, pos, p, cb, m, 1 )

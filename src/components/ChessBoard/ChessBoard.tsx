@@ -9,11 +9,12 @@ import GamePiece from "../../Pieces/GamePiece";
 import InfoBar from "../InfoBar/InfoBar";
 import {materialEvaluation} from "../../helpers/Evaluation";
 import ActualMove from "../../Classes/Move";
+import {SpecialMove} from "../../types";
 
 interface Props {
     board : number[],
     currentTurn : number,
-    move : ( from : number, to : number ) => void,
+    move : ( from : number, to : number, special? : SpecialMove ) => void,
     unMove : () => void,
     moves : ActualMove[]
 }
@@ -32,11 +33,11 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves } :
     }
 
     //THIS HANDLES MOVING
-    const onDrop = ( ev : React.DragEvent, destination : number ) => {
+    const onDrop = ( ev : React.DragEvent, destination : number, special?: SpecialMove ) => {
         let [ piece, position ] = JSON.parse( ev.dataTransfer.getData("text/plain") ) as [number, number];
-        let captured = board[destination];
-        if ( captured !== Piece.None ) capturePiece( captured )
-        move( position, destination );
+        let captured = special === "EP" ? board[destination - 8] : board[destination];
+        if ( captured !== Piece.None ) capturePiece( captured );
+        move( position, destination, special );
         setTargeting([0, 0])
     }
 
@@ -56,13 +57,13 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves } :
                     active={ targeting[1] === pos || targeting[1] === 0 } /> )
 
     const getTargetingSquares = () => Piece.getPiece( targeting[0] ) ?
-        (Piece.getPiece( targeting[0] ) as GamePiece).getLegalMoves( targeting[1], board, "all", targeting[0] > 0 ? 1 : -1 )
+        (Piece.getPiece( targeting[0] ) as GamePiece).getLegalMoves( targeting[1], board, "all", targeting[0] > 0 ? 1 : -1, moves )
             .map( move =>
                 <TargetingSquare
                     position={ move.to }
-                    isCapture={ board[move.to] !== Piece.None }
+                    isCapture={ board[move.to] !== Piece.None || move.special === "EP"}
                     isMove={ board[ move.to ] === Piece.None }
-                    onDrop={ ev => onDrop( ev, move.to ) }
+                    onDrop={ ev => onDrop( ev, move.to, move.special ) }
                 />
             )
         : null;

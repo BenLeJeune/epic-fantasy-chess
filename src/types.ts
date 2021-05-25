@@ -11,3 +11,12 @@ export interface Move {
 }
 
 export const FILES = [ "a", "b", "c", "d", "e", "f", "g", "h" ]
+
+
+export interface legalMove {
+    to : number,
+    from : number,
+    special? : SpecialMove
+}
+
+export type SpecialMove =  "EP" | "PROMOTION" | "CASTLE" | "DOUBLE"

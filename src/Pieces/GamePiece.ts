@@ -1,4 +1,5 @@
-import {Move} from "../types";
+import {legalMove, Move} from "../types";
+import ActualMove from "../Classes/Move";
 
 export default abstract class GamePiece {
 
@@ -20,8 +21,8 @@ export default abstract class GamePiece {
     public abstract shortName : string; //e.g "k"
     public abstract longName : string; //e.g "Pawn"
 
-    public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] =
-        ( position, board, mode, colour = 1 ) => {
+    public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number, history : ActualMove[]) => legalMove[] =
+        ( position, board, mode, colour = 1, history ) => {
             return board.map( ( p, square ) => {
                 if ( square !== position && p === 0) return {
                     from : position,
@@ -31,9 +32,4 @@ export default abstract class GamePiece {
             } ).filter( m => m !== null ) as legalMove[];
 
         };
-}
-
-export interface legalMove {
-    to : number,
-    from : number
 }

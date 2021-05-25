@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -19,15 +22,29 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added move history display, restructured App()-level state control to use useRef() and intermediary state.">
+    <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/helpers/FilterLegalMoves.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Classes/Game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Game.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Classes/Move.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Move.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/GamePiece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/GamePiece.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSquare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSquare.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/RiderMoves.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/RiderMoves.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,10 +84,13 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/public/Assets/Pieces" />
     <property name="list.type.of.created.stylesheet" value="Sass" />
     <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="yarn" />
@@ -116,7 +136,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -192,72 +212,6 @@
     <MESSAGE value="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic" />
     <MESSAGE value="Added move history display, restructured App()-level state control to use useRef() and intermediary state." />
     <option name="LAST_COMMIT_MESSAGE" value="Added move history display, restructured App()-level state control to use useRef() and intermediary state." />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="460" y="154" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1621122871197">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="460" y="154" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1621122871197" />
-    <state x="413" y="111" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621440460978">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="413" y="111" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1621440460978" />
-    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1621423792753">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621423792753" />
-    <state width="1899" height="88" key="GridCell.Tab.0.bottom" timestamp="1621949305255">
-      <screen x="-1920" y="-313" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="88" key="GridCell.Tab.0.bottom/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621949305255" />
-    <state width="1345" height="114" key="GridCell.Tab.0.bottom/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534898908" />
-    <state width="1345" height="33" key="GridCell.Tab.0.bottom/0.0.1366.728/-1920.-313.1920.1080@0.0.1366.728" timestamp="1621423827060" />
-    <state width="1345" height="49" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1621445654491" />
-    <state width="1899" height="88" key="GridCell.Tab.0.center" timestamp="1621949305254">
-      <screen x="-1920" y="-313" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="88" key="GridCell.Tab.0.center/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621949305254" />
-    <state width="1345" height="114" key="GridCell.Tab.0.center/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534898906" />
-    <state width="1345" height="33" key="GridCell.Tab.0.center/0.0.1366.728/-1920.-313.1920.1080@0.0.1366.728" timestamp="1621423827060" />
-    <state width="1345" height="49" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1621445654491" />
-    <state width="1899" height="88" key="GridCell.Tab.0.left" timestamp="1621949305253">
-      <screen x="-1920" y="-313" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="88" key="GridCell.Tab.0.left/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621949305253" />
-    <state width="1345" height="114" key="GridCell.Tab.0.left/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534898904" />
-    <state width="1345" height="33" key="GridCell.Tab.0.left/0.0.1366.728/-1920.-313.1920.1080@0.0.1366.728" timestamp="1621423827060" />
-    <state width="1345" height="49" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1621445654490" />
-    <state width="1899" height="88" key="GridCell.Tab.0.right" timestamp="1621949305254">
-      <screen x="-1920" y="-313" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="88" key="GridCell.Tab.0.right/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621949305254" />
-    <state width="1345" height="114" key="GridCell.Tab.0.right/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534898907" />
-    <state width="1345" height="33" key="GridCell.Tab.0.right/0.0.1366.728/-1920.-313.1920.1080@0.0.1366.728" timestamp="1621423827060" />
-    <state width="1345" height="49" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1621445654491" />
-    <state x="-1452" y="-128" key="SettingsEditor" timestamp="1621529072871">
-      <screen x="-1920" y="-313" width="1920" height="1040" />
-    </state>
-    <state x="-1452" y="-128" key="SettingsEditor/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621529072871" />
-    <state width="498" height="446" key="SwitcherDM" timestamp="1621430371996">
-      <screen x="-1920" y="-313" width="1920" height="1040" />
-    </state>
-    <state width="498" height="446" key="SwitcherDM/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621430371996" />
-    <state x="-1137" y="137" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1621795389370">
-      <screen x="-1920" y="-313" width="1920" height="1040" />
-    </state>
-    <state x="-1137" y="137" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621795389370" />
-    <state x="438" y="278" width="672" height="474" key="run.anything.popup" timestamp="1621445507584">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="-1304" y="84" width="672" height="677" key="run.anything.popup/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621435877177" />
-    <state x="438" y="278" width="672" height="474" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1621445507584" />
-    <state x="-1304" y="-140" width="672" height="676" key="search.everywhere.popup" timestamp="1621949237490">
-      <screen x="-1920" y="-313" width="1920" height="1040" />
-    </state>
-    <state x="-1304" y="-140" width="672" height="676" key="search.everywhere.popup/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621949237490" />
-    <state x="438" y="121" width="672" height="474" key="search.everywhere.popup/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534851806" />
-    <state x="-1304" y="-133" width="672" height="702" key="search.everywhere.popup/0.0.1366.728/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1621938790016" />
-    <state x="438" y="121" width="672" height="474" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1621445943081" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
