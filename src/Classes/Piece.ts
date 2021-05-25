@@ -39,7 +39,7 @@ export default class Piece {
 
     public static getFile = ( position : number ) => position % 8;
     public static getRank = ( position : number ) => ( position - ( position % 8 ) ) / 8;
-    public static getSquareName = ( position : number ) => `${ FILES[Piece.getFile(position)] }-${ Piece.getRank(position) }`
+    public static getSquareName = ( position : number ) => `${ FILES[Piece.getFile(position)] }${ Piece.getRank(position) + 1 }`
     public static getStyle = ( position : number ) => {
         return {
             gridRow: `${ 8 - Piece.getRank(position) }/${9 - Piece.getRank(position)}`,

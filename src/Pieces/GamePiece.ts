@@ -9,16 +9,16 @@ export default abstract class GamePiece {
     ///
     /// EVALUATION
     ///
-    public static engineValue : number; //adjusted based on engine evaluation
-    public static materialValue : number; //e.g 3
-    public static valueGrid : number[]; //A multiplier for each position
-    public static evaluate : ( position : number ) => number; //A function to evaluate
+    public abstract engineValue : number; //adjusted based on engine evaluation
+    public abstract materialValue : number; //e.g 3
+    public abstract valueGrid : number[]; //A multiplier for each position
+    public abstract evaluate : ( position : number ) => number; //A function to evaluate
 
     ///
     /// NAMING & DISPLAYING
     ///
-    public static shortName : string; //e.g "k"
-    public static longName : string; //e.g "Pawn"
+    public abstract shortName : string; //e.g "k"
+    public abstract longName : string; //e.g "Pawn"
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] =
         ( position, board, mode, colour = 1 ) => {

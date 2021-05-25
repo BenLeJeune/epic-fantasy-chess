@@ -20,7 +20,7 @@ export default function ChessSquare( { position } : props ) {
             labels.push( <span className="sqLabel bottom" key="file">{ FILES[ Piece.getFile(position) ] }</span> )
         }
         if ( Piece.getFile(position) === 0 ) { //And we show the rank if on the first file
-            labels.push( <span className="sqLabel left" key="rank">{ Piece.getRank(position) }</span> )
+            labels.push( <span className="sqLabel left" key="rank">{ Piece.getRank(position) + 1 }</span> )
         }
 
         return labels;
