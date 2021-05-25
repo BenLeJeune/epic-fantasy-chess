@@ -12,6 +12,19 @@ export default class Game {
 
     private moves : ActualMove[]
 
+    public UnMove = () => {
+
+        //Let's roll back the most recent move!
+        let move = this.moves.pop();
+        this.moves = [ ...this.moves ]
+        if ( move === undefined ) return;
+
+        //Let's replace any piece that was captured
+        this.board[ move.to ] = move.captured;
+        this.board[ move.from ] = move.moving;
+
+    };
+
     public Move = ( from : number, to : number ) => {
         //Let's add the move function
         //Keeping it simple for now, let's just make the move. Forcefully.
@@ -23,15 +36,13 @@ export default class Game {
             specify = ActualMove.FILE
         }
 
-        this.moves = [ ...this.moves, new ActualMove( from, to, this.board[from], this.board[to], specify  ) ]
+        this.moves.push( new ActualMove( from, to, this.board[from], this.board[to], specify) );
 
         //Let's move the piece on To to From.
         this.board[to] = this.board[from];
         this.board[from] = 0;
 
     }
-
-    public UnMove = () => {};
 
     constructor() {
         this.board = generateFIDEBoard();

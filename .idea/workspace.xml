@@ -19,27 +19,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Refactor to move away from object-based approach, now uses array-based approach">
-      <change afterPath="$PROJECT_DIR$/src/Classes/Move.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.sass" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/helpers/IsOpposingCapture.ts" afterDir="false" />
+    <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Classes/Game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Game.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Piece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Piece.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/GamePiece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/GamePiece.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/Evaluation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/Evaluation.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/RiderMoves.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/RiderMoves.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.sass" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +137,7 @@
       <workItem from="1620987162665" duration="95000" />
       <workItem from="1620987292245" duration="2784000" />
       <workItem from="1621427629751" duration="21527000" />
-      <workItem from="1621791858722" duration="21387000" />
+      <workItem from="1621791858722" duration="24959000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -165,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621873611420</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic">
+      <created>1621943833793</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1621943833794</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -186,7 +181,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added isRidingObstructed function to recursively check piece movement for obstruction." />
     <MESSAGE value="Refactor to move away from object-based approach, now uses array-based approach" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor to move away from object-based approach, now uses array-based approach" />
+    <MESSAGE value="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic" />
   </component>
   <component name="WindowStateProjectService">
     <state x="460" y="154" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1621122871197">
@@ -201,31 +197,31 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621423792753" />
-    <state width="1899" height="57" key="GridCell.Tab.0.bottom" timestamp="1621881092751">
+    <state width="1920" height="88" key="GridCell.Tab.0.bottom" timestamp="1621945054648">
       <screen x="-1920" y="-313" width="1920" height="1040" />
     </state>
-    <state width="1899" height="57" key="GridCell.Tab.0.bottom/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621881092751" />
+    <state width="1920" height="88" key="GridCell.Tab.0.bottom/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621945054648" />
     <state width="1345" height="114" key="GridCell.Tab.0.bottom/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534898908" />
     <state width="1345" height="33" key="GridCell.Tab.0.bottom/0.0.1366.728/-1920.-313.1920.1080@0.0.1366.728" timestamp="1621423827060" />
     <state width="1345" height="49" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1621445654491" />
-    <state width="1899" height="57" key="GridCell.Tab.0.center" timestamp="1621881092747">
+    <state width="1920" height="88" key="GridCell.Tab.0.center" timestamp="1621945054647">
       <screen x="-1920" y="-313" width="1920" height="1040" />
     </state>
-    <state width="1899" height="57" key="GridCell.Tab.0.center/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621881092747" />
+    <state width="1920" height="88" key="GridCell.Tab.0.center/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621945054647" />
     <state width="1345" height="114" key="GridCell.Tab.0.center/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534898906" />
     <state width="1345" height="33" key="GridCell.Tab.0.center/0.0.1366.728/-1920.-313.1920.1080@0.0.1366.728" timestamp="1621423827060" />
     <state width="1345" height="49" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1621445654491" />
-    <state width="1899" height="57" key="GridCell.Tab.0.left" timestamp="1621881092744">
+    <state width="1920" height="88" key="GridCell.Tab.0.left" timestamp="1621945054647">
       <screen x="-1920" y="-313" width="1920" height="1040" />
     </state>
-    <state width="1899" height="57" key="GridCell.Tab.0.left/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621881092744" />
+    <state width="1920" height="88" key="GridCell.Tab.0.left/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621945054647" />
     <state width="1345" height="114" key="GridCell.Tab.0.left/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534898904" />
     <state width="1345" height="33" key="GridCell.Tab.0.left/0.0.1366.728/-1920.-313.1920.1080@0.0.1366.728" timestamp="1621423827060" />
     <state width="1345" height="49" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1621445654490" />
-    <state width="1899" height="57" key="GridCell.Tab.0.right" timestamp="1621881092748">
+    <state width="1920" height="88" key="GridCell.Tab.0.right" timestamp="1621945054647">
       <screen x="-1920" y="-313" width="1920" height="1040" />
     </state>
-    <state width="1899" height="57" key="GridCell.Tab.0.right/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621881092748" />
+    <state width="1920" height="88" key="GridCell.Tab.0.right/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621945054647" />
     <state width="1345" height="114" key="GridCell.Tab.0.right/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534898907" />
     <state width="1345" height="33" key="GridCell.Tab.0.right/0.0.1366.728/-1920.-313.1920.1080@0.0.1366.728" timestamp="1621423827060" />
     <state width="1345" height="49" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1621445654491" />
@@ -246,10 +242,10 @@
     </state>
     <state x="-1304" y="84" width="672" height="677" key="run.anything.popup/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621435877177" />
     <state x="438" y="278" width="672" height="474" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1621445507584" />
-    <state x="-1304" y="-140" width="672" height="676" key="search.everywhere.popup" timestamp="1621943583863">
+    <state x="-1304" y="-140" width="672" height="676" key="search.everywhere.popup" timestamp="1621946543139">
       <screen x="-1920" y="-313" width="1920" height="1040" />
     </state>
-    <state x="-1304" y="-140" width="672" height="676" key="search.everywhere.popup/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621943583863" />
+    <state x="-1304" y="-140" width="672" height="676" key="search.everywhere.popup/0.0.1366.728/-1920.-313.1920.1040@-1920.-313.1920.1040" timestamp="1621946543139" />
     <state x="438" y="121" width="672" height="474" key="search.everywhere.popup/0.0.1366.728/-1920.-313.1920.1040@0.0.1366.728" timestamp="1621534851806" />
     <state x="-1304" y="-133" width="672" height="702" key="search.everywhere.popup/0.0.1366.728/-1920.-313.1920.1080@-1920.-313.1920.1080" timestamp="1621938790016" />
     <state x="438" y="121" width="672" height="474" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1621445943081" />

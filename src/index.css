@@ -23,6 +23,9 @@ div.app {
   grid-template-columns: 1fr 60% 1fr;
 }
 
+div.boardLeftColumn, div.boardRightColumn {
+  display: flex;
+}
 div.chessBoardColumn {
   grid-column: 2/3;
   width: 100%;
