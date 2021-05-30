@@ -23,28 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/helpers/FilterLegalMoves.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Classes/Game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Game.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Move.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Move.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/GamePiece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/GamePiece.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSqaure.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSquare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TargetingSquare/TargetingSquare.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/RiderMoves.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/RiderMoves.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +78,7 @@
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="editing.templates" />
-    <property name="ts.external.directory.path" value="C:\Users\benja\WebstormProjects\epic-fantasy-chess\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -136,7 +119,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -159,6 +142,7 @@
       <workItem from="1621427629751" duration="21527000" />
       <workItem from="1621791858722" duration="26822000" />
       <workItem from="1621954581586" duration="8000" />
+      <workItem from="1622377978568" duration="3362000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -188,11 +172,18 @@
       <option name="project" value="LOCAL" />
       <updated>1621947545356</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added castling, double pawn moves, and en passant.">
+      <created>1621965505930</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1621965505931</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -211,7 +202,8 @@
     <MESSAGE value="Refactor to move away from object-based approach, now uses array-based approach" />
     <MESSAGE value="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic" />
     <MESSAGE value="Added move history display, restructured App()-level state control to use useRef() and intermediary state." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added move history display, restructured App()-level state control to use useRef() and intermediary state." />
+    <MESSAGE value="Added castling, double pawn moves, and en passant." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added castling, double pawn moves, and en passant." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

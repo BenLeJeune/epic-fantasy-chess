@@ -16,21 +16,24 @@ interface Props {
     currentTurn : number,
     move : ( from : number, to : number, special? : SpecialMove ) => void,
     unMove : () => void,
-    moves : ActualMove[]
+    moves : ActualMove[],
+    whiteCaptured : number[],
+    blackCaptured : number[],
+    capturePiece : ( p:number ) => void
 }
 
-export default function ChessBoard({ board, currentTurn, move, unMove, moves } : Props) {
+export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece } : Props) {
 
     ///
     /// MOVING & CAPTURING
     ///
-
-    const [ whiteCaptured, setWhiteCaptured ] = useState<number[]>([]);
-    const [ blackCaptured, setBlackCaptured ] = useState<number[]>([]);
-    const capturePiece = ( p : number ) => {
-        if ( p > 0 ) setBlackCaptured( prev => [ ...prev, p ] ) //We captured a white piece
-        else if ( p < 0 ) setWhiteCaptured( prev => [ ...prev, p ] )
-    }
+    //
+    // const [ whiteCaptured, setWhiteCaptured ] = useState<number[]>([]);
+    // const [ blackCaptured, setBlackCaptured ] = useState<number[]>([]);
+    // const capturePiece = ( p : number ) => {
+    //     if ( p > 0 ) setBlackCaptured( prev => [ ...prev, p ] ) //We captured a white piece
+    //     else if ( p < 0 ) setWhiteCaptured( prev => [ ...prev, p ] )
+    // }
 
     //THIS HANDLES MOVING
     const onDrop = ( ev : React.DragEvent, destination : number, special?: SpecialMove ) => {

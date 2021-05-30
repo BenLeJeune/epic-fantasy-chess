@@ -120,4 +120,6 @@ export default class Game {
     public getMoves = () => this.moves;
     public getCurrentTurn = () => this.currentTurn;
 
+    public getLastMove = () => this.moves.length > 0 ? this.moves[ this.moves.length - 1 ] : undefined;
+
 }

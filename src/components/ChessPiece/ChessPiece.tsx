@@ -18,7 +18,6 @@ export default function ChessPiece({position, piece, target, unTarget, active}:p
             target(piece);
             e.dataTransfer.setData("text/plain", JSON.stringify( [ piece, position ] ));
             e.dataTransfer.effectAllowed = "move";
-            console.log(("dragging..."));
         }
     }
 
