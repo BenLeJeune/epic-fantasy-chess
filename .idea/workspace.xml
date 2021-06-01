@@ -23,11 +23,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Classes/Board.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PiecePromotionUI/PiecePromotionUI.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/PiecePromotionUI/PiecePromotionUI.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers/Checks.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Classes/Game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Game.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Classes/Piece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Piece.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/_colours.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/_colours.sass" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,9 +52,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
         <option value="Sass File" />
-        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -77,20 +92,20 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="editing.templates" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\public\Assets\Pieces" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\PiecePromotionUI" />
       <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\src\components\MovesDisplay" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\ChessSquare" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\ChessBoard" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\Pieces\FIDE" />
-      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\constants" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\public\Assets\Pieces" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -142,7 +157,8 @@
       <workItem from="1621427629751" duration="21527000" />
       <workItem from="1621791858722" duration="26822000" />
       <workItem from="1621954581586" duration="8000" />
-      <workItem from="1622377978568" duration="3362000" />
+      <workItem from="1622377978568" duration="26593000" />
+      <workItem from="1622543905864" duration="6023000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -179,7 +195,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621965505931</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Captured piece logic moved into the App() component away from the chessboard, and captured &quot;undone&quot; by unmoving.">
+      <created>1622391116949</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1622391116949</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -203,7 +226,8 @@
     <MESSAGE value="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic" />
     <MESSAGE value="Added move history display, restructured App()-level state control to use useRef() and intermediary state." />
     <MESSAGE value="Added castling, double pawn moves, and en passant." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added castling, double pawn moves, and en passant." />
+    <MESSAGE value="Captured piece logic moved into the App() component away from the chessboard, and captured &quot;undone&quot; by unmoving." />
+    <option name="LAST_COMMIT_MESSAGE" value="Captured piece logic moved into the App() component away from the chessboard, and captured &quot;undone&quot; by unmoving." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

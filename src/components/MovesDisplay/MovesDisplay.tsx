@@ -13,7 +13,7 @@ export default function MovesDisplay({ moves, unMove } : props ) {
         <div id="BoardMovesDisplay">
             {
                 moves.map(
-                    move => <p className="move" key={`${move.from}${move.to}`}>
+                    ( move, i ) => <p className="move" key={`${move.from}${move.to}${i}`}>
                         <span>{ move.getMoveName() }</span>
                     </p>
 

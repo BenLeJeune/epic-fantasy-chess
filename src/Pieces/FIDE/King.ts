@@ -3,6 +3,8 @@ import {Move, legalMove} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
+import {isCheck} from "../../helpers/Checks";
+import Board from "../../Classes/Board";
 
 export default class King extends GamePiece {
 
@@ -36,7 +38,7 @@ export default class King extends GamePiece {
         const queensRook = colour > 0 ? 0 : 56; //a1 or a8
         const kingsRook = colour > 0 ? 7 : 63; //h1 or h8
 
-        //If the king is still in his original square
+        //If the king is still in his original square (AND NOT CURRENTLY IN CHECK)
         if ( position === originalSquare ) {
 
             //Has the king been moved at all yet?
@@ -48,7 +50,7 @@ export default class King extends GamePiece {
                 if ( board[kingsRook] === Piece.Rook * colour && board[kingsRook -1] === Piece.None && board[kingsRook - 2] === Piece.None ) {
 
                     let krMoves = history.filter( move => move.from === kingsRook || move.to === kingsRook );
-                    if ( krMoves.length === 0 ) moves.push({
+                    if ( krMoves.length === 0)  moves.push({
                         from: originalSquare,
                         to: kingsRook - 1,
                         special: "CASTLE"
@@ -61,7 +63,7 @@ export default class King extends GamePiece {
                     && board[queensRook + 3] === Piece.None ) {
 
                     let qrMoves = history.filter( move => move.from === queensRook || move.to === queensRook );
-                    if ( qrMoves.length === 0 ) moves.push({
+                    if ( qrMoves.length === 0)  moves.push({
                         from: originalSquare,
                         to: queensRook + 2,
                         special: "CASTLE"

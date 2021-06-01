@@ -31,6 +31,7 @@ export default class Game {
                 this.board[ move.to - 8 * colour ] = move.captured;
                 break;
             case "PROMOTION":
+                //We should be able to attach the piece we want to promote to
                 break;
             case "CASTLE":
                 //CASTLING RULES
@@ -57,7 +58,7 @@ export default class Game {
 
     };
 
-    public Move = ( from : number, to : number, special? : SpecialMove ) => {
+    public Move = ( from : number, to : number, special? : SpecialMove, additional: Partial<AdditionalOptions> = {}) => {
         //Let's add the move function
         //Keeping it simple for now, let's just make the move. Forcefully.
 
@@ -78,6 +79,12 @@ export default class Game {
                 this.board[ to - 8 * colour ] = Piece.None;
                 break;
             case "PROMOTION":
+                //We should have the piece attached
+                if ( additional.hasOwnProperty("promotionTo") && additional.promotionTo !== undefined ) {
+                    let { promotionTo } = additional;
+                    //Now, we just replace the piece with the one we want to promote to!
+                    this.board[ from ] = promotionTo;
+                }
                 break;
             case "CASTLE":
                 //CASTLING RULES
@@ -110,9 +117,9 @@ export default class Game {
 
     }
 
-    constructor() {
-        this.board = generateFIDEBoard();
-        this.moves = [] as ActualMove[];
+    constructor( _board : number[] = generateFIDEBoard(), _history : ActualMove[] = [] ) {
+        this.board = _board;
+        this.moves = _history;
         this.currentTurn = 1;
     }
 
@@ -122,4 +129,8 @@ export default class Game {
 
     public getLastMove = () => this.moves.length > 0 ? this.moves[ this.moves.length - 1 ] : undefined;
 
+}
+
+export interface AdditionalOptions {
+    promotionTo : number
 }

@@ -28,7 +28,8 @@ export default function ChessSquare( { position, highlight } : props ) {
     }
 
     return <div style={Piece.getStyle( position )} className={`chessSquare ${ getCol() }`}
-                id={ `square-${ FILES[Piece.getFile(position)] }${ Piece.getRank(position) }` }>
+                id={ `square-${ Piece.getSquareName(position) }` }
+                key={ `square-${ Piece.getSquareName(position) }` }>
         {
             getLabel()
         }

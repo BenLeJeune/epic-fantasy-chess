@@ -1,0 +1,32 @@
+@use '../../modules/colours'
+
+div#PiecePromotionHead
+  background-color: colours.$mediumBlue
+  height: 12.5%
+  width: 12.5%
+  position: absolute
+  box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.25)
+
+  img
+    height: 100%
+    width: 100%
+
+div#PiecePromotionBody
+  background-color: colours.$mediumBlue
+  height: 12.5%
+  position: absolute
+  display: flex
+  flex-flow: row nowrap
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25)
+  overflow: hidden
+  div.promotionPiece
+    height: 100%
+    padding: .5rem
+
+    cursor: pointer
+    &:hover
+      background-color: colours.$lightBlue
+
+    img
+      height: 100%
+      width: 100%

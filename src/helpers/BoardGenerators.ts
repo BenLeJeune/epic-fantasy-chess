@@ -5,6 +5,23 @@
 //An Empty Board
 import Piece from "../Classes/Piece";
 
+const generateTestBoard : () => number[] = () => {
+
+    let board = generateEmptyBoard();
+
+    board[48] = Piece.Pawn;
+    board[49] = Piece.Pawn;
+    board[50] = Piece.Pawn;
+    board[51] = Piece.Pawn;
+    board[52] = Piece.Pawn;
+    board[53] = Piece.Pawn;
+    board[54] = Piece.Pawn;
+    board[55] = Piece.Pawn;
+    board[63] = -Piece.Pawn;
+
+    return board;
+}
+
 const generateEmptyBoard : () => number[] = () => {
     let board = [];
     for ( let i = 0; i <= 63; i++ ) {
@@ -55,5 +72,6 @@ const generateFIDEBoard : () => number[] = () => {
 
 export {
     generateEmptyBoard,
-    generateFIDEBoard
+    generateFIDEBoard,
+    generateTestBoard
 }

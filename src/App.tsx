@@ -1,9 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 import ChessBoard from "./components/ChessBoard/ChessBoard";
-import Game from "./Classes/Game";
+import Game, {AdditionalOptions} from "./Classes/Game";
 import MovesDisplay from "./components/MovesDisplay/MovesDisplay";
 import ActualMove from "./Classes/Move";
 import {SpecialMove} from "./types";
+import {isCheck} from "./helpers/Checks";
+import {generateTestBoard} from "./helpers/BoardGenerators";
 
 //The main component
 function App() {
@@ -23,8 +25,12 @@ function App() {
     else if ( p < 0 ) setWhiteCaptured( prev => [...prev, p] ); //If black piece, add to white's captures
   }
 
-  const move = ( from : number, to : number, special?: SpecialMove  ) => {
-    game.current.Move( from, to, special );
+  const move = ( from : number, to : number, special?: SpecialMove, additional:  Partial<AdditionalOptions> = {} ) => {
+    let col = game.current.getBoard()[from] > 0 ? 1 : -1;
+    game.current.Move( from, to, special, additional );
+
+    console.log( isCheck( game.current.getBoard(), game.current.getMoves(), col ) )
+
     setBoard( [...game.current.getBoard()] );
     setMoves( [...game.current.getMoves()] );
   }

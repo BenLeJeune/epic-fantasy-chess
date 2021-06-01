@@ -23,12 +23,6 @@ export default class Piece {
     public static isWhite = ( piece : number ) => piece > 0;
     public static isBlack = ( piece : number ) => piece < 0;
 
-    public static getLegalMoves = ( piece : number, position : number, mode : "all" | "moves" | "captures" ) => {
-
-        //We can put some nice move logic in here
-        //This will only return quasi-legal moves (i.e ignoring checks)
-    }
-
     public static longName = ( piece : number ) => [
         "None", "Pawn", "Knight", "Bishop", "Rook", "Queen", "King"
     ][ Math.abs( piece ) ]

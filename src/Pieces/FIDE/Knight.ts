@@ -26,8 +26,8 @@ export default class Knight extends GamePiece {
             board, position, Piece.Knight * colour, [
                 p => Piece.getFile(p) >= 2 ? p + 6 : p, p => Piece.getFile(p) >= 2 ? p - 10 : p,
                 p => Piece.getFile(p) <= 5 ? p + 10 : p, p => Piece.getFile(p) <= 5 ? p - 6 : p,
-                p => Piece.getFile(p) >= 1 ? p + 15 : p, p => Piece.getFile(p) >= 1 ? p - 15 : p,
-                p => Piece.getFile(p) <= 6 ? p + 17 : p, p => Piece.getFile(p) <= 6 ? p - 17 : p,
+                p => Piece.getFile(p) >= 1 ? p + 15 : p, p => Piece.getFile(p) <= 6 ? p - 15 : p,
+                p => Piece.getFile(p) <= 6 ? p + 17 : p, p => Piece.getFile(p) >= 1 ? p - 17 : p,
             ], mode
         ) )
 

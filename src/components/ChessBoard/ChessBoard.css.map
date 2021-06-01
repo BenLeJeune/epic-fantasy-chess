@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["ChessBoard.sass"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE","file":"ChessBoard.css"}
+{"version":3,"sourceRoot":"","sources":["ChessBoard.sass","../../modules/_colours.sass"],"names":[],"mappings":"AAEA;EACE,kBCES;;;ADAX;EACE;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;AAEA;EACE","file":"ChessBoard.css"}
