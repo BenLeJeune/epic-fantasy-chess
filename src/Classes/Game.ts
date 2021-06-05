@@ -8,7 +8,7 @@ export default class Game {
 
     private readonly board : number[]
 
-    private currentTurn : number;
+    private currentTurn : number; //1 for white, -1 for black
 
     private moves : ActualMove[]
 
@@ -55,6 +55,9 @@ export default class Game {
             default:
                 break;
         }
+
+
+        this.currentTurn = -this.currentTurn; //THE NEXT PLAYER'S TURN
 
     };
 
@@ -114,6 +117,8 @@ export default class Game {
         //Let's move the piece on To to From.
         this.board[to] = this.board[from];
         this.board[from] = Piece.None;
+
+        this.currentTurn = -this.currentTurn;
 
     }
 

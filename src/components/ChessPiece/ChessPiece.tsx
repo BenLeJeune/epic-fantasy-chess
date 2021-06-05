@@ -8,34 +8,30 @@ interface props {
     target: ( position : number ) => void,
     unTarget: ( position : number ) => void,
     active : boolean,
-    id : string
+    id : string,
+    draggable : boolean
 }
 
-export default function ChessPiece({position, piece, target, unTarget, active, id}:props) {
+export default function ChessPiece({position, piece, target, unTarget, active, id, draggable}:props) {
 
     let oldPos = useRef<number>(position);
 
     let pieceEl = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
-        console.log(`Moved a piece from ${ oldPos.current } to ${ position }`);
         if (pieceEl.current) {
             let el = pieceEl.current
 
             ///We want to get the difference in ranks and files
-
             let verticalDiff = Piece.getFile(position) - Piece.getFile(oldPos.current);
             let horizontalDiff = Piece.getRank( position ) - Piece.getRank( oldPos.current );
 
-
             el.style.transition = `none`;
-            console.log("applying style", verticalDiff, horizontalDiff, el.style.transition)
             el.style.transform = `translate(${ -verticalDiff * 100 }%, ${ horizontalDiff * 100 }%)`;
             setTimeout(() => {
                 el.style.transition = `transform 0.25s ease`;
                 el.style.transform = `translate(0, 0)`
             }, 0);
-
         }
 
         oldPos.current = position;
@@ -58,8 +54,8 @@ export default function ChessPiece({position, piece, target, unTarget, active, i
                 id={ id }
                 key={ id }
                 style={ Piece.getStyle(position) }
-                draggable
-                onDragStart={ onDragStart }
+                draggable={ draggable }
+                onDragStart={ draggable ? onDragStart : () => false }
                 onDragEnd={ () => unTarget(piece) }
     >
         <img src={ Piece.getImage( piece ) } alt={ piece.toString() } className="pieceImg"/>

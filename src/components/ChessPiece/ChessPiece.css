@@ -21,4 +21,8 @@ div#ChessBoardPieces.targeting > div.piece.active {
   opacity: 1;
 }
 
+div.gameOver div.piece {
+  pointer-events: none;
+}
+
 /*# sourceMappingURL=ChessPiece.css.map */

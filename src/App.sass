@@ -1,0 +1,28 @@
+@use './modules/colours'
+
+*
+  font-family: 'Roboto', sans-serif
+  box-sizing: border-box
+
+div.app
+  width: 100%
+  min-height: 100vh
+  display: grid
+  grid-template-columns: 1fr 60% 1fr
+
+
+div.boardLeftColumn, div.boardRightColumn
+  display: flex
+  flex-flow: column nowrap
+
+  p.playerToMove
+    color: colours.$offwhite
+    font-style: italic
+
+div.chessBoardColumn
+  grid-column: 2/3
+  width: 100%
+  max-width: 80vh
+  justify-self: center
+  display: flex
+  flex-flow: column nowrap

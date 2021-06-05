@@ -22,7 +22,6 @@ const isCheck : ( board:number[], history:ActualMove[], colour: number ) => bool
     let legalMoves = Board.getLegalMoves(
         board, history, { mode: "captures", colour: -colour } )
 
-    console.log( pos, legalMoves, legalMoves.filter( move => move.to === pos ));
     //Are there any attacks on the king?
     return legalMoves.filter( move => move.to === pos ).length > 0;
 

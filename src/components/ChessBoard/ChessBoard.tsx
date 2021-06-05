@@ -70,9 +70,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
         //We will return simply the piece and its position
         //UNLESS it has been moved
         //WE LOOK THROUGH THE MOVES TO FIND IT'S LAST MOVE
-
         let startingPos = pos;
-
         if ( moves.length > 0 ) {
             let inverseMoves = [...moves].reverse();
             //GO THROUGH EACH MOVE, AND TRACK THE POSITION OF THIS PIECE
@@ -99,6 +97,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     key={ getPieceKey( piece, pos ) }
                     piece={ piece }
                     id={ getPieceKey( piece, pos ) }
+                    draggable={ (currentTurn > 0 && piece > 0) || ( currentTurn < 0 && piece < 0 ) }
                     target={ () => setTargeting([ piece, pos ])  }
                     unTarget={ () => setTargeting([ 0, 0 ]) }
                     active={ targeting[1] === pos || targeting[1] === 0 } /> )

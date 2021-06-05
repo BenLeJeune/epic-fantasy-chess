@@ -9,15 +9,11 @@ const generateTestBoard : () => number[] = () => {
 
     let board = generateEmptyBoard();
 
-    board[48] = Piece.Pawn;
-    board[49] = Piece.Pawn;
-    board[50] = Piece.Pawn;
-    board[51] = Piece.Pawn;
-    board[52] = Piece.Pawn;
-    board[53] = Piece.Pawn;
-    board[54] = Piece.Pawn;
-    board[55] = Piece.Pawn;
-    board[63] = -Piece.Pawn;
+
+    board[5] = Piece.King
+    board[36] = Piece.Queen
+    // board[16] = -Piece.Queen
+    board[62] = -Piece.King
 
     return board;
 }

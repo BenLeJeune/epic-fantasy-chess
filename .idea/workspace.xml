@@ -22,25 +22,27 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Classes/Board.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PiecePromotionUI/PiecePromotionUI.sass" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PiecePromotionUI/PiecePromotionUI.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/helpers/Checks.ts" afterDir="false" />
+    <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
+      <change afterPath="$PROJECT_DIR$/public/Assets/Sounds/8bit-game-over.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/Assets/Sounds/8bit-piece-move.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/Assets/Sounds/wooden-piece-move.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/GameOverUI/GameOverUI.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/GameOverUI/GameOverUI.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers/CompareMoves.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Classes/Game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Game.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Piece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Piece.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.sass" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessPiece/ChessPiece.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/Checks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/Checks.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modules/_colours.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/_colours.sass" afterDir="false" />
     </list>
@@ -52,9 +54,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
         <option value="Sass File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -101,11 +103,11 @@
       <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\public\Assets\Pieces" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\public\Assets\Sounds" />
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\GameOverUI" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\PiecePromotionUI" />
       <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\src\components\MovesDisplay" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\ChessSquare" />
-      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\ChessBoard" />
-      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\Pieces\FIDE" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -158,7 +160,10 @@
       <workItem from="1621791858722" duration="26822000" />
       <workItem from="1621954581586" duration="8000" />
       <workItem from="1622377978568" duration="26593000" />
-      <workItem from="1622543905864" duration="6023000" />
+      <workItem from="1622543905864" duration="9551000" />
+      <workItem from="1622627120897" duration="9181000" />
+      <workItem from="1622649656904" duration="2543000" />
+      <workItem from="1622731452977" duration="920000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -202,7 +207,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622391116949</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added check restrictions, piece promotion, and animating pieces as they move.">
+      <created>1622552743956</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1622552743956</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -227,7 +239,8 @@
     <MESSAGE value="Added move history display, restructured App()-level state control to use useRef() and intermediary state." />
     <MESSAGE value="Added castling, double pawn moves, and en passant." />
     <MESSAGE value="Captured piece logic moved into the App() component away from the chessboard, and captured &quot;undone&quot; by unmoving." />
-    <option name="LAST_COMMIT_MESSAGE" value="Captured piece logic moved into the App() component away from the chessboard, and captured &quot;undone&quot; by unmoving." />
+    <MESSAGE value="Added check restrictions, piece promotion, and animating pieces as they move." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added check restrictions, piece promotion, and animating pieces as they move." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
