@@ -60,10 +60,27 @@ export default class Piece {
         }
     }
 
-    public static getImage = ( piece : number ) => `/assets/pieces/${ Piece.longName( piece ).toLowerCase() }_${ piece > 0 ? "white" : "black" }.svg`;
-
     public static getPiece : ( piece : number ) => GamePiece | null = (piece ) => [
         null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King()
     ][ Math.abs(piece) ]
+
+    //public static getImage = ( piece : number ) => `/assets/pieces/${ Piece.longName( piece ).toLowerCase() }_${ piece > 0 ? "white" : "black" }.svg`;
+
+    public static getImage = ( piece : number ) => {
+        switch ( Math.abs(piece) ) {
+            case 0:
+                return "";
+            case 1:
+                return piece > 0 ? w_pawn : b_pawn;
+            case 2:
+                return piece > 0 ? w_knight : b_knight;
+            case 3:
+                return piece > 0 ? w_bishop : b_bishop;
+            case 4:
+                return piece > 0 ? w_queen : b_queen;
+            case 5:
+                return piece > 0 ? w_king : b_king;
+        }
+    }
 
 }
