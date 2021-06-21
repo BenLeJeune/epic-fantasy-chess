@@ -6,6 +6,16 @@ import Queen from "../Pieces/FIDE/Queen";
 import King from "../Pieces/FIDE/King";
 import GamePiece from "../Pieces/GamePiece";
 import {FILES} from "../types";
+import w_pawn from "../../public/assets/Pieces/pawn_white.svg";
+import b_pawn from "../../public/assets/Pieces/pawn_black.svg";
+import w_knight from "../../public/assets/Pieces/knight_white.svg";
+import b_knight from "../../public/assets/Pieces/knight_black.svg";
+import w_bishop from "../../public/assets/Pieces/bishop_white.svg";
+import b_bishop from "../../public/assets/Pieces/bishop_black.svg";
+import w_queen from "../../public/assets/Pieces/queen_white.svg";
+import b_queen from "../../public/assets/Pieces/queen_black.svg";
+import w_king from "../../public/assets/Pieces/king_white.svg";
+import b_king from "../../public/assets/Pieces/king_black.svg";
 
 export default class Piece {
 
@@ -19,6 +29,9 @@ export default class Piece {
     public static Rook = 4;
     public static Queen = 5;
     public static King = 6;
+
+    public static w_images = [ w_pawn, w_knight, w_bishop, w_queen, w_king ];
+    public static b_images = [ b_pawn, b_knight, b_bishop, b_queen, b_king ];
 
     public static isWhite = ( piece : number ) => piece > 0;
     public static isBlack = ( piece : number ) => piece < 0;
@@ -47,7 +60,7 @@ export default class Piece {
         }
     }
 
-    public static getImage = ( piece : number ) => `/assets/pieces/${ Piece.longName( piece ).toLowerCase() }_${ piece > 0 ? "white" : "black" }.svg`
+    public static getImage = ( piece : number ) => `/assets/pieces/${ Piece.longName( piece ).toLowerCase() }_${ piece > 0 ? "white" : "black" }.svg`;
 
     public static getPiece : ( piece : number ) => GamePiece | null = (piece ) => [
         null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King()
