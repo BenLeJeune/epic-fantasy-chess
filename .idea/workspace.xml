@@ -22,10 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-    </list>
+    <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -149,7 +146,7 @@
       <workItem from="1623325090387" duration="3040000" />
       <workItem from="1623824431075" duration="75000" />
       <workItem from="1625397200838" duration="26000" />
-      <workItem from="1625413104356" duration="5037000" />
+      <workItem from="1625413104356" duration="5468000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -228,7 +225,21 @@
       <option name="project" value="LOCAL" />
       <updated>1625421272006</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Removed semicolon from package.json">
+      <created>1625421296187</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1625421296187</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Adding sass dependency">
+      <created>1625421678797</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1625421678797</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,7 +269,9 @@
     <MESSAGE value="Extracted game end checks into isGameOver() function" />
     <MESSAGE value="Updated assets to support Heroku demo" />
     <MESSAGE value="Added heroku build script to compile sass" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added heroku build script to compile sass" />
+    <MESSAGE value="Removed semicolon from package.json" />
+    <MESSAGE value="Adding sass dependency" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding sass dependency" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
