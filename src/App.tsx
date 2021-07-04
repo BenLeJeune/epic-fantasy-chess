@@ -39,7 +39,6 @@ function App() {
       ///PLAYS AUDIO
       let audio = new Audio( "/assets/Sounds/8bit-game-over.mp3" );
       audio.play();
-
     }
   }, [gameOver])
 
@@ -51,35 +50,23 @@ function App() {
     else if ( p < 0 ) setWhiteCaptured( prev => [...prev, p] ); //If black piece, add to white's captures
   }
 
-  const move = ( from : number, to : number, special?: SpecialMove, additional:  Partial<AdditionalOptions> = {} ) => {
+  const isGameOver : ( from : number ) => void = ( from )  => {
 
-    ///PLAYS AUDIO
-    let audio = new Audio( "/assets/Sounds/wooden-piece-move.mp3" );
-    audio.play();
-
+    let gMoves = game.current.getMoves();
+    let gBoard = game.current.getBoard();
     let col = game.current.getBoard()[from] > 0 ? 1 : -1;
-    game.current.Move( from, to, special, additional );
-
-    setBoard( [...game.current.getBoard()] );
-    setMoves( [...game.current.getMoves()] );
-    setCurrentTurn( game.current.getCurrentTurn() );
-
-    ///
-    /// SEE IF THE GAME HAS ENDED YET
-    ///
 
     ///CHECK FOR THREEFOLD REPETITION
-    if ( game.current.getMoves().length >= 12 ) {
-      let recentMoves = game.current.getMoves().slice( game.current.getMoves().length - 12, game.current.getMoves().length );
-      console.log(recentMoves);
+    if ( gMoves.length >= 12 ) {
+      let recentMoves = gMoves.slice( gMoves.length - 12, gMoves.length );
       if ( areIdenticalMoves( recentMoves[0], recentMoves[4], recentMoves[8] ) ) {
         if ( areIdenticalMoves( recentMoves[1], recentMoves[5], recentMoves[9] ) ) {
           if (areIdenticalMoves( recentMoves[2], recentMoves[6], recentMoves[10] )) {
             if (areIdenticalMoves(recentMoves[3], recentMoves[7], recentMoves[11])) {
-            //Threefold repetition baby lets go
-            setGameOver(true);
-            setWinner(0);
-            setGameOverMsg(REPETITION);
+              //Threefold repetition baby lets go
+              setGameOver(true);
+              setWinner(0);
+              setGameOverMsg(REPETITION);
             }
           }
         }
@@ -87,8 +74,8 @@ function App() {
     }
 
     /// CHECK FOR FIFTY-MOVE RULE
-    if ( game.current.getMoves().length >= 100 ) {
-      let recentMoves = game.current.getMoves().slice( game.current.getMoves().length - 100, game.current.getMoves().length );
+    if ( gMoves.length >= 100 ) {
+      let recentMoves = gMoves.slice( gMoves.length - 100, gMoves.length );
       let pawnMoves = recentMoves.filter( m => Math.abs( m.moving ) === Piece.Pawn );
       let captures = recentMoves.filter( m => m.captured !== 0 );
       if ( pawnMoves.length === 0 && captures.length === 0 ) {
@@ -98,29 +85,40 @@ function App() {
       }
     }
 
-    let moves= Board.getLegalMoves( game.current.getBoard(), game.current.getMoves(), { colour: -col } );
-    let legalMoves = filterLegalMoves( moves, game.current.getBoard(), game.current.getMoves(), -col )
+    let moves= Board.getLegalMoves( gBoard, gMoves, { colour: -col } );
+    let legalMoves = filterLegalMoves( moves, gBoard, gMoves, -col )
     if ( legalMoves.length === 0 ) {
       ///THERE ARE NO LEGAL MOVES!
-
       //The game is now over
       setGameOver(true);
-
-      if ( isCheck( game.current.getBoard(), game.current.getMoves(), -col ) ) {
-
+      if ( isCheck( gBoard, gMoves, -col ) ) {
         //Is in check - checkmate! Set a winner!
         setWinner( col > 0 ? 1 : -1 )
         setGameOverMsg( CHECKMATE );
-
       }
       else {
-
         //Not in check - it is a stalemate!
         setWinner(0);
         setGameOverMsg( STALEMATE ); //The game is now over
-
       }
     }
+
+  }
+
+  const move = ( from : number, to : number, special?: SpecialMove, additional:  Partial<AdditionalOptions> = {} ) => {
+
+    ///PLAYS AUDIO
+    let audio = new Audio( "/assets/Sounds/wooden-piece-move.mp3" );
+    audio.play();
+
+    game.current.Move( from, to, special, additional );
+
+    setBoard( [...game.current.getBoard()] );
+    setMoves( [...game.current.getMoves()] );
+    setCurrentTurn( game.current.getCurrentTurn() );
+
+    /// CHECK TO SEE IF THE GAME IS OVER
+    isGameOver( from );
 
   }
 
