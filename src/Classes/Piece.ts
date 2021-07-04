@@ -7,6 +7,20 @@ import King from "../Pieces/FIDE/King";
 import GamePiece from "../Pieces/GamePiece";
 import {FILES} from "../types";
 
+//IMPORTING PIECE IMAGES
+import w_pawn from "../assets/Pieces/pawn_white.svg";
+import b_pawn from "../assets/Pieces/pawn_black.svg";
+import w_knight from "../assets/Pieces/knight_white.svg";
+import b_knight from "../assets/Pieces/knight_black.svg";
+import w_bishop from "../assets/Pieces/bishop_white.svg";
+import b_bishop from "../assets/Pieces/bishop_black.svg";
+import w_rook from "../assets/Pieces/rook_white.svg";
+import b_rook from "../assets/Pieces/rook_black.svg";
+import w_queen from "../assets/Pieces/queen_white.svg";
+import b_queen from "../assets/Pieces/queen_black.svg";
+import w_king from "../assets/Pieces/king_white.svg";
+import b_king from "../assets/Pieces/king_black.svg";
+
 export default class Piece {
 
     ///
@@ -41,8 +55,24 @@ export default class Piece {
         }
     }
 
-    public static getImage = ( piece : number ) => `/assets/pieces/${ Piece.longName( piece ).toLowerCase() }_${ piece > 0 ? "white" : "black" }.svg`
-
+    public static getImage = ( piece : number ) => {
+        switch ( Math.abs(piece) ) {
+            case 0:
+                return "";
+            case Piece.Pawn:
+                return piece > 0 ? w_pawn : b_pawn;
+            case Piece.Knight:
+                return piece > 0 ? w_knight : b_knight;
+            case Piece.Bishop:
+                return piece > 0 ? w_bishop : b_bishop;
+            case Piece.Rook:
+                return piece > 0 ? w_rook : b_rook;
+            case Piece.Queen:
+                return piece > 0 ? w_queen : b_queen;
+            case Piece.King:
+                return piece > 0 ? w_king : b_king;
+        }
+    }
     public static getPiece : ( piece : number ) => GamePiece | null = (piece ) => [
         null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King()
     ][ Math.abs(piece) ]

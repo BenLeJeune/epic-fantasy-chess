@@ -23,8 +23,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/bishop_black.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/bishop_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/king_black.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/king_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/knight_black.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/knight_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/pawn_black.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/pawn_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/queen_black.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/queen_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/rook_black.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Pieces/rook_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Sounds/8bit-game-over.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Sounds/8bit-piece-move.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Assets/Sounds/wooden-piece-move.mp3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Classes/Piece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Piece.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +79,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/Assets/Pieces" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
     <property name="list.type.of.created.stylesheet" value="Sass" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -80,6 +98,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src" />
       <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\public\Assets\Pieces" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -148,7 +167,7 @@
       <workItem from="1623325090387" duration="3040000" />
       <workItem from="1623824431075" duration="75000" />
       <workItem from="1625397200838" duration="26000" />
-      <workItem from="1625413104356" duration="355000" />
+      <workItem from="1625413104356" duration="4322000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -206,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622906599180</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Extracted game end checks into isGameOver() function">
+      <created>1625413493741</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1625413493741</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,7 +259,8 @@
     <MESSAGE value="Captured piece logic moved into the App() component away from the chessboard, and captured &quot;undone&quot; by unmoving." />
     <MESSAGE value="Added check restrictions, piece promotion, and animating pieces as they move." />
     <MESSAGE value="Added game overs, can now win by checkmate or draw by stalemate and move repetition." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added game overs, can now win by checkmate or draw by stalemate and move repetition." />
+    <MESSAGE value="Extracted game end checks into isGameOver() function" />
+    <option name="LAST_COMMIT_MESSAGE" value="Extracted game end checks into isGameOver() function" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

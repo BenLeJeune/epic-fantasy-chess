@@ -99,8 +99,8 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     id={ getPieceKey( piece, pos ) }
                     draggable={ (currentTurn > 0 && piece > 0) || ( currentTurn < 0 && piece < 0 ) }
                     target={ () => setTargeting([ piece, pos ])  }
-                    unTarget={ () => setTargeting([ 0, 0 ]) }
-                    active={ targeting[1] === pos || targeting[1] === 0 } /> )
+                    unTarget={ () => setTargeting([ 0, -1 ]) }
+                    active={ targeting[1] === pos || targeting[1] === -1 } /> )
 
     const getTargetingSquares = () => Piece.getPiece( targeting[0] ) ?
         filterLegalMoves(
@@ -123,7 +123,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
     /// TARGETING
     ///
     // [ piece, position from ]
-    const [ targeting, setTargeting ] = useState<[ number, number ]>([ 0, 0 ]);
+    const [ targeting, setTargeting ] = useState<[ number, number ]>([ 0, -1 ]);
 
 
     ///

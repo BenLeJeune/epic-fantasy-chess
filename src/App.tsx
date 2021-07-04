@@ -21,7 +21,7 @@ const CHECKMATE = "via Checkmate",
 //The main component
 function App() {
 
-  const game = useRef( new Game() )
+  const game = useRef( new Game(generateTestBoard()) )
 
 
   //The Game
@@ -50,11 +50,10 @@ function App() {
     else if ( p < 0 ) setWhiteCaptured( prev => [...prev, p] ); //If black piece, add to white's captures
   }
 
-  const isGameOver : ( from : number ) => void = ( from )  => {
+  const isGameOver : ( from : number, col: number ) => void = ( from, col )  => {
 
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
-    let col = game.current.getBoard()[from] > 0 ? 1 : -1;
 
     ///CHECK FOR THREEFOLD REPETITION
     if ( gMoves.length >= 12 ) {
@@ -87,6 +86,7 @@ function App() {
 
     let moves= Board.getLegalMoves( gBoard, gMoves, { colour: -col } );
     let legalMoves = filterLegalMoves( moves, gBoard, gMoves, -col )
+    console.log(legalMoves, col)
     if ( legalMoves.length === 0 ) {
       ///THERE ARE NO LEGAL MOVES!
       //The game is now over
@@ -107,6 +107,8 @@ function App() {
 
   const move = ( from : number, to : number, special?: SpecialMove, additional:  Partial<AdditionalOptions> = {} ) => {
 
+    let col = game.current.getBoard()[from] > 0 ? 1 : -1;
+
     ///PLAYS AUDIO
     let audio = new Audio( "/assets/Sounds/wooden-piece-move.mp3" );
     audio.play();
@@ -118,7 +120,7 @@ function App() {
     setCurrentTurn( game.current.getCurrentTurn() );
 
     /// CHECK TO SEE IF THE GAME IS OVER
-    isGameOver( from );
+    isGameOver( from, col );
 
   }
 
