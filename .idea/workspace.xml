@@ -149,7 +149,7 @@
       <workItem from="1623325090387" duration="3040000" />
       <workItem from="1623824431075" duration="75000" />
       <workItem from="1625397200838" duration="26000" />
-      <workItem from="1625413104356" duration="5005000" />
+      <workItem from="1625413104356" duration="5037000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -221,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625420680756</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Added heroku build script to compile sass">
+      <created>1625421272006</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1625421272006</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,7 +257,8 @@
     <MESSAGE value="Added game overs, can now win by checkmate or draw by stalemate and move repetition." />
     <MESSAGE value="Extracted game end checks into isGameOver() function" />
     <MESSAGE value="Updated assets to support Heroku demo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated assets to support Heroku demo" />
+    <MESSAGE value="Added heroku build script to compile sass" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added heroku build script to compile sass" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
