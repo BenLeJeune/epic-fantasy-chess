@@ -14,7 +14,6 @@ import Piece from "./Classes/Piece";
 
 const CHECKMATE = "via Checkmate",
     STALEMATE = "via Stalemate",
-    MATERIAL = "via Insufficient Material",
     REPETITION = "via Move Repetition",
     FIFTYMOVE = "via the Fifty-move rule";
 
@@ -41,6 +40,12 @@ function App() {
       audio.play();
     }
   }, [gameOver])
+
+///
+/// OPPONENT AI
+///
+
+
 
   //Captures
   const [ whiteCaptured, setWhiteCaptured ] = useState<number[]>([]);
