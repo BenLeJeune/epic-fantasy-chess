@@ -5,13 +5,14 @@ import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
 import {isCheck} from "../../helpers/Checks";
 import Board from "../../Classes/Board";
+import {kingGrid} from "../ValueGrids";
 
 export default class King extends GamePiece {
 
     //eval
     public materialValue = 999;
-    public engineValue = 999;
-    public valueGrid = [];
+    public engineValue = 20000;
+    public valueGrid = kingGrid;
     public evaluate = ( p : number ) => this.engineValue;
 
     //naming & display

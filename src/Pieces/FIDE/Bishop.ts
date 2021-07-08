@@ -2,13 +2,14 @@ import GamePiece from "../GamePiece";
 import {legalMove, Move} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
+import {bishopGrid} from "../ValueGrids";
 
 export default class Bishop extends GamePiece {
 
     //eval
     public materialValue = 3;
-    public engineValue = 3.3;
-    public valueGrid = [];
+    public engineValue = 330;
+    public valueGrid = bishopGrid;
     public evaluate = ( p : number ) => this.engineValue;
 
     //naming & display

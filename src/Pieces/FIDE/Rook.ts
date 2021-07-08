@@ -2,13 +2,14 @@ import GamePiece from "../GamePiece";
 import {Move, legalMove} from "../../types";
 import {getLegalRiderMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
+import {rookGrid} from "../ValueGrids";
 
 export default class Rook extends GamePiece {
 
     //eval
     public materialValue = 5;
-    public engineValue = 5;
-    public valueGrid = [];
+    public engineValue = 500;
+    public valueGrid = rookGrid;
     public evaluate = ( p : number ) => this.engineValue;
 
     //naming & display

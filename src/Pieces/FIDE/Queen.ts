@@ -2,13 +2,14 @@ import GamePiece from "../GamePiece";
 import {legalMove, Move} from "../../types";
 import {getLegalRiderMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
+import {queenGrid} from "../ValueGrids";
 
 export default class Queen extends GamePiece {
 
     //eval
     public materialValue = 9;
-    public engineValue = 9;
-    public valueGrid = [];
+    public engineValue = 900;
+    public valueGrid = queenGrid;
     public evaluate = ( p : number ) => this.engineValue;
 
     //naming & display

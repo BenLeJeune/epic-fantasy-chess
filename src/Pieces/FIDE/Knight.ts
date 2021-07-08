@@ -3,13 +3,14 @@ import {Move, legalMove} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
+import { knightGrid } from "../ValueGrids";
 
 export default class Knight extends GamePiece {
 
     //eval
     public materialValue = 3;
-    public engineValue = 3;
-    public valueGrid = [];
+    public engineValue = 320;
+    public valueGrid = knightGrid;
     public evaluate = ( p : number ) => this.engineValue;
 
     //naming & display

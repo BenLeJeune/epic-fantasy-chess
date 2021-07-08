@@ -3,13 +3,14 @@ import {Move, legalMove, SpecialMove} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
+import { pawnGrid } from "../ValueGrids";
 
 export default class Pawn extends GamePiece {
 
     //eval
     public materialValue = 1;
-    public engineValue = 1;
-    public valueGrid = [];
+    public engineValue = 100;
+    public valueGrid = pawnGrid;
     public evaluate = ( p : number ) => this.engineValue;
 
     //naming & display

@@ -24,7 +24,7 @@ const CHECKMATE = "via Checkmate",
 //The main component
 function App() {
 
-  const game = useRef( new Game() )
+  const game = useRef( new Game()  )
 
 
   //The Game
@@ -154,7 +154,7 @@ function App() {
         generateRandomMove()
             .then(
                 m => {
-                  if (!gameOver) try {
+                  if (!gameOver && m) try {
                     console.log("making move!")
                     move(m.from, m.to, m.special)
                   }

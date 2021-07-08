@@ -3,6 +3,7 @@ import ActualMove from "../Classes/Move";
 import Game from "../Classes/Game";
 import {SpecialMove} from "../types";
 import {filterLegalMoves} from "../helpers/Checks";
+import {positionalEngineEvaluation} from "../helpers/Evaluation";
 
 /// FIRST STAGE - COMPLETELY RANDOM
 
@@ -25,7 +26,20 @@ const moveGenerator = ( board: number[], history: moveProxy[], options: {} = {} 
 
     let legalMoves = filterLegalMoves( randomMoves, g.getBoard(), g.getMoves(), -1 )
 
-    return randomFromList(legalMoves);
+    if ( legalMoves.length === 0 ) return;
+
+    //Evaluate all the legal moves
+    let orderedMoves = legalMoves.map( move => {
+        g.Move( move.from, move.to, move.special );
+        let evaluation = positionalEngineEvaluation( g.getBoard() );
+        if ( move.special === "CASTLE" ) evaluation -= 50;
+        g.UnMove();
+        return { move, ev: evaluation }
+    } ).sort(( prev, next ) => - next.ev + prev.ev);
+
+    orderedMoves.map(m => console.log(m.move, m.ev  ))
+
+    return orderedMoves[0].move;
 
 }
 
