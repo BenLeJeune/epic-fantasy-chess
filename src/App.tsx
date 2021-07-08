@@ -3,7 +3,7 @@ import ChessBoard from "./components/ChessBoard/ChessBoard";
 import Game, {AdditionalOptions} from "./Classes/Game";
 import MovesDisplay from "./components/MovesDisplay/MovesDisplay";
 import ActualMove from "./Classes/Move";
-import {SpecialMove} from "./types";
+import {legalMove, Move, SpecialMove} from "./types";
 import {filterLegalMoves, isCheck} from "./helpers/Checks";
 import {generateTestBoard} from "./helpers/BoardGenerators";
 import Board from "./Classes/Board";
@@ -11,6 +11,10 @@ import GameOverUI from "./components/GameOverUI/GameOverUI";
 import "./App.css"
 import {areIdenticalMoves} from "./helpers/CompareMoves";
 import Piece from "./Classes/Piece";
+
+//Opponent Web Worker
+import { wrap } from 'comlink';
+
 
 const CHECKMATE = "via Checkmate",
     STALEMATE = "via Stalemate",
@@ -41,11 +45,28 @@ function App() {
     }
   }, [gameOver])
 
-///
-/// OPPONENT AI
-///
+  ///
+  /// OPPONENT AI
+  ///
 
+  const generateRandomMove = async () => {
 
+    const worker = new Worker("./WebWorker/worker", { name: "opponentWebWorker", type: "module" });
+    const { MoveGenerator } = wrap<import("./WebWorker/worker").OpponentWebWorker>(worker)
+
+    let gMoves = game.current.getMoves();
+    let gBoard = game.current.getBoard();
+
+    let parsedMoves = gMoves.map(
+        ({ from, to, moving, captured, special, specify }) => {
+          return {
+              from, to, moving, captured, special, specify
+        } })
+
+    return await MoveGenerator( gBoard, parsedMoves, { colour: -1 }).finally(() => {
+      worker.terminate();
+    } )
+  }
 
   //Captures
   const [ whiteCaptured, setWhiteCaptured ] = useState<number[]>([]);
@@ -91,7 +112,6 @@ function App() {
 
     let moves= Board.getLegalMoves( gBoard, gMoves, { colour: -col } );
     let legalMoves = filterLegalMoves( moves, gBoard, gMoves, -col )
-    console.log(legalMoves, col)
     if ( legalMoves.length === 0 ) {
       ///THERE ARE NO LEGAL MOVES!
       //The game is now over
@@ -120,13 +140,32 @@ function App() {
 
     game.current.Move( from, to, special, additional );
 
-    setBoard( [...game.current.getBoard()] );
     setMoves( [...game.current.getMoves()] );
+    setBoard( [...game.current.getBoard()] );
     setCurrentTurn( game.current.getCurrentTurn() );
 
     /// CHECK TO SEE IF THE GAME IS OVER
     isGameOver( from, col );
 
+    //IF NOT, THE OPPONENT PLAYS A MOVE
+    setTimeout(() => {
+      if ( !gameOver && game.current.getCurrentTurn() === -1 ) {
+        console.log("GENERATING A LEGAL MOVE");
+        generateRandomMove()
+            .then(
+                m => {
+                  if (!gameOver) try {
+                    console.log("making move!")
+                    move(m.from, m.to, m.special)
+                  }
+                  catch (e) {
+                    console.log(e);
+                  }
+                }
+            )
+      }
+
+    }, 0)
   }
 
   const unMove = () => {

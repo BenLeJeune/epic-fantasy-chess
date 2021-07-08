@@ -87,6 +87,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     }, pos
                 );
             }
+
         }
 
         return `${ startingPos }-${ piece }`

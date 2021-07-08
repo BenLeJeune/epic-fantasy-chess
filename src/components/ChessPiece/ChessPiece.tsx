@@ -19,12 +19,19 @@ export default function ChessPiece({position, piece, target, unTarget, active, i
     let pieceEl = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
+        console.log("Re-rendering ", id)
+    }, [])
+
+    useLayoutEffect(() => {
         if (pieceEl.current) {
+            console.log("Smoothing")
             let el = pieceEl.current
 
             ///We want to get the difference in ranks and files
             let verticalDiff = Piece.getFile(position) - Piece.getFile(oldPos.current);
             let horizontalDiff = Piece.getRank( position ) - Piece.getRank( oldPos.current );
+
+            console.log(verticalDiff, horizontalDiff)
 
             el.style.transition = `none`;
             el.style.transform = `translate(${ -verticalDiff * 100 }%, ${ horizontalDiff * 100 }%)`;
