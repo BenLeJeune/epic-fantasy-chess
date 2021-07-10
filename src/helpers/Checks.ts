@@ -8,6 +8,9 @@ import ActualMove from "../Classes/Move";
 import Board from "../Classes/Board";
 import Game from "../Classes/Game";
 
+///
+/// IS THIS COLOUR'S KING IN CHECK?
+///
 const isCheck : ( board:number[], history:ActualMove[], colour: number ) => boolean = ( board, history, colour ) => {
 
     //Determine the king's square

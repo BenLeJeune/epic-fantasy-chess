@@ -21,10 +21,12 @@ interface Props {
     moves : ActualMove[],
     whiteCaptured : number[],
     blackCaptured : number[],
-    capturePiece : ( p:number ) => void
+    capturePiece : ( p:number ) => void,
+    whiteArmy: number[],
+    blackArmy: number[]
 }
 
-export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece } : Props) {
+export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy } : Props) {
 
     ///
     /// MOVING & CAPTURING
@@ -133,9 +135,11 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
     // Will be -1 when not shown
     const [ [ promotionFrom, promotionTo ], setPromotion ] = useState<[ number, number ]>([ -1, -1 ]);
 
-    const getValidPromotionPieces = () => {
-        let pieces = [ Piece.Knight, Piece.Bishop, Piece.Rook, Piece.Queen ];
-        return pieces.map( piece => board[promotionFrom] > 0 ? piece : -piece )
+    const getValidPromotionPieces = ( colour: -1 | 1 ) => {
+        let pieces = colour > 0 ? whiteArmy : blackArmy;
+        //We want to remove duplicates
+        let filtered = pieces.reduce(( acc, cur ) => acc.indexOf( cur ) === -1 ? [ ...acc, cur ] : acc, [] as number[]);
+        return filtered.sort( (a, b) => a - b ).map( piece => colour > 0 ? piece : -piece )
     }
 
     return <>
@@ -161,7 +165,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     promotionFrom !== -1 ? <PiecePromotionUI above={Piece.getRank( promotionTo ) === 7}
                                    positionFrom={promotionFrom}
                                    positionTo={promotionTo}
-                                   validPieces={ getValidPromotionPieces() }
+                                   validPieces={ getValidPromotionPieces( board[promotionFrom] > 0 ? 1 : -1 ) }
                                    promoting={promotionFrom > 0 ? board[promotionFrom] : Piece.None}
                                    callback={onPromotion}
                     /> : null

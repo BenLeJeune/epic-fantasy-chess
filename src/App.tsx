@@ -15,6 +15,16 @@ import Piece from "./Classes/Piece";
 //Opponent Web Worker
 import { wrap } from 'comlink';
 
+//ARMIES
+const FIDEArmy = [
+    Piece.Rook,
+    Piece.Knight,
+    Piece.Bishop,
+    Piece.Queen,
+    Piece.Bishop,
+    Piece.Knight,
+    Piece.Rook
+]
 
 const CHECKMATE = "via Checkmate",
     STALEMATE = "via Stalemate",
@@ -24,7 +34,7 @@ const CHECKMATE = "via Checkmate",
 //The main component
 function App() {
 
-  const game = useRef( new Game()  )
+  const game = useRef( new Game( generateTestBoard() )  )
 
 
   //The Game
@@ -41,7 +51,7 @@ function App() {
     if (gameOver) {
       ///PLAYS AUDIO
       let audio = new Audio( "/assets/Sounds/8bit-game-over.mp3" );
-      audio.play();
+      audio.play().then();
     }
   }, [gameOver])
 
@@ -63,7 +73,7 @@ function App() {
               from, to, moving, captured, special, specify
         } })
 
-    return await MoveGenerator( gBoard, parsedMoves, { colour: -1 }).finally(() => {
+    return await MoveGenerator( gBoard, parsedMoves, FIDEArmy, { colour: -1 }).finally(() => {
       worker.terminate();
     } )
   }
@@ -150,13 +160,11 @@ function App() {
     //IF NOT, THE OPPONENT PLAYS A MOVE
     setTimeout(() => {
       if ( !gameOver && game.current.getCurrentTurn() === -1 ) {
-        console.log("GENERATING A LEGAL MOVE");
         generateRandomMove()
             .then(
-                m => {
+                ( m ) => {
                   if (!gameOver && m) try {
-                    console.log("making move!")
-                    move(m.from, m.to, m.special)
+                    move(m.move.from, m.move.to, m.move.special, m.additional)
                   }
                   catch (e) {
                     console.log(e);
@@ -192,6 +200,7 @@ function App() {
     <div className={`chessBoardColumn ${ gameOver ? "gameOver" : "playing" }`}>
       <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves}
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
+                  whiteArmy={ FIDEArmy } blackArmy={ FIDEArmy }
       />
     </div>
     <div className="boardRightColumn">
