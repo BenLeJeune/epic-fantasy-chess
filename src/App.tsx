@@ -34,7 +34,7 @@ const CHECKMATE = "via Checkmate",
 //The main component
 function App() {
 
-  const game = useRef( new Game( generateTestBoard() )  )
+  const game = useRef( new Game()  )
 
 
   //The Game

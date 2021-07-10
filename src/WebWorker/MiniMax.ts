@@ -10,7 +10,9 @@ import includePromotion, {PromotionMove} from "./IncludePromotions";
 
 //If we're maximising (white), then it will have just been black's turn
 //If we're minimising (black), then it will have just been white's turn
-const miniMax = (g : Game, depth : number, maximising : boolean, army: number[] ) => {
+// ALPHA represents the MIN score the MAXIMISING player is guaranteed
+// BETA represents the MAX score the MINIMISING player is guaranteed
+const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], alpha:number = -Infinity, beta:number = Infinity ) => {
     let col = maximising ? 1 : -1 as 1 | -1;
 
     let partialLegalMoves = Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col } )
@@ -33,12 +35,14 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[] 
 
             for ( let { move: m, additional } of legalMoves ) {
                 g.Move( m.from, m.to, m.special, additional );
-                let ev = miniMax(g, depth - 1, !maximising, army)[0]
+                let ev = miniMax(g, depth - 1, !maximising, army, alpha, beta)[0];
+                g.UnMove()
                 if (value < ev) {
                     value = ev;
                     move = { move : m, additional };
                 }
-                g.UnMove()
+                if ( value >= beta ) break; //β cutoff
+                alpha = Math.max( alpha, value );
             }
 
             return [ value, move ] as [ number, PromotionMove ];
@@ -52,12 +56,14 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[] 
 
             for ( let { move: m, additional }  of legalMoves ) {
                 g.Move( m.from, m.to, m.special, additional );
-                let ev = miniMax(g, depth - 1, !maximising, army)[0]
+                let ev = miniMax(g, depth - 1, !maximising, army, alpha, beta)[0]
+                g.UnMove();
                 if (value > ev) {
-                    value = ev
+                    value = ev;
                     move =  { move : m, additional };
                 }
-                g.UnMove()
+                if ( value <= alpha ) break; //α cutoff
+                beta = Math.min( beta, value )
             }
 
             return [ value, move ] as [ number, PromotionMove ];

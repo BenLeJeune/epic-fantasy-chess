@@ -6,6 +6,7 @@ import {filterLegalMoves} from "../helpers/Checks";
 import {positionalEngineEvaluation} from "../helpers/Evaluation";
 import Piece from "../Classes/Piece";
 import miniMax from "./MiniMax";
+import queryOpeningBook from "./QueryOpeningBook";
 
 /// FIRST STAGE - COMPLETELY RANDOM
 
@@ -35,6 +36,15 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], o
     let legalMoves = filterLegalMoves( randomMoves, g.getBoard(), g.getMoves(), -1 )
 
     if ( legalMoves.length === 0 ) return;
+
+    //BEFORE WE SEARCH FOR ACTUAL MOVES, LET'S EXAMINE THE OPENING BOOK
+
+    let opening = queryOpeningBook( g );
+
+    if (opening) {
+        return opening;
+    }
+
 
     //Evaluate all the legal moves
     // let orderedMoves = legalMoves.map( move => {
@@ -66,12 +76,12 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], o
     //
     // orderedMoves.map(m => console.log(m.move, m.ev))
 
-    const DEPTH = 3;
+    const DEPTH = 4;
 
     console.time(`MiniMax with depth ${ DEPTH }`)
 
     let move = miniMax( g, DEPTH, false, army )
-    console.log(`Found a move with value ${move[0]}`)
+    console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
 
     console.timeEnd(`MiniMax with depth ${ DEPTH }`);
 
