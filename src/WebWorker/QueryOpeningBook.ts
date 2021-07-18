@@ -45,7 +45,7 @@ const queryOpeningBook = (g : Game ) => {
 
             if (validMove?.length >= 0) {
                 moves.push(validMove[0])
-                console.log(`Identified: the ${ opening.name }`)
+                // console.log(`Identified: the ${ opening.name }`)
             }
 
         }

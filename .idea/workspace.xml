@@ -23,13 +23,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
-      <change afterPath="$PROJECT_DIR$/src/WebWorker/QueryOpeningBook.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/WebWorker/openings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/WebWorker/HashTable.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/helpers/Utils.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/WebWorker/QueryOpeningBook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/QueryOpeningBook.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/Evaluation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/Evaluation.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +160,11 @@
       <workItem from="1625508046425" duration="13394000" />
       <workItem from="1625732383090" duration="5734000" />
       <workItem from="1625825423114" duration="11321000" />
-      <workItem from="1625911059355" duration="7371000" />
+      <workItem from="1625911059355" duration="8539000" />
+      <workItem from="1625944234450" duration="368000" />
+      <workItem from="1625994194714" duration="21037000" />
+      <workItem from="1626358135737" duration="8936000" />
+      <workItem from="1626609469066" duration="3963000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -294,7 +299,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625913416757</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Added openings.json from ECO for the opponent to look through.">
+      <created>1625920080776</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1625920080776</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -332,7 +344,8 @@
     <MESSAGE value="Ran yarn eject, implemented WebWorker that plays a random legal move for black." />
     <MESSAGE value="Added piece value grids, engine evaluation now takes these into account (in centipawns). AI now chooses move that results in best immediate position." />
     <MESSAGE value="AI Now searches several moves in advance to find the best move, and will find/avoid checkmate." />
-    <option name="LAST_COMMIT_MESSAGE" value="AI Now searches several moves in advance to find the best move, and will find/avoid checkmate." />
+    <MESSAGE value="Added openings.json from ECO for the opponent to look through." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added openings.json from ECO for the opponent to look through." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -9,6 +9,7 @@ import ActualMove from "../Classes/Move";
 import {legalMove} from "../types";
 import {PromotionMove} from "../WebWorker/IncludePromotions";
 import Board from "../Classes/Board";
+import {arraysAreEqual} from "./Utils";
 
 const materialEvaluation = (board : number[] ) => {
     return board.filter(p => p !== Piece.None).reduce((t, piece) => {
@@ -21,19 +22,20 @@ const materialEvaluation = (board : number[] ) => {
 
 const positionalEngineEvaluation = ( board : number[], history: ActualMove[] ) => {
 
+
     let wMoves =  filterLegalMoves( Board.getLegalMoves( board, history, { colour: 1 } ), board, history, 1 );
     let bMoves = filterLegalMoves( Board.getLegalMoves( board, history, { colour: -1 } ), board, history, -1 );
 
     if ( isCheck( board, history, 1  ) && wMoves.length === 0){
         //If white is checkmated, return negative infinity.
-        return -Infinity
+        return Number.NEGATIVE_INFINITY
     }
     else if ( isCheck( board, history, -1 ) && bMoves.length === 0 ) {
         //If black mated, return infinity
-        return Infinity
+        return Number.POSITIVE_INFINITY
     }
 
-    return board.filter( p => p !== Piece.None ).reduce(( t, piece, pos ) => {
+    let e =  board.filter( p => p !== Piece.None ).reduce(( t, piece, pos ) => {
         if ( !Piece.getPiece(piece) ) return t;
         else {
             const p = Piece.getPiece(piece) as GamePiece;
@@ -48,6 +50,8 @@ const positionalEngineEvaluation = ( board : number[], history: ActualMove[] ) =
             }
         }
     }, 0)
+
+    return e;
 }
 
 

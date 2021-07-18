@@ -34,8 +34,11 @@ const CHECKMATE = "via Checkmate",
 //The main component
 function App() {
 
-  const game = useRef( new Game()  )
+  const game = useRef( new Game( /*generateTestBoard()*/ )  )
 
+  /// THE OPPONENT
+
+  const worker = useRef( wrap<import("./WebWorker/worker").OpponentWebWorker>(new Worker("./WebWorker/worker", { name: "opponentWebWorker", type: "module" })) )
 
   //The Game
   const [ board, setBoard ] = useState<number[]>( game.current.getBoard() );
@@ -60,9 +63,8 @@ function App() {
   ///
 
   const generateRandomMove = async () => {
-
-    const worker = new Worker("./WebWorker/worker", { name: "opponentWebWorker", type: "module" });
-    const { MoveGenerator } = wrap<import("./WebWorker/worker").OpponentWebWorker>(worker)
+    // const { MoveGenerator } = wrap<import("./WebWorker/worker").OpponentWebWorker>(worker.current)
+    const { MoveGenerator } = worker.current;
 
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
@@ -73,9 +75,7 @@ function App() {
               from, to, moving, captured, special, specify
         } })
 
-    return await MoveGenerator( gBoard, parsedMoves, FIDEArmy, { colour: -1 }).finally(() => {
-      worker.terminate();
-    } )
+    return await MoveGenerator( gBoard, parsedMoves, FIDEArmy, { colour: -1 })
   }
 
   //Captures
