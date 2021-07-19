@@ -10,7 +10,6 @@ import Game from "../Classes/Game";
 
 ///
 /// IS THIS COLOUR'S KING IN CHECK?
-///
 const isCheck : ( board:number[], history:ActualMove[], colour: number ) => boolean = ( board, history, colour ) => {
 
     //Determine the king's square
@@ -48,7 +47,7 @@ const filterLegalMoves : ( moves: legalMove[], board : number[], history:ActualM
         //First, let's make the move.
         game.Move( move.from, move.to, move.special );
         //Now, let's see if there is a check.
-        let stillInCheck = isCheck( game.getBoard(), history, colour );
+        let stillInCheck = isCheck( game.getBoard(), game.getMoves(), colour );
         //Then, we unmake the move.
         game.UnMove();
         return !stillInCheck;

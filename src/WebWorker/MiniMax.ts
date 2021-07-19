@@ -23,10 +23,10 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
     let partialLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col, mode: "captures" } )
     let partialLegalMoves =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col, mode: "moves" } )
     // let partialLegalMoves = Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col } )
-    let filteredLegalMoves = filterLegalMoves( partialLegalMoves, g.getBoard(), g.getMoves(), col )
-    let filteredLegalCaptures = filterLegalMoves( partialLegalCaptures, g.getBoard(), g.getMoves(), col )
-    let unorderedMoves = includePromotion( g.getBoard(), filteredLegalMoves, army, col );
-    let unorderedCaptures = includePromotion( g.getBoard(), filteredLegalCaptures, army, col );
+    // let filteredLegalMoves = filterLegalMoves( partialLegalMoves, g.getBoard(), g.getMoves(), col )
+    // let filteredLegalCaptures = filterLegalMoves( partialLegalCaptures, g.getBoard(), g.getMoves(), col )
+    let unorderedMoves = includePromotion( g.getBoard(), partialLegalMoves, army, col );
+    let unorderedCaptures = includePromotion( g.getBoard(), partialLegalCaptures, army, col );
 
     //We want to order our moves.
     let orderedPromotionMoves = [...unorderedMoves, ...unorderedCaptures].filter( m => m.additional?.promotionTo )
@@ -49,7 +49,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
 
     let isCheckMate = isCheck( g.getBoard(), g.getMoves(), col) && legalMoves.length === 0;
 
-    if ( depth === 0 || isCheckMate || ( depth <= 0 && unorderedCaptures.length === 0 ) ) {
+    if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(partialLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 ) ) {
         //We've reached the end! Return the final evaluation
         let ev = positionalEngineEvaluation( g.getBoard(), g.getMoves() );
         hashSet( g.getBoard(), ev )
@@ -62,32 +62,49 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         let value = maximising ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
         let move = legalMoves[0];
 
-        for ( let { move: m, additional } of legalMoves ) {
+        //THERE ARE SOME THINGS WE HAVE TO FILTER - CASTLING
+        let partFilter = legalMoves.filter( ({move}) => {
+            //THERE ARE SOME SPECIAL RULES FOR SPECIAL MOVES
+            if ( move.special === "CASTLE") {
+                if ( isCheck( g.getBoard(), g.getMoves(), col ) ) return false; //Cannot castle out of check
+                let kingsRook = col > 0 ? 7 : 63;
+                let queensRook = col > 0 ? 0 : 56;
+                if ( move.to === kingsRook - 1 && Board.isThreatened( kingsRook - 2, g.getBoard(), g.getMoves(), -col )) return false;
+                if ( move.to === queensRook + 2 && Board.isThreatened( queensRook + 3, g.getBoard(), g.getMoves(), -col ) ) return false;
+            }
+            return true;
+        } )
+
+        for ( let { move: m, additional } of partFilter ) {
             g.Move( m.from, m.to, m.special, additional );
-            let hashedEval = hashGet( g.getBoard() );
-            let ev : number = hashedEval || miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, alpha, beta)[0];
-            if (!hashedEval) {
-                hashSet(g.getBoard(), ev);
-            }
-            //Return straight away if we find a forced mate.
-            g.UnMove()
-            function update() {
-                value = ev;
-                move = { move: m, additional }
-            }
-            if (maximising) {
-                if ( value <= ev) update()
-                if ( value >= beta ) break; //β cutoff
-                alpha = Math.max( alpha, value );
-            }
-            else {
-                if (value >= ev) {
-                    value = ev;
-                    move =  { move : m, additional };
+            if (!isCheck(g.getBoard(), g.getMoves(), col)) {
+                let hashedEval = hashGet(g.getBoard());
+                let ev: number = hashedEval || miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, alpha, beta)[0];
+                if (!hashedEval) {
+                    hashSet(g.getBoard(), ev);
                 }
-                if ( value <= alpha ) break; //α cutoff
-                beta = Math.min( beta, value )
+                //Return straight away if we find a forced mate.
+                g.UnMove()
+
+                function update() {
+                    value = ev;
+                    move = {move: m, additional}
+                }
+
+                if (maximising) {
+                    if (value <= ev) update()
+                    if (value >= beta) break; //β cutoff
+                    alpha = Math.max(alpha, value);
+                } else {
+                    if (value >= ev) {
+                        value = ev;
+                        move = {move: m, additional};
+                    }
+                    if (value <= alpha) break; //α cutoff
+                    beta = Math.min(beta, value)
+                }
             }
+            else g.UnMove()
         }
 
         return [ value, move ] as [ number, PromotionMove ];

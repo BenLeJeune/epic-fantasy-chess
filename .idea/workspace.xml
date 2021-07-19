@@ -24,12 +24,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Board.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Board.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/helpers/Checks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/Checks.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/Evaluation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/Evaluation.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,7 +160,7 @@
       <workItem from="1625994194714" duration="21037000" />
       <workItem from="1626358135737" duration="8936000" />
       <workItem from="1626609469066" duration="6254000" />
-      <workItem from="1626691052565" duration="3832000" />
+      <workItem from="1626691052565" duration="5673000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -313,7 +309,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626613507855</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Improved the efficiency of position Evaluation.ts, implemented estimated move ordering.">
+      <created>1626695727009</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1626695727009</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -353,7 +356,8 @@
     <MESSAGE value="AI Now searches several moves in advance to find the best move, and will find/avoid checkmate." />
     <MESSAGE value="Added openings.json from ECO for the opponent to look through." />
     <MESSAGE value="Added transposition tables to reduce the time spent re-evaluating the same positions." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added transposition tables to reduce the time spent re-evaluating the same positions." />
+    <MESSAGE value="Improved the efficiency of position Evaluation.ts, implemented estimated move ordering." />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved the efficiency of position Evaluation.ts, implemented estimated move ordering." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
