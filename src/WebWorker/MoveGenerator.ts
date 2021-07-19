@@ -42,7 +42,7 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], o
     //BEFORE WE SEARCH FOR ACTUAL MOVES, LET'S EXAMINE THE OPENING BOOK
 
     let opening = queryOpeningBook( g );
-    const DEPTH = 3;
+    const DEPTH = 2;
 
     if (opening) {
         return opening;
@@ -55,7 +55,7 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], o
     let nodes = 0;
     let counter = () => nodes++
 
-    let move = miniMax( g, DEPTH, false, army, b => table.get(b), (b, e) => table.set(b, e), counter );
+    let move = miniMax( g, DEPTH, false, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter );
 
     console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
     console.log(`Examined ${ nodes } nodes`)

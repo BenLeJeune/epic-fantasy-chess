@@ -17,7 +17,7 @@ import Piece from "../Classes/Piece";
 // ALPHA represents the MIN score the MAXIMISING player is guaranteed
 // BETA represents the MAX score the MINIMISING player is guaranteed
 
-const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>number|null, hashSet:(b:number[],e:number)=>void, counter:()=>void, alpha:number = -Infinity, beta:number = Infinity ) => {
+const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[],e:number,t:number,q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity ) => {
     let col = maximising ? 1 : -1 as 1 | -1;
 
     let partialLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col, mode: "captures" } )
@@ -48,19 +48,23 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
     ];
 
     let isCheckMate = isCheck( g.getBoard(), g.getMoves(), col) && legalMoves.length === 0;
+    let oppoonentLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: -col, mode: "captures" } )
 
-    if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(partialLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 ) ) {
+    if ( depth === -2 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 )) {
         //We've reached the end! Return the final evaluation
+        let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0
         let ev = positionalEngineEvaluation( g.getBoard(), g.getMoves() );
-        hashSet( g.getBoard(), ev )
+        hashSet( g.getBoard(), ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
         counter()
-        return [ ev , { move: { from: -1, to: -1 } } ] as [ number, PromotionMove ];
+        return [ ev , { move: { from: -1, to: -1 } }, g.getMoves().length, quiescence_quiet || isCheckMate ] as [ number, PromotionMove, number, boolean ];
     }
     else {
         //The evaluation hasn't finished yet!
 
         let value = maximising ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
         let move = legalMoves[0];
+        let quiet = false;
+        let move_depth = depth;
 
         //THERE ARE SOME THINGS WE HAVE TO FILTER - CASTLING
         let partFilter = legalMoves.filter( ({move}) => {
@@ -78,10 +82,34 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         for ( let { move: m, additional } of partFilter ) {
             g.Move( m.from, m.to, m.special, additional );
             if (!isCheck(g.getBoard(), g.getMoves(), col)) {
+
                 let hashedEval = hashGet(g.getBoard());
-                let ev: number = hashedEval || miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, alpha, beta)[0];
-                if (!hashedEval) {
-                    hashSet(g.getBoard(), ev);
+                let ev:number = 0;
+                let temp_quiet = false;
+                let temp_depth = 0;
+
+                //Where we started this evaluation from
+                let evaluatingFrom = g.getMoves().length + depth - original_depth;
+
+                if ( hashedEval && ( hashedEval[2]  || ( hashedEval[1] - evaluatingFrom >= 2)) ) {
+                    ev = hashedEval[0]
+                    temp_depth = hashedEval[1]
+                    temp_quiet = hashedEval[2]
+                }
+                else {
+                    let minmax =  miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta);
+                    ev = minmax[0]
+
+                    //Here we can do some special evaluations
+                    if (g.getMoves().length <= 20 || g.getBoard().filter(p => p !== Piece.None).length >= 24 ) {
+                        //We're still roughly in the opening
+                        if ( Math.abs(g.getBoard()[m.from]) === Piece.Pawn ) ev += 30 //Encourage pawn moves
+                        else if ( Math.abs(g.getBoard()[m.from]) === Piece.Knight || Math.abs(g.getBoard()[m.from]) === Piece.Bishop ) ev += 15 //Encourage pawn moves
+                    }
+
+                    temp_depth = minmax[2]
+                    temp_quiet = minmax[3]
+                    hashSet(g.getBoard(), ev, g.getMoves().length, temp_quiet);
                 }
                 //Return straight away if we find a forced mate.
                 g.UnMove()
@@ -89,6 +117,8 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
                 function update() {
                     value = ev;
                     move = {move: m, additional}
+                    quiet = temp_quiet
+                    move_depth = temp_depth;
                 }
 
                 if (maximising) {
@@ -107,7 +137,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
             else g.UnMove()
         }
 
-        return [ value, move ] as [ number, PromotionMove ];
+        return [ value, move, move_depth, quiet ] as [ number, PromotionMove, number, boolean ];
 
     }
 

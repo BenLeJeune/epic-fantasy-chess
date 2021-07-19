@@ -1,11 +1,11 @@
 import Piece from "../Classes/Piece";
 import {arraysAreEqual} from "../helpers/Utils";
 
-const BOARD = 0, EVAL = 1;
+const BOARD = 0, EVAL = 1, TURN = 2, QUIET = 3;
 export default class TranspositionTable {
 
 
-    table : [ number[], number ][][];
+    table : [ number[], number, number, boolean ][][];
     size : number;
 
     constructor() {
@@ -19,7 +19,7 @@ export default class TranspositionTable {
         return arrayHash.reduce((a, n) => a + n) % 4999;
     }
 
-    set( board: number[], evaluation: number ) {
+    set( board: number[], evaluation: number, turnNumber : number, quiet : boolean ) {
         const index = this.hash(board);
         if (this.table[index]) {
             //If the index already exists
@@ -27,25 +27,25 @@ export default class TranspositionTable {
                 //Loop over the pairs at that index
                 //If we find a match=
                 if ( arraysAreEqual( board, this.table[index][pairIndex][BOARD] ) ) {
-                    this.table[index][pairIndex] = [[...board], evaluation]; //was storing at this.table[index][EVAL], where EVAL = 1
+                    this.table[index][pairIndex] = [[...board], evaluation, turnNumber, quiet]; //was storing at this.table[index][EVAL], where EVAL = 1
                     return;
                 }
             }
             //No existing element, push a new pair
-            this.table[index].push([[...board], evaluation]);
+            this.table[index].push([[...board], evaluation, turnNumber, quiet]);
             return;
         }
-        this.table[index] = [[[...board], evaluation]];
+        this.table[index] = [[[...board], evaluation, turnNumber, quiet]];
         this.size++;
     }
 
-    get( board: number[] ) : number | null {
+    get( board: number[] ) : [number, number, boolean] | null {
         const index = this.hash(board);
         if (this.table[index]) {
             for ( let pair of this.table[index] ) {
                 //Loop through possible matches
                 if ( arraysAreEqual( board, pair[BOARD] ) ) {
-                    return pair[EVAL]
+                    return [ pair[EVAL], pair[TURN], pair[QUIET] ]
                 }
             }
         }
