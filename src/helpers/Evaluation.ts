@@ -22,18 +22,17 @@ const materialEvaluation = (board : number[] ) => {
 
 const positionalEngineEvaluation = ( board : number[], history: ActualMove[] ) => {
 
-
-    let wMoves =  filterLegalMoves( Board.getLegalMoves( board, history, { colour: 1 } ), board, history, 1 );
-    let bMoves = filterLegalMoves( Board.getLegalMoves( board, history, { colour: -1 } ), board, history, -1 );
-
-    if ( isCheck( board, history, 1  ) && wMoves.length === 0){
+    if ( isCheck( board, history, 1  )){
+        let wMoves =  filterLegalMoves( Board.getLegalMoves( board, history, { colour: 1 } ), board, history, 1 );
         //If white is checkmated, return negative infinity.
-        return Number.NEGATIVE_INFINITY
+        if ( wMoves.length === 0 ) return Number.NEGATIVE_INFINITY
     }
-    else if ( isCheck( board, history, -1 ) && bMoves.length === 0 ) {
+    else if ( isCheck( board, history, -1 )) {
+        let bMoves = filterLegalMoves( Board.getLegalMoves( board, history, { colour: -1 } ), board, history, -1 );
         //If black mated, return infinity
-        return Number.POSITIVE_INFINITY
+        if ( bMoves.length === 0 ) return Number.POSITIVE_INFINITY
     }
+
 
     let e =  board.filter( p => p !== Piece.None ).reduce(( t, piece, pos ) => {
         if ( !Piece.getPiece(piece) ) return t;

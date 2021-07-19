@@ -34,7 +34,7 @@ const filterLegalMoves : ( moves: legalMove[], board : number[], history:ActualM
 
     let game = new Game( board , history );
 
-    return moves.filter( move => {
+    let filtered = moves.filter( move => {
 
         //THERE ARE SOME SPECIAL RULES FOR SPECIAL MOVES
         if ( move.special === "CASTLE") {
@@ -53,6 +53,8 @@ const filterLegalMoves : ( moves: legalMove[], board : number[], history:ActualM
         game.UnMove();
         return !stillInCheck;
     } )
+
+    return filtered
 
 }
 

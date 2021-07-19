@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import ChessBoard from "./components/ChessBoard/ChessBoard";
 import Game, {AdditionalOptions} from "./Classes/Game";
 import MovesDisplay from "./components/MovesDisplay/MovesDisplay";
@@ -13,7 +13,7 @@ import {areIdenticalMoves} from "./helpers/CompareMoves";
 import Piece from "./Classes/Piece";
 
 //Opponent Web Worker
-import { wrap } from 'comlink';
+import {Remote, wrap} from 'comlink';
 
 //ARMIES
 const FIDEArmy = [
@@ -38,7 +38,11 @@ function App() {
 
   /// THE OPPONENT
 
-  const worker = useRef( wrap<import("./WebWorker/worker").OpponentWebWorker>(new Worker("./WebWorker/worker", { name: "opponentWebWorker", type: "module" })) )
+  const worker = useRef<any>()
+  useLayoutEffect(() => {
+    worker.current = wrap<import("./WebWorker/worker").OpponentWebWorker>(new Worker("./WebWorker/worker", { name: "opponentWebWorker", type: "module" }));
+    console.log("Creating worker!");
+  }, [])
 
   //The Game
   const [ board, setBoard ] = useState<number[]>( game.current.getBoard() );

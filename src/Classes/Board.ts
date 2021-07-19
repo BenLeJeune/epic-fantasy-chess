@@ -25,6 +25,7 @@ export default class Board {
 
         //Pushes each of the moves
 
+
         return moves;
 
     }

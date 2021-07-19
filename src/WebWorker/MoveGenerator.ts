@@ -13,7 +13,7 @@ import TranspositionTable from "./HashTable";
 
 // Gets a random element from a list
 
-type moveProxy = {
+export type moveProxy = {
     from: number, to: number, moving: number, captured: number, specify: number, special: SpecialMove | undefined
 }
 
@@ -42,7 +42,7 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], o
     //BEFORE WE SEARCH FOR ACTUAL MOVES, LET'S EXAMINE THE OPENING BOOK
 
     let opening = queryOpeningBook( g );
-    const DEPTH = 1;
+    const DEPTH = 3;
 
     if (opening) {
         return opening;
@@ -52,9 +52,13 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], o
 
     console.time(`MiniMax with depth ${ DEPTH }`)
 
-    let move = miniMax( g, DEPTH, false, army, b => table.get(b), (b, e) => table.set(b, e) );
+    let nodes = 0;
+    let counter = () => nodes++
+
+    let move = miniMax( g, DEPTH, false, army, b => table.get(b), (b, e) => table.set(b, e), counter );
 
     console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
+    console.log(`Examined ${ nodes } nodes`)
     console.log(table);
 
     console.timeEnd(`MiniMax with depth ${ DEPTH }`);
