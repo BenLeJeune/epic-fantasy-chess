@@ -24,9 +24,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/HashTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/HashTable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +159,10 @@
       <workItem from="1625994194714" duration="21037000" />
       <workItem from="1626358135737" duration="8936000" />
       <workItem from="1626609469066" duration="6254000" />
-      <workItem from="1626691052565" duration="10889000" />
+      <workItem from="1626691052565" duration="12364000" />
+      <workItem from="1627040314950" duration="2141000" />
+      <workItem from="1627214157264" duration="1571000" />
+      <workItem from="1627301287668" duration="37000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -324,7 +325,21 @@
       <option name="project" value="LOCAL" />
       <updated>1626697544117</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Implemented more detailed Quiescence search that re-evaluates when necessary.">
+      <created>1626702946373</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1626702946373</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Updated package.json to specify npm and node version">
+      <created>1627043446559</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1627043446559</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -366,7 +381,9 @@
     <MESSAGE value="Added transposition tables to reduce the time spent re-evaluating the same positions." />
     <MESSAGE value="Improved the efficiency of position Evaluation.ts, implemented estimated move ordering." />
     <MESSAGE value="Improved the efficiency of the MiniMax by removing unnecessary move filtering." />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved the efficiency of the MiniMax by removing unnecessary move filtering." />
+    <MESSAGE value="Implemented more detailed Quiescence search that re-evaluates when necessary." />
+    <MESSAGE value="Updated package.json to specify npm and node version" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated package.json to specify npm and node version" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
