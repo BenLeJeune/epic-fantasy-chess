@@ -14,6 +14,10 @@ import Piece from "./Classes/Piece";
 
 //Opponent Web Worker
 import {Remote, wrap} from 'comlink';
+import {
+  beginBackgroundEvaluation,
+  beginBackgroundEvaluation as BeginBackgroundEvaluation
+} from "./WebWorker/MoveGenerator";
 
 //ARMIES
 const FIDEArmy = [
@@ -49,6 +53,8 @@ function App() {
   const [ currentTurn, setCurrentTurn ] = useState<number>( game.current.getCurrentTurn() );
   const [ moves, setMoves ] = useState<ActualMove[]>( game.current.getMoves() );
 
+  const playerColour = 1;
+
   //Ending the game
   const [ winner, setWinner ] = useState<number>(0); //1 for white win, -1 for black win, 0 for draw
   const [ gameOver, setGameOver ] = useState<boolean>(false);
@@ -66,6 +72,30 @@ function App() {
   /// OPPONENT AI
   ///
 
+  const beginBackgroundEvaluation = async () => {
+    const { BeginBackgroundEvaluation } = worker.current;
+
+    let gMoves = game.current.getMoves();
+    let gBoard = game.current.getBoard();
+
+    let parsedMoves = gMoves.map(
+        ({ from, to, moving, captured, special, specify }) => {
+          return {
+            from, to, moving, captured, special, specify
+          } })
+
+    BeginBackgroundEvaluation( [...gBoard], parsedMoves, FIDEArmy, { colour: -1 } )
+
+  }
+
+  const endBackgroundEvaluation = async () => {
+
+    const { EndBackgroundEvaluation } = worker.current;
+
+    EndBackgroundEvaluation()
+
+  }
+
   const generateRandomMove = async () => {
     // const { MoveGenerator } = wrap<import("./WebWorker/worker").OpponentWebWorker>(worker.current)
     const { MoveGenerator } = worker.current;
@@ -79,7 +109,7 @@ function App() {
               from, to, moving, captured, special, specify
         } })
 
-    return await MoveGenerator( gBoard, parsedMoves, FIDEArmy, { colour: -1 })
+    return await MoveGenerator( [...gBoard], parsedMoves, FIDEArmy, { colour: -1 })
   }
 
   //Captures
@@ -145,14 +175,25 @@ function App() {
   }
 
   const move = ( from : number, to : number, special?: SpecialMove, additional:  Partial<AdditionalOptions> = {} ) => {
+    //When we make our move, stop performing background calculations
 
     let col = game.current.getBoard()[from] > 0 ? 1 : -1;
+    if ( col === 1 ) endBackgroundEvaluation();
 
     ///PLAYS AUDIO
     let audio = new Audio( "/assets/Sounds/wooden-piece-move.mp3" );
     audio.play();
 
+
+    let captured = special === "EP" ? game.current.getBoard()[to - (8 * col )] : game.current.getBoard()[to];
+
+    if (captured !== Piece.None) {
+      console.log(`CAPTURING A ${ captured }`)
+      capturePiece(captured);
+    }
+
     game.current.Move( from, to, special, additional );
+
 
     setMoves( [...game.current.getMoves()] );
     setBoard( [...game.current.getBoard()] );
@@ -169,6 +210,8 @@ function App() {
                 ( m ) => {
                   if (!gameOver && m) try {
                     move(m.move.from, m.move.to, m.move.special, m.additional)
+                    beginBackgroundEvaluation()
+                    //When we make this move, begin performing background calculations
                   }
                   catch (e) {
                     console.log(e);
@@ -204,7 +247,7 @@ function App() {
     <div className={`chessBoardColumn ${ gameOver ? "gameOver" : "playing" }`}>
       <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves}
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
-                  whiteArmy={ FIDEArmy } blackArmy={ FIDEArmy }
+                  whiteArmy={ FIDEArmy } blackArmy={ FIDEArmy } playerColour={ playerColour }
       />
     </div>
     <div className="boardRightColumn">

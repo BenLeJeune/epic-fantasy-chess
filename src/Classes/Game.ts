@@ -123,7 +123,7 @@ export default class Game {
     }
 
     constructor( _board : number[] = generateFIDEBoard(), _history : ActualMove[] = [] ) {
-        this.board = _board;
+        this.board = [..._board]
         this.moves = _history;
         this.currentTurn = 1;
     }

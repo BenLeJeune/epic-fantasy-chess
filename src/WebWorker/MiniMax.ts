@@ -18,6 +18,10 @@ import Piece from "../Classes/Piece";
 // BETA represents the MAX score the MINIMISING player is guaranteed
 
 const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[],e:number,t:number,q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity ) => {
+
+    ///Another exit point
+    ///Returned values are meaningless, won't read them
+
     let col = maximising ? 1 : -1 as 1 | -1;
 
     let partialLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col, mode: "captures" } )
@@ -50,7 +54,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
     let isCheckMate = isCheck( g.getBoard(), g.getMoves(), col) && legalMoves.length === 0;
     let oppoonentLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: -col, mode: "captures" } )
 
-    if ( depth === -2 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 )) {
+    if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 )) {
         //We've reached the end! Return the final evaluation
         let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0
         let ev = positionalEngineEvaluation( g.getBoard(), g.getMoves() );
@@ -80,6 +84,11 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         } )
 
         for ( let { move: m, additional } of partFilter ) {
+
+            /// THIS IS WHERE WE CHECK FOR OUR CONDITION
+            /// IF THE CONDITION IS FALSE, OUR TIME IS UP!
+            /// WE WON'T BE USING THE RETURNED VALUE, ONLY UTILISING THE TRANSPOSITION TABLE
+
             g.Move( m.from, m.to, m.special, additional );
             if (!isCheck(g.getBoard(), g.getMoves(), col)) {
 
