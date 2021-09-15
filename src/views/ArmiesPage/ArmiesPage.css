@@ -1,0 +1,49 @@
+div#ArmiesPage div#NavBar {
+  background-color: #262836;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin-bottom: 3em;
+}
+div#ArmiesPage div#NavBar > h3.navBarHeader {
+  color: #E2E2E2;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding-left: 0.5em;
+}
+div#ArmiesPage div#NavBar > a {
+  margin: 0.5em;
+}
+div#ArmiesPage h1.pageHeading {
+  color: #F8DC97;
+  font-size: 3em;
+  padding-left: 0.5em;
+}
+div#ArmiesPage p.pageSubtitle {
+  color: #E2E2E2;
+  padding-left: 1.5em;
+  font-size: 1em;
+}
+div#ArmiesPage div.armiesListing {
+  font-size: 1em;
+  padding: 0 1.5em;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+div.armyPreview {
+  display: inline-block;
+  background-color: #2C2F40;
+  max-width: 20em;
+  min-width: 10em;
+  padding: 0.5em;
+  margin: 1em;
+}
+div.armyPreview h3.ArmyName {
+  color: #F8DC97;
+}
+div.armyPreview div.pieces > p {
+  color: #464B66;
+}
+
+/*# sourceMappingURL=ArmiesPage.css.map */

@@ -15,7 +15,7 @@ export default class Knight extends GamePiece {
 
     //naming & display
     public shortName = Knight.shortName;
-    public longName = Knight.shortName;
+    public longName = Knight.longName;
     public static shortName = "N";
     public  static longName = "Knight";
 

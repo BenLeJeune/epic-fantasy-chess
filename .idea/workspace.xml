@@ -23,14 +23,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
+      <change afterPath="$PROJECT_DIR$/src/MainRouter.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Presets/Armies.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Routers/ArmiesRouter.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Routers/DecksRouter.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Routers/PlayRouter.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/NiceButton/NiceButton.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/NiceButton/NiceButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/Homepage/Homepage.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/Homepage/Homepage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Game.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/worker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/worker.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InfoBar/InfoBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/_colours.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/_colours.sass" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,9 +54,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
         <option value="Sass File" />
-        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -80,7 +94,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
     <property name="ts.external.directory.path" value="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -172,7 +186,11 @@
       <workItem from="1627486914938" duration="291000" />
       <workItem from="1627991153540" duration="10105000" />
       <workItem from="1628529232406" duration="254000" />
-      <workItem from="1629030892977" duration="3883000" />
+      <workItem from="1629030892977" duration="7105000" />
+      <workItem from="1631732832756" duration="4143000" />
+      <workItem from="1631739879554" duration="160000" />
+      <workItem from="1631740060965" duration="2329000" />
+      <workItem from="1631742437700" duration="557000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -349,7 +367,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627043446559</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Adjusted minimax to encourage proactive moves (odd number of evals) and discourage waiting moves in drawn positions.">
+      <created>1629035803006</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1629035803006</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -368,7 +393,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added isRidingObstructed function to recursively check piece movement for obstruction." />
     <MESSAGE value="Refactor to move away from object-based approach, now uses array-based approach" />
     <MESSAGE value="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic" />
     <MESSAGE value="Added move history display, restructured App()-level state control to use useRef() and intermediary state." />
@@ -393,7 +417,8 @@
     <MESSAGE value="Improved the efficiency of the MiniMax by removing unnecessary move filtering." />
     <MESSAGE value="Implemented more detailed Quiescence search that re-evaluates when necessary." />
     <MESSAGE value="Updated package.json to specify npm and node version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated package.json to specify npm and node version" />
+    <MESSAGE value="Adjusted minimax to encourage proactive moves (odd number of evals) and discourage waiting moves in drawn positions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adjusted minimax to encourage proactive moves (odd number of evals) and discourage waiting moves in drawn positions." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1,0 +1,46 @@
+@use "../../modules/colours"
+
+div#ArmiesPage
+  div#NavBar
+    background-color: colours.$mediumBlue
+    display: flex
+    flex-flow: row nowrap
+    align-items: center
+    margin-bottom: 3em
+    > h3.navBarHeader
+      color: colours.$offwhite
+      font-weight: bold
+      font-size: 1.5em
+      padding-left: .5em
+    > a
+      margin: 0.5em
+
+  h1.pageHeading
+    color: colours.$lightsquare
+    font-size: 3em
+    padding-left: .5em
+  p.pageSubtitle
+    color: colours.$offwhite
+    padding-left: 1.5em
+    font-size: 1em
+
+  div.armiesListing
+    font-size: 1em
+    padding: 0 1.5em
+    display: flex
+    flex-flow: row wrap
+
+div.armyPreview
+
+  display: inline-block
+  background-color: colours.$lightBlue
+  max-width: 20em
+  min-width: 10em
+  padding: 0.5em
+  margin: 1em
+
+  h3.ArmyName
+    color: colours.$lightsquare
+  div.pieces
+    > p
+      color: colours.$offLightBlue

@@ -1,0 +1,23 @@
+@use "../../modules/colours"
+
+div#HomepageMain
+  h1.MainTitle
+    text-align: center
+    font-size: 4em
+    margin: 2em
+    color: colours.$lightsquare
+
+div.buttonsRow
+  width: 50%
+  transform: translateX(50%)
+  display: flex
+  flex-flow: row nowrap
+  align-items: center
+  justify-content: space-evenly
+  justify-items: center
+  align-content: space-around
+
+  @media(max-width: 1000px)
+    flex-flow: column nowrap
+    > a
+      padding: .5em

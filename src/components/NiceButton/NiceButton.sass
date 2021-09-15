@@ -1,0 +1,52 @@
+@use "../../modules/colours"
+
+
+div.niceButtonOuter
+  display: inline-block
+  position: relative
+
+  &:hover
+    div.niceButtonForeground
+      transform: translateY(-0.5rem)
+  &:active
+    div.niceButtonForeground
+      transform: translateY(-0.25rem)
+      background-color: colours.$lightSquareBrighter
+
+  div.niceButtonBackground
+    border-radius: 0.5em
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background-color: colours.$lightBlue
+
+  div.niceButtonForeground
+    background-color: colours.$darksquare
+    border-radius: 0.5em
+    position: relative
+
+    transition: transform 0.25s ease-out, background-color 0.25s ease-out
+
+    display: inline-block
+
+    font-size: 0.75em
+
+    &.small
+      padding: 0.5em
+      p
+        padding: 0.25em 1em
+
+    &.medium
+      font-size: 1.5em
+    &.large
+      font-size: 2em
+
+    padding: 1em
+
+    p
+      color: colours.$lightsquare
+      font-weight: bold
+      text-decoration: none
+      padding: 0.5em 2em

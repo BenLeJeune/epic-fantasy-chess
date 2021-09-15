@@ -1,0 +1,57 @@
+div#GameOverUI {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  opacity: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem 5rem;
+  border-radius: 1rem;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+div#GameOverUI.hidden {
+  transform: translate(-50%, -25%);
+  opacity: 0;
+}
+div#GameOverUI.white {
+  background-color: #E2E2E2;
+  color: #161823;
+}
+div#GameOverUI.black {
+  background-color: #161823;
+  color: #E2E2E2;
+}
+div#GameOverUI div#GameOverHeader h2.scoreMessage {
+  font-size: 3rem;
+  font-weight: normal;
+  margin: 0.25rem;
+}
+div#GameOverUI div#GameOverHeader p.winnerMessage {
+  font-size: 1.5rem;
+  margin: 0.25rem;
+}
+div#GameOverUI div#GameOverBody p {
+  font-size: 1rem;
+  font-style: italic;
+  margin: 0 0 0.5rem 0;
+}
+div#GameOverUI button {
+  border: none;
+  outline: none;
+  background-color: #2C2F40;
+  color: #E2E2E2;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 1.5rem;
+}
+div#GameOverUI button:hover, div#GameOverUI button:active {
+  outline: none;
+  background-color: #262836;
+  cursor: pointer;
+}
+div#GameOverUI button:active {
+  transform: translateY(0.25rem);
+}
+
+/*# sourceMappingURL=GameOverUI.css.map */

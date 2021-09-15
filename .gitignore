@@ -25,6 +25,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-#Ignore css files
-*.css
+# ignore css mapping files files
+# can't ignore CSS files because SASS doesn't play nice at college PCs
 *.css.map

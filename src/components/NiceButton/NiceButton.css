@@ -1,0 +1,49 @@
+div.niceButtonOuter {
+  display: inline-block;
+  position: relative;
+}
+div.niceButtonOuter:hover div.niceButtonForeground {
+  transform: translateY(-0.5rem);
+}
+div.niceButtonOuter:active div.niceButtonForeground {
+  transform: translateY(-0.25rem);
+  background-color: #5F6EC3;
+}
+div.niceButtonOuter div.niceButtonBackground {
+  border-radius: 0.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #2C2F40;
+}
+div.niceButtonOuter div.niceButtonForeground {
+  background-color: #3A4377;
+  border-radius: 0.5em;
+  position: relative;
+  transition: transform 0.25s ease-out, background-color 0.25s ease-out;
+  display: inline-block;
+  font-size: 0.75em;
+  padding: 1em;
+}
+div.niceButtonOuter div.niceButtonForeground.small {
+  padding: 0.5em;
+}
+div.niceButtonOuter div.niceButtonForeground.small p {
+  padding: 0.25em 1em;
+}
+div.niceButtonOuter div.niceButtonForeground.medium {
+  font-size: 1.5em;
+}
+div.niceButtonOuter div.niceButtonForeground.large {
+  font-size: 2em;
+}
+div.niceButtonOuter div.niceButtonForeground p {
+  color: #F8DC97;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.5em 2em;
+}
+
+/*# sourceMappingURL=NiceButton.css.map */
