@@ -1,6 +1,7 @@
 div.niceButtonOuter {
   display: inline-block;
   position: relative;
+  cursor: pointer;
 }
 div.niceButtonOuter:hover div.niceButtonForeground {
   transform: translateY(-0.5rem);
@@ -44,6 +45,4 @@ div.niceButtonOuter div.niceButtonForeground p {
   font-weight: bold;
   text-decoration: none;
   padding: 0.5em 2em;
-}
-
-/*# sourceMappingURL=NiceButton.css.map */
+}/*# sourceMappingURL=NiceButton.css.map */

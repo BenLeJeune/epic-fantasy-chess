@@ -1,0 +1,16 @@
+div#NavBar {
+  background-color: #262836;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin-bottom: 3em;
+}
+div#NavBar > h3.navBarHeader {
+  color: #E2E2E2;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding-left: 0.5em;
+}
+div#NavBar > a {
+  margin: 0.5em;
+}/*# sourceMappingURL=NavBar.css.map */

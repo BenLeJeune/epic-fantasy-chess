@@ -19,6 +19,7 @@ export const FIDEARMY = new Army([
     Piece.Knight,
     Piece.Bishop,
     Piece.Queen,
+    Piece.King,
     Piece.Bishop,
     Piece.Knight,
     Piece.Rook

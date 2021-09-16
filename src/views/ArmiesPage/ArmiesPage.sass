@@ -1,19 +1,6 @@
 @use "../../modules/colours"
 
 div#ArmiesPage
-  div#NavBar
-    background-color: colours.$mediumBlue
-    display: flex
-    flex-flow: row nowrap
-    align-items: center
-    margin-bottom: 3em
-    > h3.navBarHeader
-      color: colours.$offwhite
-      font-weight: bold
-      font-size: 1.5em
-      padding-left: .5em
-    > a
-      margin: 0.5em
 
   h1.pageHeading
     color: colours.$lightsquare
@@ -22,6 +9,10 @@ div#ArmiesPage
   p.pageSubtitle
     color: colours.$offwhite
     padding-left: 1.5em
+    font-size: 1em
+
+  div.armiesButtonRow
+    padding: 0 1.5em
     font-size: 1em
 
   div.armiesListing
@@ -38,6 +29,7 @@ div.armyPreview
   min-width: 10em
   padding: 0.5em
   margin: 1em
+  border-radius: 0.5em
 
   h3.ArmyName
     color: colours.$lightsquare

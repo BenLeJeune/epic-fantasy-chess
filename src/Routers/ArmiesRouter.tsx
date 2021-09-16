@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom';
 import ArmiesPage from "../views/ArmiesPage/ArmiesPage";
+import ArmiesBuilderPage from "../views/ArmiesBuilderPage/ArmiesBuilderPage";
 
 export default function ArmiesRouter() {
 
@@ -13,7 +14,7 @@ export default function ArmiesRouter() {
         </Route>
 
         <Route path={`${url}/:armyID`}>
-            <h1>BUILDING AN ARMY</h1>
+            <ArmiesBuilderPage/>
         </Route>
 
     </Switch>
