@@ -18,6 +18,11 @@ export default class Bishop extends GamePiece {
     public static shortName = "B";
     public static longName = "Bishop";
 
+    public movesDescription = "Moves any number of squares diagonally.";
+    public specialMoves = [
+        ""
+    ]
+    public notes = "Is colour-bound.";
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves

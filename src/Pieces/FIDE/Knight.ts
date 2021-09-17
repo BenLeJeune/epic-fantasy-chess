@@ -19,6 +19,13 @@ export default class Knight extends GamePiece {
     public static shortName = "N";
     public  static longName = "Knight";
 
+
+    public movesDescription = "Two squares in one direction, then one perpendicular, forming an L-shape.";
+    public specialMoves = [
+        ""
+    ]
+    public notes = "Can leap over pieces.";
+
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number, history : ActualMove[]) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves
 

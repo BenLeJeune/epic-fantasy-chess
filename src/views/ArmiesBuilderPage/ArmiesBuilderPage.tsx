@@ -27,6 +27,8 @@ export default function ArmiesBuilderPage() {
         }
     }, [])
 
+    let [ piecePreview, setPiecePreview ] = useState(0);
+
 
     const getChessBoard = () => {
         let chessSquares = [];
@@ -48,7 +50,7 @@ export default function ArmiesBuilderPage() {
     )
 
     const getPieceLibrary = () => Piece.PIECES.map(
-        ( piece, i ) => <div className="libraryPiece">
+        ( piece, i ) => <div className="libraryPiece" onMouseOver={ () => setPiecePreview(piece) }>
             <img src={ Piece.getImage(piece) } />
         </div>
     )
@@ -60,10 +62,38 @@ export default function ArmiesBuilderPage() {
 
             <div className="pieceInfoPreview">
 
+                <div className={`pieceInfoPreviewBox ${ piecePreview === 0 ? "noPreview" : "preview" }`}>
+                    {
+                        piecePreview === 0 ? <p className="faded">Hover over a piece to look at it.</p> : <>
+                            <h1 className="PieceInfo">{ Piece.getPiece(piecePreview)?.longName }</h1>
+                            <div className="imgContainer">
+                                <img src={ Piece.getImage(piecePreview) } />
+                            </div>
+                            {
+                                piecePreview === Piece.Pawn || piecePreview === Piece.King ?
+                                    <p className="faded">This piece cannot be altered or swapped.</p> : <><br/><br/></>
+                            }
+                            <p className="info">
+                                <b>Notation:</b> { Piece.getPiece(piecePreview)?.shortName } <br/>
+                                <b>Value:</b> { piecePreview === Piece.King ? "Infinity" : Piece.getPiece(piecePreview)?.materialValue } <br/>
+                                <br/>
+                                { Piece.getPiece(piecePreview)?.movesDescription } <br/><br/>
+                                { Piece.getPiece(piecePreview)?.specialMoves.map(s => <>{s} </>) } <br/><br/>
+                                { Piece.getPiece(piecePreview)?.notes } <br/><br/>
+
+                            </p>
+                        </>
+                    }
+                </div>
+
             </div>
 
             <div className="piecesList">
-                { getPieceLibrary() }
+                <div className="pieceLibrary">
+
+                    { getPieceLibrary() }
+
+                </div>
             </div>
 
             <div className="lowerBoard">

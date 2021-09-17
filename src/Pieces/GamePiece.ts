@@ -21,6 +21,13 @@ export default abstract class GamePiece {
     public abstract shortName : string; //e.g "k"
     public abstract longName : string; //e.g "Pawn"
 
+    ///
+    /// MOVES
+    ///
+    public abstract movesDescription : string; // e.g "One forward."
+    public abstract specialMoves : string[]; // e.g "Can move two times on first turn
+    public abstract notes : string;
+
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number, history : ActualMove[]) => legalMove[] =
         ( position, board, mode, colour = 1, history ) => {
             return board.map( ( p, square ) => {

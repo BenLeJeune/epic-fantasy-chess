@@ -18,6 +18,12 @@ export default class Rook extends GamePiece {
     public static shortName = "R";
     public static longName = "Rook";
 
+    public movesDescription = "Moves any number of squares diagonally or vertically.";
+    public specialMoves = [
+        "If neither pieces have moved, and isn't through check, can \"castle\" with the king."
+    ]
+    public notes = "";
+
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves
 

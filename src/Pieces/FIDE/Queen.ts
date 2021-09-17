@@ -18,6 +18,12 @@ export default class Queen extends GamePiece {
     public static shortName = "Q";
     public static longName = "Queen";
 
+    public movesDescription = "Moves any number of squares diagonally, horizontally and vertically - combining the moves of the Rook and the Bishop.";
+    public specialMoves = [
+        ""
+    ]
+    public notes = "";
+
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves
 

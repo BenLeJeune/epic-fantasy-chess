@@ -21,6 +21,12 @@ export default class King extends GamePiece {
     public static shortName = "K";
     public static longName = "King"
 
+    public movesDescription = "Moves one square in any direction.";
+    public specialMoves = [
+        "If a Castler and this piece have not moved, and you don't pass through check to do so, you may move the king two squares towards the castler, placing the castler on the other side."
+    ]
+    public notes = "Cannot move into check, and if possible must move out of check. If checkmated, you lose the game.";
+
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number, history : ActualMove[]) => legalMove[] = ( position, board, mode, colour = 1, history ) => {
         //Let's use this as a test for the legal rider moves
 
