@@ -5,35 +5,26 @@ import NiceButton from "../../components/NiceButton/NiceButton";
 import Piece from "../../Classes/Piece";
 import NavBar from "../../components/NavBar/NavBar"
 
+const ARMY_KEY = "myArmies";
+
 export default function ArmiesPage() {
 
     const getArmies = () => {
 
-        let armies = [];
+        //Reading armies from local storage.
+        let armies = [] as Army[];
 
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
-        armies.push(FIDEARMY)
+        let armiesJSON = localStorage.getItem(ARMY_KEY);
+        if (armiesJSON) {
+            let parsedArmies = JSON.parse(armiesJSON);
+            Object.keys(parsedArmies).map(key => armies.push(parsedArmies[key]));
+        }
 
         return armies;
     }
 
     const createNewArmy = () => {
 
-        const ARMY_KEY = "myArmies";
 
         let armiesJSON = localStorage.getItem(ARMY_KEY);
         let name : string = "";
@@ -102,7 +93,9 @@ interface ArmyPreviewProps {
 
 export function ArmyPreview( { army }: ArmyPreviewProps) {
 
-    return <div className="armyPreview">
+    return <div className="armyPreview"
+                onClick={ () => window.location.href = `/armies/${ army.name }` }
+    >
         <h3 className="ArmyName">
             { army.name }
         </h3>

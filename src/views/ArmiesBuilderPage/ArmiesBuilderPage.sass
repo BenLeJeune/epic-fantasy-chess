@@ -1,5 +1,21 @@
 @use "../../modules/colours"
 
+div.saveChanges
+    position: fixed
+    bottom: 2vh
+    left: 2vh
+    width: 100%
+    padding: 0.5em
+    background-color: colours.$mediumBlue
+    animation: save-change-entrance 0.5s forwards
+    border-radius: 0.25em
+
+@keyframes save-change-entrance
+    0%
+        transform: translateY(200%)
+    100%
+        transform: translateY(0)
+
 div#ArmiesBuilderPage
     h1
         color: colours.$lightsquare
@@ -21,12 +37,27 @@ div#ArmiesBuilderPage
             grid-column: 2 / 3
             grid-row: 1 / 2
             background-color: blue
+            display: flex
+            flex-flow: row wrap
+            align-items: flex-start
+            div.libraryPiece
+                margin: 0.5em
+                min-width: 7.5em
+                cursor: pointer
+                border-radius: 0.25em
+                img
+                    height: 100%
+                    width: 100%
+                background-color: colours.$darksquare
+                transition: background-color 0.25s ease-out
+                &:hover
+                    background-color: colours.$lightSquareBrighter
         div.lowerBoard
             grid-column: 2 / 3
             grid-row: 2 / 3
             div.chessBoardPadding
                 height: 100%
-                width: 100%
+                width: 100%     
                 padding: .5em
                 display: flex
                 align-items: center

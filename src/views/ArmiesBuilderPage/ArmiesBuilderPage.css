@@ -1,3 +1,32 @@
+div.saveChanges {
+  position: fixed;
+  bottom: 2vh;
+  left: 2vh;
+  width: 100%;
+  padding: 0.5em;
+  background-color: #262836;
+  -webkit-animation: save-change-entrance 0.5s forwards;
+          animation: save-change-entrance 0.5s forwards;
+  border-radius: 0.25em;
+}
+
+@-webkit-keyframes save-change-entrance {
+  0% {
+    transform: translateY(200%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes save-change-entrance {
+  0% {
+    transform: translateY(200%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
 div#ArmiesBuilderPage h1 {
   color: #F8DC97;
   font-size: 3em;
@@ -19,6 +48,24 @@ div#ArmiesBuilderPage div.armiesManager div.piecesList {
   grid-column: 2/3;
   grid-row: 1/2;
   background-color: blue;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+}
+div#ArmiesBuilderPage div.armiesManager div.piecesList div.libraryPiece {
+  margin: 0.5em;
+  min-width: 7.5em;
+  cursor: pointer;
+  border-radius: 0.25em;
+  background-color: #3A4377;
+  transition: background-color 0.25s ease-out;
+}
+div#ArmiesBuilderPage div.armiesManager div.piecesList div.libraryPiece img {
+  height: 100%;
+  width: 100%;
+}
+div#ArmiesBuilderPage div.armiesManager div.piecesList div.libraryPiece:hover {
+  background-color: #5F6EC3;
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard {
   grid-column: 2/3;

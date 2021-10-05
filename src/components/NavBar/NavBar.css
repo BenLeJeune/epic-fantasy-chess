@@ -4,6 +4,10 @@ div#NavBar {
   flex-flow: row nowrap;
   align-items: center;
   margin-bottom: 3em;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 div#NavBar > h3.navBarHeader {
   color: #E2E2E2;
