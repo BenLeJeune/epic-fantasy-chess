@@ -27,6 +27,12 @@ div.armyPreview {
   padding: 0.5em;
   margin: 1em;
   border-radius: 0.5em;
+  cursor: pointer;
+  transform: translateY(0);
+  transition: transform 0.25s ease-out;
+}
+div.armyPreview:hover {
+  transform: translateY(-0.5em);
 }
 div.armyPreview h3.ArmyName {
   color: #F8DC97;

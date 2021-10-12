@@ -1,3 +1,22 @@
+div.saveChanges {
+  position: fixed;
+  bottom: 2vh;
+  left: 2vh;
+  width: calc(100% - 4vh);
+  padding: 0.5em;
+  background-color: #262836;
+  animation: save-change-entrance 0.5s forwards;
+  border-radius: 0.5em;
+}
+
+@keyframes save-change-entrance {
+  0% {
+    transform: translateY(200%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
 div#ArmiesBuilderPage h1 {
   color: #F8DC97;
   font-size: 3em;

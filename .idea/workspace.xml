@@ -24,19 +24,15 @@
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Bishop.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/King.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Knight.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Pawn.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Queen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/FIDE/Rook.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Pieces/GamePiece.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/GamePiece.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/NavBar/NavBar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar/NavBar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/NiceButton/NiceButton.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NiceButton/NiceButton.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavBar/NavBar.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar/NavBar.sass" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.sass" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.sass" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,6 +180,9 @@
       <workItem from="1631740060965" duration="2329000" />
       <workItem from="1631742437700" duration="613000" />
       <workItem from="1631815060510" duration="4273000" />
+      <workItem from="1631865510433" duration="801000" />
+      <workItem from="1633454383699" duration="2489000" />
+      <workItem from="1634018901705" duration="591000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
@@ -374,7 +373,14 @@
       <option name="project" value="LOCAL" />
       <updated>1631743029607</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Added piece library &amp; previews to the army builder page">
+      <created>1631865718123</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1631865718123</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -393,7 +399,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented ActualMoves, isOpposingCapture, piece movement logic &amp; capturing logic" />
     <MESSAGE value="Added move history display, restructured App()-level state control to use useRef() and intermediary state." />
     <MESSAGE value="Added castling, double pawn moves, and en passant." />
     <MESSAGE value="Captured piece logic moved into the App() component away from the chessboard, and captured &quot;undone&quot; by unmoving." />
@@ -418,7 +423,8 @@
     <MESSAGE value="Updated package.json to specify npm and node version" />
     <MESSAGE value="Adjusted minimax to encourage proactive moves (odd number of evals) and discourage waiting moves in drawn positions." />
     <MESSAGE value="Added css to version control, implemented basic routing &amp; army structures" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added css to version control, implemented basic routing &amp; army structures" />
+    <MESSAGE value="Added piece library &amp; previews to the army builder page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added piece library &amp; previews to the army builder page" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

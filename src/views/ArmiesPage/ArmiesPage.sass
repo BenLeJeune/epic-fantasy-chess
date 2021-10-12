@@ -30,6 +30,11 @@ div.armyPreview
   padding: 0.5em
   margin: 1em
   border-radius: 0.5em
+  cursor: pointer
+  transform: translateY(0)
+  transition: transform 0.25s ease-out
+  &:hover
+    transform: translateY(-0.5em)
 
   h3.ArmyName
     color: colours.$lightsquare
