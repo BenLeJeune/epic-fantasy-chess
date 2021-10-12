@@ -5,8 +5,18 @@ div.saveChanges {
   width: calc(100% - 4vh);
   padding: 0.5em;
   background-color: #262836;
-  animation: save-change-entrance 0.5s forwards;
+  -webkit-animation: save-change-entrance 0.5s forwards;
+          animation: save-change-entrance 0.5s forwards;
   border-radius: 0.5em;
+}
+
+@-webkit-keyframes save-change-entrance {
+  0% {
+    transform: translateY(200%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes save-change-entrance {
@@ -91,7 +101,7 @@ div#ArmiesBuilderPage div.armiesManager div.piecesList div.pieceLibrary div.libr
 div#ArmiesBuilderPage div.armiesManager div.piecesList div.pieceLibrary div.libraryPiece:hover > img {
   transform: translateY(-5%);
 }
-div#ArmiesBuilderPage div.armiesManager div.piecesList div.pieceLibrary div.libraryPiece > img {
+div#ArmiesBuilderPage div.armiesManager div.piecesList div.pieceLibrary div.libraryPiece img {
   width: 100%;
   transition: transform 0.25s ease-out;
 }
@@ -138,6 +148,4 @@ div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div.chessBoard div.lowerBoardSquare.dark {
   background-color: #3A4377;
-}
-
-/*# sourceMappingURL=ArmiesBuilderPage.css.map */
+}/*# sourceMappingURL=ArmiesBuilderPage.css.map */

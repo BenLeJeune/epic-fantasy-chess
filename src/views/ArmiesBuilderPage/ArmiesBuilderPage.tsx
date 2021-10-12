@@ -82,12 +82,11 @@ export default function ArmiesBuilderPage() {
     }
 
     const getPieceLibrary = () => Piece.PIECES.map(
-        ( piece, i ) => <div className="libraryPiece" onMouseOver={ () => setPiecePreview(piece) }
+        ( piece, i ) => <div className="libraryPiece" onMouseOver={ () => setPiecePreview(piece) }>
+            <img src={ Piece.getImage(piece) }
              draggable
              onDragStart={ e => pieceDragStart( e, piece ) }
-             onDragEnd={ () => pieceDragEnd( piece ) }
-        >
-            <img src={ Piece.getImage(piece) } />
+             onDragEnd={ () => pieceDragEnd( piece ) } />
         </div>
     )
 
@@ -109,7 +108,7 @@ export default function ArmiesBuilderPage() {
         }
     }
 
-    return <div id="ArmiesBuilderPage">
+    return <div id="ArmiesBuilderPage" className="paddedTop">
 
         <NavBar/>
         <h1>{ armyID }</h1>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import App from "../App";
 
 export default function PlayRouter() {
@@ -10,6 +10,7 @@ export default function PlayRouter() {
 
         <Route path={`${url}`} exact>
             <h1>SETTING UP YOUR GAME</h1>
+            <Link to={`${url}/playing`}>PLAY A GAME</Link>
         </Route>
 
         <Route path={`${url}/playing`}>

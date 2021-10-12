@@ -20,7 +20,7 @@ export default class Rook extends GamePiece {
 
     public movesDescription = "Moves any number of squares diagonally or vertically.";
     public specialMoves = [
-        "If neither pieces have moved, and isn't through check, can \"castle\" with the king."
+        "If neither pieces have moved, and this doesn't cause the king to move through check, can \"castle\" with the king."
     ]
     public notes = "";
 

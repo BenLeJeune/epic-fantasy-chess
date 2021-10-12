@@ -10,17 +10,15 @@ const generateTestBoard : () => number[] = () => {
     let board = generateEmptyBoard();
 
     board[1] = -Piece.King
-    board[8] = -Piece.Pawn
     board[10] = -Piece.Pawn
-    board[15] = Piece.Rook
     board[17] = -Piece.Pawn
     board[41] = Piece.Pawn
     board[47] = Piece.Pawn
     board[48] = Piece.Pawn
     board[51] = -Piece.Knight
-    board[52] = -Piece.Rook
     board[56] = Piece.King
-    board[61] = -Piece.Rook
+    board[61] = Piece.Bede
+    board[30] = -Piece.Waffle
 
     return board;
 }
@@ -72,6 +70,7 @@ const generateFIDEBoard : () => number[] = () => {
     return board;
 
 }
+
 
 export {
     generateEmptyBoard,

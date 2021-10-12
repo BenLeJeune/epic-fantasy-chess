@@ -21,6 +21,17 @@ import b_queen from "../assets/Pieces/queen_black.svg";
 import w_king from "../assets/Pieces/king_white.svg";
 import b_king from "../assets/Pieces/king_black.svg";
 
+//COLOURBOUND CLOBBERERS
+import Waffle from "../Pieces/COLBOUND/Waffle";
+import Bede from "../Pieces/COLBOUND/Bede";
+
+import w_bede from "../assets/Pieces/bede_white.svg";
+import b_bede from "../assets/Pieces/bede_black.svg";
+import w_waffle from "../assets/Pieces/waffle_white.svg";
+import b_waffle from "../assets/Pieces/waffle_black.svg";
+import w_warbishop from "../assets/Pieces/warbishop_white.svg";
+import b_warbishop from "../assets/Pieces/warbishop_black.svg";
+
 export default class Piece {
 
     public static PIECES = [ 1, 2, 3, 4, 5, 6 ]
@@ -36,16 +47,16 @@ export default class Piece {
     public static Queen = 5;
     public static King = 6;
 
+    ///
+    /// COLOURBOUND CLOBBERERS VALUES
+    ///
+    public static Waffle = 7;
+    public static Warbishop = 8;
+    public static Bede = 9;
+    public static Cardinal = 10;
+
     public static isWhite = ( piece : number ) => piece > 0;
     public static isBlack = ( piece : number ) => piece < 0;
-
-    public static longName = ( piece : number ) => [
-        "None", "Pawn", "Knight", "Bishop", "Rook", "Queen", "King"
-    ][ Math.abs( piece ) ]
-
-    public static shortName = ( piece : number ) => [
-        "", "p", "k", "b", "r", "q", "k"
-    ][ Math.abs( piece ) ]
 
     public static getFile = ( position : number ) => position % 8;
     public static getRank = ( position : number ) => ( position - ( position % 8 ) ) / 8;
@@ -73,10 +84,16 @@ export default class Piece {
                 return piece > 0 ? w_queen : b_queen;
             case Piece.King:
                 return piece > 0 ? w_king : b_king;
+            case Piece.Waffle:
+                return piece > 0 ? w_waffle : b_waffle;
+            case Piece.Warbishop:
+                return piece > 0 ? w_warbishop : b_warbishop;
+            case Piece.Bede:
+                return piece > 0 ? w_warbishop : b_warbishop;
         }
     }
     public static getPiece : ( piece : number ) => GamePiece | null = (piece ) => [
-        null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King()
+        null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King(), new Waffle(), new Bede(), new Bede()
     ][ Math.abs(piece) ]
 
 }

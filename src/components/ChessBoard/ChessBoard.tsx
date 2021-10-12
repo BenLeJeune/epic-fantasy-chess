@@ -24,10 +24,11 @@ interface Props {
     capturePiece : ( p:number ) => void,
     whiteArmy: number[],
     blackArmy: number[],
-    playerColour : number
+    playerColour : number,
+    opponentActive : boolean
 }
 
-export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour } : Props) {
+export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive } : Props) {
 
     ///
     /// MOVING & CAPTURING
@@ -100,7 +101,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     key={ getPieceKey( piece, pos ) }
                     piece={ piece }
                     id={ getPieceKey( piece, pos ) }
-                    draggable={ (currentTurn > 0 && piece > 0 && playerColour > 0) || ( currentTurn < 0 && piece < 0 && playerColour < 0 ) }
+                    draggable={ (currentTurn > 0 && piece > 0 && (playerColour > 0 || !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) ) }
                     target={ () => setTargeting([ piece, pos ])  }
                     unTarget={ () => setTargeting([ 0, -1 ]) }
                     active={ targeting[1] === pos || targeting[1] === -1 } /> )

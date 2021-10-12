@@ -38,7 +38,14 @@ const CHECKMATE = "via Checkmate",
 //The main component
 function App() {
 
-  const game = useRef( new Game( /*generateTestBoard()*/ )  )
+  ///
+  /// USED FOR DEVELOPMENT PURPOSES
+  ///
+
+  const [ opponent ] = useState(false); //THIS DISABLES THE AI AND LETS YOU MOVE BOTH COLOUR PIECES
+
+
+  const game = useRef( new Game( generateTestBoard() ) )
 
   /// THE OPPONENT
 
@@ -204,7 +211,7 @@ function App() {
 
     //IF NOT, THE OPPONENT PLAYS A MOVE
     setTimeout(() => {
-      if ( !gameOver && game.current.getCurrentTurn() === -1 ) {
+      if ( !gameOver && game.current.getCurrentTurn() === -1 && opponent ) {
         generateRandomMove()
             .then(
                 ( m ) => {
@@ -247,7 +254,7 @@ function App() {
     <div className={`chessBoardColumn ${ gameOver ? "gameOver" : "playing" }`}>
       <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves}
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
-                  whiteArmy={ FIDEArmy } blackArmy={ FIDEArmy } playerColour={ playerColour }
+                  whiteArmy={ FIDEArmy } blackArmy={ FIDEArmy } playerColour={ playerColour } opponentActive={opponent}
       />
     </div>
     <div className="boardRightColumn">

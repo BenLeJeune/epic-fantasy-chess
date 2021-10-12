@@ -60,7 +60,7 @@ export default function ArmiesPage() {
 
     }
 
-    return <div id="ArmiesPage">
+    return <div id="ArmiesPage" className="paddedTop">
 
         <NavBar/>
 
