@@ -19,6 +19,8 @@ const generateTestBoard : () => number[] = () => {
     board[56] = Piece.King
     board[61] = Piece.Bede
     board[30] = -Piece.Waffle
+    board[13] = -Piece.Warbishop
+    board[10] = Piece.Cardinal
 
     return board;
 }

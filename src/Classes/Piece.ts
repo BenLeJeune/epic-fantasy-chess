@@ -24,6 +24,8 @@ import b_king from "../assets/Pieces/king_black.svg";
 //COLOURBOUND CLOBBERERS
 import Waffle from "../Pieces/COLBOUND/Waffle";
 import Bede from "../Pieces/COLBOUND/Bede";
+import Warbishop from "../Pieces/COLBOUND/Warbishop";
+import Cardinal from "../Pieces/COLBOUND/Cardinal";
 
 import w_bede from "../assets/Pieces/bede_white.svg";
 import b_bede from "../assets/Pieces/bede_black.svg";
@@ -31,10 +33,13 @@ import w_waffle from "../assets/Pieces/waffle_white.svg";
 import b_waffle from "../assets/Pieces/waffle_black.svg";
 import w_warbishop from "../assets/Pieces/warbishop_white.svg";
 import b_warbishop from "../assets/Pieces/warbishop_black.svg";
+import w_cardinal from "../assets/Pieces/cardinal_white.svg";
+import b_cardinal from "../assets/Pieces/cardinal_black.svg";
+
 
 export default class Piece {
 
-    public static PIECES = [ 1, 2, 3, 4, 5, 6 ]
+    public static PIECES = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
 
     ///
     /// PIECE NUMBER VALUES - negative for black!
@@ -89,11 +94,14 @@ export default class Piece {
             case Piece.Warbishop:
                 return piece > 0 ? w_warbishop : b_warbishop;
             case Piece.Bede:
-                return piece > 0 ? w_warbishop : b_warbishop;
+                return piece > 0 ? w_bede : b_bede;
+            case Piece.Cardinal:
+                return piece > 0 ? w_cardinal : b_cardinal;
         }
     }
     public static getPiece : ( piece : number ) => GamePiece | null = (piece ) => [
-        null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King(), new Waffle(), new Bede(), new Bede()
+        null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King(),
+         new Waffle(), new Warbishop(), new Bede(), new Cardinal()
     ][ Math.abs(piece) ]
 
 }

@@ -20,7 +20,7 @@ export default class Waffle extends GamePiece {
     public  static longName = "Waffle";
 
 
-    public movesDescription = "Can move one square horizontally/vertically, or leap two squares horizontally.";
+    public movesDescription = "Can move one square horizontally/vertically, or leap two squares diagonally.";
     public specialMoves = [
         ""
     ]

@@ -26,7 +26,7 @@ export default class Knight extends GamePiece {
     ]
     public notes = "Can leap over pieces.";
 
-    public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number, history : ActualMove[]) => legalMove[] = ( position, board, mode, colour = 1 ) => {
+    public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves
 
         let moves = [] as legalMove[];

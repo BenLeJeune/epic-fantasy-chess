@@ -38,7 +38,7 @@ export default class Warbishop extends GamePiece {
                 p => Piece.getRank(p) <= 6 && Piece.getFile(p) <= 6 ? p + 10 : p, //up & right
                 p => Piece.getRank(p) <= 6 && Piece.getFile(p) >= 1 ? p + 6 : p, //up & left
                 p => Piece.getRank(p) >= 1 && Piece.getFile(p) <= 6 ? p - 6 : p, //down & right
-                p => Piece.getRank(p) >= 1 && Piece.getFile(p) >= 1 ? p - 10 : p //down & left
+                p => Piece.getRank(p) >= 1 && Piece.getFile(p) >= 1 ? p - 10 : p, //down & left
                 //Double-move diagonal
                 p => Piece.getRank(p) <= 5 && Piece.getFile(p) <= 5 ? p + 18 : p, //up & right
                 p => Piece.getRank(p) <= 5 && Piece.getFile(p) >= 2 ? p + 14 : p, //up & left
