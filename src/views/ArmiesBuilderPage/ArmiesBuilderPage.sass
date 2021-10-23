@@ -16,6 +16,12 @@ div.saveChanges
     100%
         transform: translateY(0)
 
+@keyframes invalid-pulse
+    0%
+        transform: scale(1.25)
+    100%
+        transform: scale(1)
+
 div#ArmiesBuilderPage
     h1
         color: colours.$lightsquare
@@ -43,6 +49,8 @@ div#ArmiesBuilderPage
                 position: absolute
                 top: 0
                 left: 2.5%
+                p
+                    padding: 0 0.5em
                 p.faded
                     color: colours.$offLightBlue
                     font-style: italic
@@ -87,6 +95,19 @@ div#ArmiesBuilderPage
         div.lowerBoard
             grid-column: 2 / 3
             grid-row: 2 / 3
+            position: relative
+
+            div.pointBuyCounter
+                position: absolute
+                top: 10%
+                left: 0
+                font-size: 2em
+                color: colours.$offLightBlue
+                .invalid
+                    color: colours.$red
+                    display: inline-block
+                    animation: invalid-pulse 0.5s forwards
+
             div.chessBoardPadding
                 height: 100%
                 width: 100%
@@ -94,6 +115,7 @@ div#ArmiesBuilderPage
                 display: flex
                 align-items: center
                 justify-content: center
+                position: relative
                 div.chessBoard
                     display: grid
                     height: 0

@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, {useState, useLayoutEffect, useRef} from "react";
 import { useParams } from "react-router-dom";
 import "./ArmiesBuilderPage.css"
 import { Army } from "../../Presets/Armies";
@@ -33,7 +33,6 @@ export default function ArmiesBuilderPage() {
     }, [])
 
     let [ piecePreview, setPiecePreview ] = useState(0);
-
 
     const getChessBoard = () => {
         let chessSquares = [];
@@ -70,14 +69,28 @@ export default function ArmiesBuilderPage() {
 
     }
 
+    let pointBuyRef = useRef<HTMLElement>(null);
+    const getPointBuyTotal = () => armyPieces.filter( p => p !== 6 ).reduce((prev, next) => (Piece.getPiece(next)?.materialValue || 0) + prev, 0 );
+
     const onDrop = ( e : React.DragEvent, i : number ) => {
         let piece : number = Number(e.dataTransfer.getData("text"));
         //We dragged this piece to the target location
         if ( i !== 4 ) { //We can't replace the king!
-            setArmyPieces( prev => [
-                ...prev.slice(0, i), piece, ...prev.slice(i+1)
-            ] )
+            let newPieces = [
+            ...armyPieces.slice(0, i), piece, ...armyPieces.slice(i+1)
+            ]
+            setArmyPieces( newPieces )
             setChangesMade(true);
+
+            if (pointBuyRef.current) {
+                pointBuyRef.current.className = "";
+                if (newPieces.filter( p => p !== 6 ).reduce((prev, next) => (Piece.getPiece(next)?.materialValue || 0) + prev, 0 ) > 31) {
+                    setTimeout(() => {
+                            if (pointBuyRef.current) pointBuyRef.current.className = "invalid";
+
+                        }, 0)
+                }
+            }
         }
     }
 
@@ -91,13 +104,19 @@ export default function ArmiesBuilderPage() {
     )
 
     const saveChanges = () => {
+
+        if (getPointBuyTotal() > 31) {
+            let sure = window.confirm("Your army is over the point buy limit. You will not be able to play with this army. Are you sure you want to save?");
+            if (!sure) return;
+        }
+
         const ARMY_KEY = "myArmies";
 
         let armiesJSON = localStorage.getItem(ARMY_KEY);
 
         if (armiesJSON) {
             let armies = JSON.parse(armiesJSON);
-            let newName = prompt("Choose your army's name", armyName) as string;
+            let newName = prompt("Choose your army's name", armyName) || armyName;
 
             if ( newName !== armyName ) delete armies[armyName]; //Get rid of the old key
             armies[newName] = new Army( armyPieces, newName );
@@ -125,17 +144,26 @@ export default function ArmiesBuilderPage() {
                                 <img src={ Piece.getImage(piecePreview) } />
                             </div>
                             {
-                                piecePreview === Piece.Pawn || piecePreview === Piece.King ?
-                                    <p className="faded">This piece cannot be altered or swapped.</p> : <><br/><br/></>
+                                piecePreview === Piece.Pawn ?
+                                    <p className="faded">You cannot change your front row of pawns.</p> : <><br/><br/></>
+                            }
+                            {
+                                piecePreview === Piece.King ?
+                                    <p className="faded">This piece cannot be moved, swapped or altered.</p> : <><br/><br/></>
                             }
                             <p className="info">
                                 <b>Notation:</b> { Piece.getPiece(piecePreview)?.shortName } <br/>
                                 <b>Value:</b> { piecePreview === Piece.King ? "Infinity" : Piece.getPiece(piecePreview)?.materialValue } <br/>
                                 <br/>
                                 { Piece.getPiece(piecePreview)?.movesDescription } <br/><br/>
-                                { Piece.getPiece(piecePreview)?.specialMoves.map(s => <>{s} </>) } <br/><br/>
-                                { Piece.getPiece(piecePreview)?.notes } <br/><br/>
+                                { Piece.getPiece(piecePreview)?.specialMoves.map((s, i, x) =>
+                                    <>{s}{ i+1 === x.length ? <> <br/><br/> </> : null }</>) }
+                                { Piece.getPiece(piecePreview)?.notes ? <>{Piece.getPiece(piecePreview)?.notes}<br/><br/></> : null }
 
+                            </p>
+                            <p className="faded">
+                                Tags:
+                                { Piece.getPiece(piecePreview)?.categories.map((c, i, x) => <> {c}{ i + 1 === x.length ? "" : "," }</> ) }
                             </p>
                         </>
                     }
@@ -153,11 +181,18 @@ export default function ArmiesBuilderPage() {
 
             <div className="lowerBoard">
 
+
                 <div className="chessBoardPadding">
 
+                    <div className="pointBuyCounter">
+                        <p>Point Buy: <strong ref={pointBuyRef}>{ getPointBuyTotal() }/31 </strong> </p>
+                    </div>
+
                     <div className="chessBoard" style={{width: "100%"}}>
+
                         { getChessBoard() }
                         { getChessPieces() }
+
                     </div>
 
                 </div>

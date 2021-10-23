@@ -1,5 +1,5 @@
 import GamePiece from "../GamePiece";
-import {legalMove, Move} from "../../types";
+import {legalMove, Move, tag} from "../../types";
 import {getLegalRiderMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import {queenGrid} from "../ValueGrids";
@@ -21,10 +21,9 @@ export default class Cardinal extends GamePiece {
     public static longName = "Cardinal";
 
     public movesDescription = "Moves any number of squares diagonally, or in an L-shape - combining the moves of the Knight and the Bishop.";
-    public specialMoves = [
-        ""
-    ]
+    public specialMoves = []
     public notes = "";
+    public categories = [ "Major", "Queen", "Crusader" ] as tag[]
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves

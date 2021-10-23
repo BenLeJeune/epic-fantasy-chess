@@ -1,5 +1,5 @@
 import GamePiece from "../GamePiece";
-import {Move, legalMove} from "../../types";
+import {Move, legalMove, tag} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
@@ -26,6 +26,7 @@ export default class King extends GamePiece {
         "If a Castler and this piece have not moved, and you don't pass through check to do so, you may move the king two squares towards the castler, placing the castler on the other side."
     ]
     public notes = "Cannot move into check, and if possible must move out of check. If checkmated, you lose the game.";
+    public categories = [ "Major", "King" ] as tag[];
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number, history : ActualMove[]) => legalMove[] = ( position, board, mode, colour = 1, history ) => {
         //Let's use this as a test for the legal rider moves

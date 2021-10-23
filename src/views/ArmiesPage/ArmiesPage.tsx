@@ -56,7 +56,22 @@ export default function ArmiesPage() {
 
         window.location.href = `/armies/${ name }`;
 
+    }
 
+    const deleteArmy = ( armyName : string ) => {
+
+        let armiesJSON = localStorage.getItem(ARMY_KEY);
+        if (armiesJSON) {
+
+            let armies = JSON.parse(armiesJSON);
+
+            if (armies[armyName]) delete armies[armyName];
+
+            localStorage.setItem(ARMY_KEY, JSON.stringify(armies));
+
+            window.location.reload();
+
+        }
 
     }
 
@@ -76,7 +91,7 @@ export default function ArmiesPage() {
         <div className="armiesListing">
             {
              getArmies().map(
-                 army => <ArmyPreview army={army} />
+                 army => <ArmyPreview army={army} deleteArmy={deleteArmy} />
              )
             }
         </div>
@@ -86,14 +101,22 @@ export default function ArmiesPage() {
 }
 
 interface ArmyPreviewProps {
-    army: Army
+    army: Army,
+    deleteArmy: ( armyName : string ) => void
 }
 
-export function ArmyPreview( { army }: ArmyPreviewProps) {
+export function ArmyPreview( { army, deleteArmy }: ArmyPreviewProps) {
 
     return <div className="armyPreview"
                 onClick={ () => window.location.href = `/armies/${ army.name }` }
     >
+        <div className="delete" onClick={ e => {
+            e.stopPropagation();
+            deleteArmy( army.name );
+        } }>
+            ✖
+        </div>
+
         <h3 className="ArmyName">
             { army.name }
         </h3>

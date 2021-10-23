@@ -1,5 +1,5 @@
 import GamePiece from "../GamePiece";
-import {legalMove, Move} from "../../types";
+import {legalMove, Move, tag} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import {rookGrid} from "../ValueGrids"
@@ -25,6 +25,7 @@ export default class Bede extends GamePiece {
         "As this piece is colourbound, the king can move up to three squares to keep it on its colour."
     ]
     public notes = "";
+    public categories = [ "Minor", "Rook", "Crusader" ] as tag[];
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] 
     = ( position, board, mode, colour = 1 ) => {

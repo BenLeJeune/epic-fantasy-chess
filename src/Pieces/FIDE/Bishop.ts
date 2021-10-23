@@ -1,5 +1,5 @@
 import GamePiece from "../GamePiece";
-import {legalMove, Move} from "../../types";
+import {legalMove, Move, tag} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import {bishopGrid} from "../ValueGrids";
@@ -19,10 +19,9 @@ export default class Bishop extends GamePiece {
     public static longName = "Bishop";
 
     public movesDescription = "Moves any number of squares diagonally.";
-    public specialMoves = [
-        ""
-    ]
+    public specialMoves = []
     public notes = "Is colour-bound.";
+    public categories = [ "Minor", "Bishop", "Colour-bound", "FIDE" ] as tag[];
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves

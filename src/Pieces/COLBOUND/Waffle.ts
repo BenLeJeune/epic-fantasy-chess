@@ -1,5 +1,5 @@
 import GamePiece from "../GamePiece";
-import {Move, legalMove} from "../../types";
+import {Move, legalMove, tag} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
@@ -21,10 +21,9 @@ export default class Waffle extends GamePiece {
 
 
     public movesDescription = "Can move one square horizontally/vertically, or leap two squares diagonally.";
-    public specialMoves = [
-        ""
-    ]
+    public specialMoves = []
     public notes = "Can leap over pieces.";
+    public categories = [ "Minor", "Knight", "Crusader" ] as tag[];
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves

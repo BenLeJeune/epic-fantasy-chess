@@ -163,7 +163,7 @@ function App() {
 
     let moves= Board.getLegalMoves( gBoard, gMoves, { colour: -col } );
     let legalMoves = filterLegalMoves( moves, gBoard, gMoves, -col )
-    if ( legalMoves.length === 0 ) {
+    if ( legalMoves.length === 0 && opponent) {
       ///THERE ARE NO LEGAL MOVES!
       //The game is now over
       setGameOver(true);

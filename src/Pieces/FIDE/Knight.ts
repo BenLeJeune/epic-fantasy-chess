@@ -1,5 +1,5 @@
 import GamePiece from "../GamePiece";
-import {Move, legalMove} from "../../types";
+import {Move, legalMove, tag} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
@@ -21,10 +21,9 @@ export default class Knight extends GamePiece {
 
 
     public movesDescription = "Two squares in one direction, then one perpendicular, forming an L-shape.";
-    public specialMoves = [
-        ""
-    ]
+    public specialMoves = []
     public notes = "Can leap over pieces.";
+    public categories = [ "Minor", "Knight", "FIDE" ] as tag[];
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves

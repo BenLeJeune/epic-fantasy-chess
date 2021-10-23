@@ -24,6 +24,7 @@ div.armyPreview {
   background-color: #2C2F40;
   max-width: 20em;
   min-width: 10em;
+  position: relative;
   padding: 0.5em;
   margin: 1em;
   border-radius: 0.5em;
@@ -34,9 +35,25 @@ div.armyPreview {
 div.armyPreview:hover {
   transform: translateY(-0.5em);
 }
+div.armyPreview:hover div.delete {
+  opacity: 1;
+}
+div.armyPreview div.delete {
+  opacity: 0;
+  transition: opacity 0.25s ease, color 0.25s ease-in-out;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: #E2E2E2;
+}
+div.armyPreview div.delete:hover {
+  color: #464B66;
+}
 div.armyPreview h3.ArmyName {
   color: #F8DC97;
 }
 div.armyPreview div.pieces > p {
   color: #464B66;
-}/*# sourceMappingURL=ArmiesPage.css.map */
+}
+
+/*# sourceMappingURL=ArmiesPage.css.map */

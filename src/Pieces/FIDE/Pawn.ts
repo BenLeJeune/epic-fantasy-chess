@@ -1,5 +1,5 @@
  import GamePiece from "../GamePiece";
-import {Move, legalMove, SpecialMove} from "../../types";
+import {Move, legalMove, SpecialMove, tag} from "../../types";
 import {getLegalRiderMoves, getLegalSingleMoves} from "../../helpers/RiderMoves";
 import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
@@ -21,10 +21,11 @@ export default class Pawn extends GamePiece {
 
     public movesDescription = "Moves one square directly forward, and captures one square diagonally forward."
     public specialMoves = [
-        "Can move two squares at once if on it's starting rank.",
+        "Can move two squares at once if on your second rank.",
         "If an opposing pawn moves two squares at once, can capture that pawn by \"capturing\" the square it skipped over."
     ]
     public notes = "Upon reaching the final rank, pawns can promote into another piece in the game."
+    public categories = [ "Minor", "Pawn" ] as tag[];
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number, history : ActualMove[]) => legalMove[] = ( position, board, mode, colour = 1, history ) => {
         //Let's use this as a test for the legal rider moves

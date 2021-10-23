@@ -5,18 +5,8 @@ div.saveChanges {
   width: calc(100% - 4vh);
   padding: 0.5em;
   background-color: #262836;
-  -webkit-animation: save-change-entrance 0.5s forwards;
-          animation: save-change-entrance 0.5s forwards;
+  animation: save-change-entrance 0.5s forwards;
   border-radius: 0.5em;
-}
-
-@-webkit-keyframes save-change-entrance {
-  0% {
-    transform: translateY(200%);
-  }
-  100% {
-    transform: translateY(0);
-  }
 }
 
 @keyframes save-change-entrance {
@@ -25,6 +15,14 @@ div.saveChanges {
   }
   100% {
     transform: translateY(0);
+  }
+}
+@keyframes invalid-pulse {
+  0% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 div#ArmiesBuilderPage h1 {
@@ -54,6 +52,9 @@ div#ArmiesBuilderPage div.armiesManager div.pieceInfoPreview div.pieceInfoPrevie
   position: absolute;
   top: 0;
   left: 2.5%;
+}
+div#ArmiesBuilderPage div.armiesManager div.pieceInfoPreview div.pieceInfoPreviewBox p {
+  padding: 0 0.5em;
 }
 div#ArmiesBuilderPage div.armiesManager div.pieceInfoPreview div.pieceInfoPreviewBox p.faded {
   color: #464B66;
@@ -108,6 +109,19 @@ div#ArmiesBuilderPage div.armiesManager div.piecesList div.pieceLibrary div.libr
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard {
   grid-column: 2/3;
   grid-row: 2/3;
+  position: relative;
+}
+div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.pointBuyCounter {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  font-size: 2em;
+  color: #464B66;
+}
+div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.pointBuyCounter .invalid {
+  color: #DF5F53;
+  display: inline-block;
+  animation: invalid-pulse 0.5s forwards;
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding {
   height: 100%;
@@ -116,6 +130,7 @@ div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div.chessBoard {
   display: grid;
@@ -148,4 +163,6 @@ div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div.chessBoard div.lowerBoardSquare.dark {
   background-color: #3A4377;
-}/*# sourceMappingURL=ArmiesBuilderPage.css.map */
+}
+
+/*# sourceMappingURL=ArmiesBuilderPage.css.map */

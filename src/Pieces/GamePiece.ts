@@ -1,4 +1,4 @@
-import {legalMove, Move} from "../types";
+import {legalMove, Move, tag} from "../types";
 import ActualMove from "../Classes/Move";
 
 export default abstract class GamePiece {
@@ -22,11 +22,12 @@ export default abstract class GamePiece {
     public abstract longName : string; //e.g "Pawn"
 
     ///
-    /// MOVES
+    /// LIBRARY DESCRIPTION
     ///
     public abstract movesDescription : string; // e.g "One forward."
     public abstract specialMoves : string[]; // e.g "Can move two times on first turn
-    public abstract notes : string;
+    public abstract notes : string; //Miscellaneous notes
+    public abstract categories : tag[]; //Tags assigned to this piece
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number, history : ActualMove[]) => legalMove[] =
         ( position, board, mode, colour = 1, history ) => {
