@@ -1,0 +1,32 @@
+@use "../../modules/colours"
+
+div#PlayPage
+    h1
+        color: colours.$lightsquare
+        font-size: 3em
+        padding: .25em .5em
+    div.playPageInner
+        padding: 0 1.5em
+        h3
+            color: colours.$lightsquare
+            font-size: 1.5em
+        div.centred
+            display: flex
+            justify-content: center
+            align-items: center
+            margin: 0.5em 0 1.5em
+
+div.selectionItem
+    display: inline-block
+    background-color: colours.$darksquare
+    padding: .75em
+    border-radius: .25em
+    cursor: pointer
+    margin: 0 .5em
+    color: colours.$lightsquare
+    transition: transform 0.25s ease-in-out, background-color 0.25s ease-in-out
+    user-select: none
+    &:hover
+        background-color: colours.$lightSquareBrighter
+    &.selected
+        background-color: colours.$lightSquareBrighter

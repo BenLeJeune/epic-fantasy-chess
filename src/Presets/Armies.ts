@@ -24,3 +24,14 @@ export const FIDEARMY = new Army([
     Piece.Knight,
     Piece.Rook
 ], "FIDE Army");
+
+export const CRUSADERSARMY = new Army([
+    Piece.Bede,
+    Piece.Waffle,
+    Piece.Warbishop,
+    Piece.Cardinal,
+    Piece.King,
+    Piece.Warbishop,
+    Piece.Knight,
+    Piece.Rook
+], "Colourbound Crusaders")

@@ -33,6 +33,4 @@ div#ChessBoardWrapper div#ChessBoardOuter div.board {
 }
 div#ChessBoardWrapper div#ChessBoardOuter div.board#ChessBoardPieces {
   pointer-events: none;
-}
-
-/*# sourceMappingURL=ChessBoard.css.map */
+}/*# sourceMappingURL=ChessBoard.css.map */

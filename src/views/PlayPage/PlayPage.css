@@ -1,0 +1,39 @@
+div#PlayPage h1 {
+  color: #F8DC97;
+  font-size: 3em;
+  padding: 0.25em 0.5em;
+}
+div#PlayPage div.playPageInner {
+  padding: 0 1.5em;
+}
+div#PlayPage div.playPageInner h3 {
+  color: #F8DC97;
+  font-size: 1.5em;
+}
+div#PlayPage div.playPageInner div.centred {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5em 0 1.5em;
+}
+
+div.selectionItem {
+  display: inline-block;
+  background-color: #3A4377;
+  padding: 0.75em;
+  border-radius: 0.25em;
+  cursor: pointer;
+  margin: 0 0.5em;
+  color: #F8DC97;
+  transition: transform 0.25s ease-in-out, background-color 0.25s ease-in-out;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+div.selectionItem:hover {
+  background-color: #5F6EC3;
+}
+div.selectionItem.selected {
+  background-color: #5F6EC3;
+}/*# sourceMappingURL=PlayPage.css.map */

@@ -8,6 +8,7 @@ export default function NavBar() {
         <h3 className="navBarHeader">Epic Fantasy Chess</h3>
         <NiceButton onClick="/" text="HOME" buttonStyle="small"/>
         <NiceButton onClick="/play" text="PLAY" buttonStyle="small"/>
+        <NiceButton onClick="/armies" text="ARMIES" buttonStyle="small"/>
         <NiceButton onClick="/decks" text="DECKS" buttonStyle="small"/>
     </div>
 
