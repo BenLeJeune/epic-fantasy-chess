@@ -32,6 +32,6 @@ export const CRUSADERSARMY = new Army([
     Piece.Cardinal,
     Piece.King,
     Piece.Warbishop,
-    Piece.Knight,
-    Piece.Rook
+    Piece.Waffle,
+    Piece.Bede
 ], "Colourbound Crusaders")

@@ -4,6 +4,7 @@
 
 //An Empty Board
 import Piece from "../Classes/Piece";
+import {Army} from "../Presets/Armies";
 
 const generateTestBoard : () => number[] = () => {
 
@@ -75,9 +76,26 @@ const generateFIDEBoard : () => number[] = () => {
 
 }
 
+// GENERATE BOARD FROM TWO ARMIES
+const generateBoardFromArmies: ( wArmy: Army, bArmy: Army ) => number[] = ( whiteArmy, blackArmy ) => {
+    let board = generateEmptyBoard();
+    whiteArmy.pieces.map( //White army
+        ( piece, index ) => board[index] = piece
+    )
+    blackArmy.pieces.map( //Black army
+        ( piece, index ) => board[63 - index] = piece * -1
+    )
+    //Add the pawns
+    for (let i = 8; i <= 15; i++) {
+        board[i] = Piece.Pawn;
+        board[63 - i] = -Piece.Pawn;
+    }
+    return board;
+}
 
 export {
     generateEmptyBoard,
     generateFIDEBoard,
-    generateTestBoard
+    generateTestBoard,
+    generateBoardFromArmies
 }

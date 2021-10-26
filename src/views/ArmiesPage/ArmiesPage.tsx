@@ -4,8 +4,8 @@ import {Army, FIDEARMY} from "../../Presets/Armies";
 import NiceButton from "../../components/NiceButton/NiceButton";
 import Piece from "../../Classes/Piece";
 import NavBar from "../../components/NavBar/NavBar"
+import { ARMY_KEY } from "../../KEYS";
 
-const ARMY_KEY = "myArmies";
 export default function ArmiesPage() {
 
     const getArmies = () => {

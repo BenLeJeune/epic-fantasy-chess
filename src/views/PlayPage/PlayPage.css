@@ -26,14 +26,22 @@ div.selectionItem {
   margin: 0 0.5em;
   color: #F8DC97;
   transition: transform 0.25s ease-in-out, background-color 0.25s ease-in-out;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 div.selectionItem:hover {
   background-color: #5F6EC3;
 }
 div.selectionItem.selected {
   background-color: #5F6EC3;
-}/*# sourceMappingURL=PlayPage.css.map */
+}
+div.selectionItem.selected.disabled {
+  background-color: #3A4377;
+}
+div.selectionItem.disabled {
+  text-decoration: line-through;
+  opacity: 0.5;
+  background-color: #3A4377;
+  cursor: not-allowed;
+}
+
+/*# sourceMappingURL=PlayPage.css.map */

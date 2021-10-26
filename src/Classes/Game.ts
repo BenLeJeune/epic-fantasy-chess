@@ -128,7 +128,7 @@ export default class Game {
         this.currentTurn = 1;
 
         // FOR DEVELOPMENT PURPOSES
-        ( window as any ).updateBoard = ( update:(board:number[])=>number[] ) => update(this.board).map((p, i) => this.board[i] = p);
+        if (global.window) ( global.window as any ).updateBoard = ( update:(board:number[])=>number[] ) => update(this.board).map((p, i) => this.board[i] = p);
 
     }
 

@@ -9,6 +9,7 @@ import miniMax from "./MiniMax";
 import queryOpeningBook from "./QueryOpeningBook";
 import TranspositionTable from "./HashTable";
 import Queen from "../Pieces/FIDE/Queen";
+import {randomFromList} from "../helpers/Utils";
 
 /// FIRST STAGE - COMPLETELY RANDOM
 
@@ -46,10 +47,11 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], o
 
     //BEFORE WE SEARCH FOR ACTUAL MOVES, LET'S EXAMINE THE OPENING BOOK
 
-    let opening = queryOpeningBook( g );
+    let [opening, openingName] = queryOpeningBook( g );
     const DEPTH = 2;
 
     if (opening) {
+        console.log(`Opening: ${ openingName }`)
         return opening;
     }
 
@@ -138,7 +140,7 @@ const beginBackgroundEvaluation = async ( board: number[], history: moveProxy[],
     const counter = () => nodes++;
 
 
-    let move = miniMax( g, DEPTH, false, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter );
+    // let move = miniMax( g, DEPTH, false, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter );
 
     console.log(`Finished background calculations. Nodes evaluated during your turn: ${ nodes }`)
 

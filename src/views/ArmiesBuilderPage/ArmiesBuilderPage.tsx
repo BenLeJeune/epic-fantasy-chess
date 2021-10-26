@@ -5,6 +5,7 @@ import { Army } from "../../Presets/Armies";
 import Piece from "../../Classes/Piece"
 import NiceButton from "../../components/NiceButton/NiceButton";
 import NavBar from "../../components/NavBar/NavBar";
+import { ARMY_KEY } from "../../KEYS";
 
 export default function ArmiesBuilderPage() {
 
@@ -18,7 +19,6 @@ export default function ArmiesBuilderPage() {
 
     useLayoutEffect(() => {
         //Run this when the page first loads - retrieve data about the army
-        const ARMY_KEY = "myArmies";
         let armiesJSON = localStorage.getItem( ARMY_KEY );
         if ( !armiesJSON ) {
             // If you don't have any armies, then you shouldn't be here!
@@ -97,7 +97,7 @@ export default function ArmiesBuilderPage() {
     const getPieceLibrary = () => Piece.PIECES.map(
         ( piece, i ) => <div className="libraryPiece" onMouseOver={ () => setPiecePreview(piece) }>
             <img src={ Piece.getImage(piece) }
-             draggable
+             draggable={ piece !== Piece.King }
              onDragStart={ e => pieceDragStart( e, piece ) }
              onDragEnd={ () => pieceDragEnd( piece ) } />
         </div>
@@ -109,8 +109,6 @@ export default function ArmiesBuilderPage() {
             let sure = window.confirm("Your army is over the point buy limit. You will not be able to play with this army. Are you sure you want to save?");
             if (!sure) return;
         }
-
-        const ARMY_KEY = "myArmies";
 
         let armiesJSON = localStorage.getItem(ARMY_KEY);
 

@@ -13,7 +13,7 @@ export default function PlayRouter() {
             <PlayPage/>
         </Route>
 
-        <Route path={`${url}/playing`}>
+        <Route path={`${url}/game/:uuid`}>
             <App/>
         </Route>
 

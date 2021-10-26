@@ -3,9 +3,9 @@ import ChessBoard from "./components/ChessBoard/ChessBoard";
 import Game, {AdditionalOptions} from "./Classes/Game";
 import MovesDisplay from "./components/MovesDisplay/MovesDisplay";
 import ActualMove from "./Classes/Move";
-import {legalMove, Move, SpecialMove} from "./types";
+import {GameInfo, legalMove, Move, SpecialMove} from "./types";
 import {filterLegalMoves, isCheck} from "./helpers/Checks";
-import {generateTestBoard} from "./helpers/BoardGenerators";
+import {generateBoardFromArmies, generateTestBoard} from "./helpers/BoardGenerators";
 import Board from "./Classes/Board";
 import GameOverUI from "./components/GameOverUI/GameOverUI";
 import "./App.css"
@@ -18,6 +18,9 @@ import {
   beginBackgroundEvaluation,
   beginBackgroundEvaluation as BeginBackgroundEvaluation
 } from "./WebWorker/MoveGenerator";
+import {useParams} from "react-router-dom";
+import {GAME_KEY} from "./KEYS";
+import {Army} from "./Presets/Armies";
 
 //ARMIES
 const FIDEArmy = [
@@ -39,13 +42,22 @@ const CHECKMATE = "via Checkmate",
 function App() {
 
   ///
+  /// GAME START DATA
+  ///
+  const { uuid } = useParams<{ uuid : string }>();
+  const [{ colour : playerColour, opponent, army, opponentArmy } ] = useState(() => {
+    const rawGamesData = localStorage.getItem(GAME_KEY) || "{}";
+    const parsedGamesData = JSON.parse(rawGamesData) as { [uuid : string]: GameInfo };
+    return parsedGamesData[uuid];
+  })
+
+  ///
   /// USED FOR DEVELOPMENT PURPOSES
   ///
+  // const [ opponent ] = useState(false); //THIS DISABLES THE AI AND LETS YOU MOVE BOTH COLOUR PIECES
 
-  const [ opponent ] = useState(false); //THIS DISABLES THE AI AND LETS YOU MOVE BOTH COLOUR PIECES
 
-
-  const game = useRef( new Game( generateTestBoard() ) )
+  const game = useRef( new Game( generateBoardFromArmies( JSON.parse(army) as Army, JSON.parse(opponentArmy) as Army ) ) );
 
   /// THE OPPONENT
 
@@ -59,8 +71,6 @@ function App() {
   const [ board, setBoard ] = useState<number[]>( game.current.getBoard() );
   const [ currentTurn, setCurrentTurn ] = useState<number>( game.current.getCurrentTurn() );
   const [ moves, setMoves ] = useState<ActualMove[]>( game.current.getMoves() );
-
-  const playerColour = 1;
 
   //Ending the game
   const [ winner, setWinner ] = useState<number>(0); //1 for white win, -1 for black win, 0 for draw
@@ -163,7 +173,7 @@ function App() {
 
     let moves= Board.getLegalMoves( gBoard, gMoves, { colour: -col } );
     let legalMoves = filterLegalMoves( moves, gBoard, gMoves, -col )
-    if ( legalMoves.length === 0 && opponent) {
+    if ( legalMoves.length === 0 ) {
       ///THERE ARE NO LEGAL MOVES!
       //The game is now over
       setGameOver(true);
@@ -211,7 +221,7 @@ function App() {
 
     //IF NOT, THE OPPONENT PLAYS A MOVE
     setTimeout(() => {
-      if ( !gameOver && game.current.getCurrentTurn() === -1 && opponent ) {
+      if ( !gameOver && game.current.getCurrentTurn() === -1 && opponent === "COMP" ) {
         generateRandomMove()
             .then(
                 ( m ) => {
@@ -222,6 +232,7 @@ function App() {
                   }
                   catch (e) {
                     console.log(e);
+                    console.log(m)
                   }
                 }
             )
@@ -254,7 +265,7 @@ function App() {
     <div className={`chessBoardColumn ${ gameOver ? "gameOver" : "playing" }`}>
       <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves}
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
-                  whiteArmy={ FIDEArmy } blackArmy={ FIDEArmy } playerColour={ playerColour } opponentActive={opponent}
+                  whiteArmy={ FIDEArmy } blackArmy={ FIDEArmy } playerColour={ playerColour } opponentActive={opponent === "COMP"}
       />
     </div>
     <div className="boardRightColumn">

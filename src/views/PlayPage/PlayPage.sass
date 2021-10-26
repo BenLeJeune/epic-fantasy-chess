@@ -30,3 +30,10 @@ div.selectionItem
         background-color: colours.$lightSquareBrighter
     &.selected
         background-color: colours.$lightSquareBrighter
+        &.disabled
+            background-color: colours.$darksquare
+    &.disabled
+        text-decoration: line-through
+        opacity: 0.5
+        background-color: colours.$darksquare
+        cursor: not-allowed
