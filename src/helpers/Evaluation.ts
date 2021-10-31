@@ -20,7 +20,8 @@ const materialEvaluation = (board : number[] ) => {
     }, 0);
 }
 
-const positionalEngineEvaluation = ( board : number[], history: ActualMove[] ) => {
+const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pieceIndexes?: number[] ) => {
+
 
     if ( isCheck( board, history, 1  )){
         let wMoves =  filterLegalMoves( Board.getLegalMoves( board, history, { colour: 1 } ), board, history, 1 );
@@ -34,7 +35,10 @@ const positionalEngineEvaluation = ( board : number[], history: ActualMove[] ) =
     }
 
 
-    let e =  board.filter( p => p !== Piece.None ).reduce(( t, piece, pos ) => {
+    let e =  !pieceIndexes ? board.filter( p => p !== Piece.None ) : pieceIndexes.map(i => board[i])
+
+    let startTime = performance.now();
+    let val = e.reduce(( t, piece, pos ) => {
         if ( !Piece.getPiece(piece) ) return t;
         else {
             const p = Piece.getPiece(piece) as GamePiece;
@@ -48,9 +52,16 @@ const positionalEngineEvaluation = ( board : number[], history: ActualMove[] ) =
                 return t - value;
             }
         }
-    }, 0)
+    }, 0);
 
-    return e;
+    let endTime = performance.now();
+
+    let elapsed = endTime - startTime;
+    if (elapsed > 4) {
+        console.log(`Took ${ elapsed } ms to evaluate after ${ history[history.length - 1].getMoveName() }`);
+    }
+
+    return val
 }
 
 

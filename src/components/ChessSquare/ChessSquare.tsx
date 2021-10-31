@@ -5,10 +5,11 @@ import Piece from "../../Classes/Piece";
 
 interface props {
     position: number,
-    highlight : boolean
+    highlight : boolean,
+    rotated : boolean
 }
 
-export default function ChessSquare( { position, highlight } : props ) {
+export default function ChessSquare( { position, highlight, rotated } : props ) {
 
     const getCol = () => {
         if ( ( 7 * Piece.getRank(position) + Piece.getFile(position) ) % 2 === 1 ) return "light";
@@ -27,7 +28,7 @@ export default function ChessSquare( { position, highlight } : props ) {
         return labels;
     }
 
-    return <div style={Piece.getStyle( position )} className={`chessSquare ${ getCol() }`}
+    return <div style={Piece.getStyle( position, rotated )} className={`chessSquare ${ getCol() }`}
                 id={ `square-${ Piece.getSquareName(position) }` }
                 key={ `square-${ Piece.getSquareName(position) }` }>
         {

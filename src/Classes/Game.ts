@@ -3,6 +3,7 @@ import {generateFIDEBoard} from "../helpers/BoardGenerators";
 import ActualMove from "./Move";
 import Piece from "./Piece";
 import Pawn from "../Pieces/FIDE/Pawn";
+import Rook from "../Pieces/FIDE/Rook";
 
 export default class Game {
 
@@ -39,7 +40,15 @@ export default class Game {
 
                 //If we were castling Queenside
                 if ( move.from > move.to ) {
-                    let rookSquare = move.to - 2;
+                    let rookDistance = 0;
+                    if ( Math.abs(this.board[move.to + 1]) === Piece.Rook) {
+                        //CASTLING WITH A SIMPLE ROOK
+                        rookDistance = 2; //Rook is 2 after where the king moves to
+                    }
+                    else if ( Math.abs(this.board[move.to + 1]) === Piece.Bede) {
+                        rookDistance = 1; //Bede is only 1 after where the king moves to
+                    }
+                    let rookSquare = move.to - rookDistance;
                     this.board[rookSquare] = this.board[ move.to + 1 ];
                     this.board[ move.to + 1 ] = Piece.None;
                 }
@@ -95,7 +104,14 @@ export default class Game {
 
                 //If we're castling Queenside
                 if ( from > to ) {
-                    let rookSquare = to - 2;
+                    let rookSquare = to;
+                    if ( Math.abs(this.board[ to - 2 ]) === Piece.Rook && this.board[ to - 1 ] === Piece.None ) {
+                        //CASTLING WITH A SIMPLE ROOK
+                        rookSquare -= 2; //Rook is 2 after where the king moves to
+                    }
+                    else if ( Math.abs(this.board[to - 1]) === Piece.Bede) {
+                        rookSquare -= 1; //Bede is only 1 after where the king moves to
+                    }
                     this.board[ to + 1 ] = this.board[rookSquare];
                     this.board[rookSquare] = Piece.None;
                 }

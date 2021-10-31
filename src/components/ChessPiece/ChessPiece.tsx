@@ -9,10 +9,11 @@ interface props {
     unTarget: ( position : number ) => void,
     active : boolean,
     id : string,
-    draggable : boolean
+    draggable : boolean,
+    rotated: boolean
 }
 
-export default function ChessPiece({position, piece, target, unTarget, active, id, draggable}:props) {
+export default function ChessPiece({position, piece, target, unTarget, active, id, draggable, rotated}:props) {
 
     let oldPos = useRef<number>(position);
 
@@ -26,6 +27,10 @@ export default function ChessPiece({position, piece, target, unTarget, active, i
             let verticalDiff = Piece.getFile(position) - Piece.getFile(oldPos.current);
             let horizontalDiff = Piece.getRank( position ) - Piece.getRank( oldPos.current );
 
+            if (rotated) { //Rotated if the board is rotated
+                verticalDiff = -verticalDiff;
+                horizontalDiff = -horizontalDiff;
+            }
 
             el.style.transition = `none`;
             el.style.transform = `translate(${ -verticalDiff * 100 }%, ${ horizontalDiff * 100 }%)`;
@@ -54,7 +59,7 @@ export default function ChessPiece({position, piece, target, unTarget, active, i
                 ref={ pieceEl }
                 id={ id }
                 key={ id }
-                style={ Piece.getStyle(position) }
+                style={ Piece.getStyle(position, rotated) }
                 draggable={ draggable }
                 onDragStart={ draggable ? onDragStart : () => false }
                 onDragEnd={ () => unTarget(piece) }

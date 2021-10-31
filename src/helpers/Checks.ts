@@ -10,7 +10,7 @@ import Game from "../Classes/Game";
 
 ///
 /// IS THIS COLOUR'S KING IN CHECK?
-const isCheck : ( board:number[], history:ActualMove[], colour: number ) => boolean = ( board, history, colour ) => {
+const isCheck : ( board:number[], history:ActualMove[], colour: number, legalMoves?: legalMove[] ) => boolean = ( board, history, colour, legalMoves ) => {
 
     //Determine the king's square
 
@@ -21,7 +21,7 @@ const isCheck : ( board:number[], history:ActualMove[], colour: number ) => bool
 
     let pos = colour > 0 ? wKing : bKing;
 
-    let legalMoves = Board.getLegalMoves(
+    if (!legalMoves) legalMoves = Board.getLegalMoves(
         board, history, { mode: "captures", colour: -colour } )
 
     //Are there any attacks on the king?

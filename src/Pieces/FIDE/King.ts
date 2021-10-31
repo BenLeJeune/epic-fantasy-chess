@@ -55,7 +55,7 @@ export default class King extends GamePiece {
             if ( kingMoves.length === 0 ) {
 
                 //Has the king's rook been moved at all yet?
-                if ( board[kingsRook] === Piece.Rook * colour && board[kingsRook -1] === Piece.None && board[kingsRook - 2] === Piece.None ) {
+                if ( (board[kingsRook] === Piece.Rook * colour || board[kingsRook] === Piece.Bede * colour) && board[kingsRook -1] === Piece.None && board[kingsRook - 2] === Piece.None ) {
 
                     let krMoves = history.filter( move => move.from === kingsRook || move.to === kingsRook );
                     if ( krMoves.length === 0)  moves.push({
@@ -76,6 +76,18 @@ export default class King extends GamePiece {
                         to: queensRook + 2,
                         special: "CASTLE"
                     });
+                }
+                //The Queen's rook has special rules for castling if the rook-piece is colourbound, such as the Bede.
+                if ( board[queensRook] === Piece.Bede * colour && board[queensRook + 1] === Piece.None && board[queensRook +2] === Piece.None
+                    && board[queensRook + 3] === Piece.None) {
+
+                    let qbMoves = history.filter( move => move.from === queensRook || move.to === queensRook );
+                    if ( qbMoves.length === 0 ) moves.push({
+                        from: originalSquare,
+                        to: queensRook + 1,
+                        special: "CASTLE"
+                    })
+
                 }
 
             }

@@ -25,10 +25,17 @@ interface Props {
     whiteArmy: number[],
     blackArmy: number[],
     playerColour : number,
-    opponentActive : boolean
+    activePlayer : number,
+    opponentActive : boolean,
+    gameUUID: string
 }
 
-export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive } : Props) {
+export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, activePlayer, opponentActive, gameUUID } : Props) {
+
+    //Whether or not the board needs to be rotated
+    const rotated = activePlayer === -1 && !opponentActive;
+
+    const [DEV_MODE_ENABLED] = useState(gameUUID === "dev-playground");
 
     ///
     /// MOVING & CAPTURING
@@ -66,7 +73,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
     /// GENERATING UI ELEMENTS
     ///
 
-    const getSquares = () => board.map( (piece, pos) => <ChessSquare position={pos}
+    const getSquares = () => board.map( (piece, pos) => <ChessSquare position={pos} rotated={rotated}
                                          highlight={ moves.length >= 1 && ( pos === moves[moves.length - 1].to || pos === moves[moves.length - 1].from ) } /> )
 
     const getPieceKey = ( piece : number, pos : number ) => {
@@ -79,12 +86,13 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
             //GO THROUGH EACH MOVE, AND TRACK THE POSITION OF THIS PIECE
             startingPos = inverseMoves.reduce( ( p, m ) => m.to === p && m.moving === piece ? m.from : p , pos );
 
-            if ( Math.abs( piece ) === Piece.Rook ) { //If a rook, we also want to retain it for castling
+            if ( Math.abs( piece ) === Piece.Rook || Math.abs( piece ) === Piece.Bede ) { //If a rook, we also want to retain it for castling
                 startingPos = inverseMoves.reduce(
                     ( p, m ) => {
                         let regularMove = ( m.to === p && m.moving === piece );
-                        let castle = ( m.special === "CASTLE" && ( m.to === p + 1 || m.to === p - 1 ) )
+                        let castle = ( m.special === "CASTLE" && ( m.to === p + 1 || m.to === p - 1 ) );
                         if ( regularMove ) return m.from
+                        else if (castle && Math.abs(piece) === Piece.Bede) return m.to === p + 1 ? m.to + 1 : m.to - 1;
                         else if ( castle ) return m.to === p + 1 ? m.to + 1 : m.to - 2;
                         else return p
                     }, pos
@@ -101,10 +109,11 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     key={ getPieceKey( piece, pos ) }
                     piece={ piece }
                     id={ getPieceKey( piece, pos ) }
-                    draggable={ (currentTurn > 0 && piece > 0 && (playerColour > 0 || !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) ) || !opponentActive }
+                    draggable={ (currentTurn > 0 && piece > 0 && (playerColour > 0|| !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) ) || DEV_MODE_ENABLED }
                     target={ () => setTargeting([ piece, pos ])  }
                     unTarget={ () => setTargeting([ 0, -1 ]) }
-                    active={ targeting[1] === pos || targeting[1] === -1 } /> )
+                    active={ targeting[1] === pos || targeting[1] === -1 }
+                    rotated={rotated} /> )
 
     const getTargetingSquares = () => Piece.getPiece( targeting[0] ) ?
         filterLegalMoves(
@@ -138,8 +147,10 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
 
     const getValidPromotionPieces = ( colour: -1 | 1 ) => {
         let pieces = colour > 0 ? whiteArmy : blackArmy;
+        console.log(colour)
         //We want to remove duplicates
-        let filtered = pieces.reduce(( acc, cur ) => acc.indexOf( cur ) === -1 ? [ ...acc, cur ] : acc, [] as number[]);
+        let filtered = pieces.filter(p => Math.abs(p) !== Piece.King)
+            .reduce(( acc, cur ) => acc.indexOf( cur ) === -1 ? [ ...acc, cur ] : acc, [] as number[]);
         return filtered.sort( (a, b) => a - b ).map( piece => colour > 0 ? piece : -piece )
     }
 
@@ -153,7 +164,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                 </div>
 
                 {
-                  targeting[0] !== 0 ?<div id="ChessBoardTargeting" className="board">
+                  targeting[0] !== 0 ? <div id="ChessBoardTargeting" className="board">
                       { getTargetingSquares() }
                   </div> : null
                 }
@@ -164,11 +175,12 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
 
                 {
                     promotionFrom !== -1 ? <PiecePromotionUI above={Piece.getRank( promotionTo ) === 7}
-                                   positionFrom={promotionFrom}
-                                   positionTo={promotionTo}
-                                   validPieces={ getValidPromotionPieces( board[promotionFrom] > 0 ? 1 : -1 ) }
-                                   promoting={promotionFrom > 0 ? board[promotionFrom] : Piece.None}
-                                   callback={onPromotion}
+                            positionFrom={promotionFrom}
+                            positionTo={promotionTo}
+                            validPieces={ getValidPromotionPieces( board[promotionFrom] > 0 ? 1 : -1 ) }
+                            promoting={promotionFrom > 0 ? board[promotionFrom] : Piece.None}
+                            callback={onPromotion}
+                            rotated={ rotated }
                     /> : null
                 }
 

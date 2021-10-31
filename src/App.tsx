@@ -20,18 +20,8 @@ import {
 } from "./WebWorker/MoveGenerator";
 import {useParams} from "react-router-dom";
 import {GAME_KEY} from "./KEYS";
-import {Army} from "./Presets/Armies";
+import {Army, FIDEARMY} from "./Presets/Armies";
 
-//ARMIES
-const FIDEArmy = [
-    Piece.Rook,
-    Piece.Knight,
-    Piece.Bishop,
-    Piece.Queen,
-    Piece.Bishop,
-    Piece.Knight,
-    Piece.Rook
-]
 
 const CHECKMATE = "via Checkmate",
     STALEMATE = "via Stalemate",
@@ -48,7 +38,20 @@ function App() {
   const [{ colour : playerColour, opponent, army, opponentArmy } ] = useState(() => {
     const rawGamesData = localStorage.getItem(GAME_KEY) || "{}";
     const parsedGamesData = JSON.parse(rawGamesData) as { [uuid : string]: GameInfo };
-    return parsedGamesData[uuid];
+    const thisGame = parsedGamesData[uuid];
+    try {
+      thisGame.army = JSON.parse(thisGame.army);
+      thisGame.opponentArmy = JSON.parse(thisGame.opponentArmy);
+    }
+    catch (e) {
+      console.log(e)
+    }
+    return thisGame as GameInfo & { army : Army, opponentArmy : Army } || {
+      colour: 1,
+      opponent: "LOCAL",
+      army: FIDEARMY,
+      opponentArmy: FIDEARMY,
+    }
   })
 
   ///
@@ -57,7 +60,7 @@ function App() {
   // const [ opponent ] = useState(false); //THIS DISABLES THE AI AND LETS YOU MOVE BOTH COLOUR PIECES
 
 
-  const game = useRef( new Game( generateBoardFromArmies( JSON.parse(army) as Army, JSON.parse(opponentArmy) as Army ) ) );
+  const game = useRef( new Game( playerColour > 0 ? generateBoardFromArmies( army, opponentArmy ) : generateBoardFromArmies( opponentArmy, army ) ) );
 
   /// THE OPPONENT
 
@@ -88,7 +91,6 @@ function App() {
   ///
   /// OPPONENT AI
   ///
-
   const beginBackgroundEvaluation = async () => {
     const { BeginBackgroundEvaluation } = worker.current;
 
@@ -101,7 +103,7 @@ function App() {
             from, to, moving, captured, special, specify
           } })
 
-    BeginBackgroundEvaluation( [...gBoard], parsedMoves, FIDEArmy, { colour: -1 } )
+    BeginBackgroundEvaluation( [...gBoard], parsedMoves, opponentArmy.pieces, { colour: -1 } )
 
   }
 
@@ -126,10 +128,12 @@ function App() {
               from, to, moving, captured, special, specify
         } })
 
-    return await MoveGenerator( [...gBoard], parsedMoves, FIDEArmy, { colour: -1 })
+    return await MoveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, { colour: -1 })
   }
 
-  //Captures
+  ///
+  /// GAME STATE - CAPTURES, MOVES, GAME OVER
+  ///
   const [ whiteCaptured, setWhiteCaptured ] = useState<number[]>([]);
   const [ blackCaptured, setBlackCaptured ] = useState<number[]>([]);
   const capturePiece = ( p : number ) => {
@@ -265,7 +269,8 @@ function App() {
     <div className={`chessBoardColumn ${ gameOver ? "gameOver" : "playing" }`}>
       <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves}
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
-                  whiteArmy={ FIDEArmy } blackArmy={ FIDEArmy } playerColour={ playerColour } opponentActive={opponent === "COMP"}
+                  whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces } playerColour={ playerColour } activePlayer={-1}
+                  opponentActive={opponent === "COMP"} gameUUID={ uuid }
       />
     </div>
     <div className="boardRightColumn">

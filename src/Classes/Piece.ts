@@ -66,10 +66,10 @@ export default class Piece {
     public static getFile = ( position : number ) => position % 8;
     public static getRank = ( position : number ) => ( position - ( position % 8 ) ) / 8;
     public static getSquareName = ( position : number ) => `${ FILES[Piece.getFile(position)] }${ Piece.getRank(position) + 1 }`
-    public static getStyle = ( position : number ) => {
+    public static getStyle = ( position : number, flipped: boolean = true ) => {
         return {
-            gridRow: `${ 8 - Piece.getRank(position) }/${9 - Piece.getRank(position)}`,
-            gridColumn: `${ Piece.getFile(position) + 1 }/${Piece.getFile(position) + 2}`
+            gridRow: !flipped ? `${ 8 - Piece.getRank(position) }/${9 - Piece.getRank(position)}` : `${ 1 + Piece.getRank(position) }/${2 + Piece.getRank(position)}`,
+            gridColumn: !flipped ? `${ Piece.getFile(position) + 1 }/${Piece.getFile(position) + 2}` : `${ 8 - Piece.getFile(position) }/${9 - Piece.getFile(position)}`
         }
     }
 

@@ -83,7 +83,7 @@ const generateBoardFromArmies: ( wArmy: Army, bArmy: Army ) => number[] = ( whit
         ( piece, index ) => board[index] = piece
     )
     blackArmy.pieces.map( //Black army
-        ( piece, index ) => board[63 - index] = piece * -1
+        ( piece, index ) => board[56 + index] = piece * -1
     )
     //Add the pawns
     for (let i = 8; i <= 15; i++) {

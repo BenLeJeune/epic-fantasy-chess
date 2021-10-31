@@ -49,7 +49,7 @@ export default function PlayPage() {
     const loadIntoGame = () => {
         const uuid = generateUUID(); // GENERATE UUID
         // RANDOM SELECTIONS
-        let _colour = colour === "RANDOM" ? randomFromList([-1, 1]) : ["BLACK", "", "WHITE"].indexOf(colour);
+        let _colour = colour === "RANDOM" ? randomFromList([-1, 1]) : ["BLACK", "", "WHITE"].indexOf(colour) - 1;
         let _army = army === -1 ? randomFromList(armies) : armies[army];
         let _opponentArmy = opponentArmy === -1 ? randomFromList(armies) : armies[opponentArmy];
 

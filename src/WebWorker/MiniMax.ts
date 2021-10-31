@@ -44,6 +44,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         .sort(( p, n ) => Math.abs( 4.5 - Piece.getFile(p.move.to) ) - Math.abs( 4.5 - Piece.getFile(n.move.to) )) //Moving pawns towards the centre
     let remainingMoves = unorderedMoves.filter( m => g.getBoard()[m.move.to] === 0  && g.getBoard()[m.move.from] !== col * Piece.Pawn ) ;
 
+
     let legalMoves = [
         ...orderedPromotionMoves, /// PROMOTING IS USUALLY GOOD,
         ...orderedCaptures, /// THEN CAPTURES
@@ -51,7 +52,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         ...remainingMoves /// THEN THE REST
     ];
 
-    let isCheckMate = isCheck( g.getBoard(), g.getMoves(), col) && legalMoves.length === 0;
+    let isCheckMate = isCheck( g.getBoard(), g.getMoves(), col) && legalMoves.length === 0; //am I in check?
     let oppoonentLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: -col, mode: "captures" } )
 
     if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 )) {
@@ -80,6 +81,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
                 if ( move.to === kingsRook - 1 && Board.isThreatened( kingsRook - 2, g.getBoard(), g.getMoves(), -col )) return false;
                 if ( move.to === queensRook + 2 && Board.isThreatened( queensRook + 3, g.getBoard(), g.getMoves(), -col ) ) return false;
             }
+
             return true;
         } )
 
@@ -90,6 +92,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
             /// WE WON'T BE USING THE RETURNED VALUE, ONLY UTILISING THE TRANSPOSITION TABLE
 
             g.Move( m.from, m.to, m.special, additional );
+
             if (!isCheck(g.getBoard(), g.getMoves(), col)) {
 
                 let hashedEval = hashGet(g.getBoard());
