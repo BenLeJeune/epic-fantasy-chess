@@ -7,14 +7,15 @@ interface props {
     position : number,
     onDrop : ( e : React.DragEvent ) => void,
     isMove : boolean,
-    isCapture : boolean
+    isCapture : boolean,
+    rotated: boolean
 }
 
-export default function TargetingSquare( { position, onDrop, isMove, isCapture } : props ) {
+export default function TargetingSquare( { position, onDrop, isMove, isCapture, rotated } : props ) {
 
 
     return <div
-        style={ Piece.getStyle( position ) }
+        style={ Piece.getStyle( position, rotated ) }
         className={`targetingSquare ${ isMove ? "move" : "" } ${ isCapture ? "capture" : "" }`}
         id={`target_${ Piece.getSquareName( position ) }`}
         onDrop={ onDrop }

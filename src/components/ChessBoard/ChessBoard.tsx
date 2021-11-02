@@ -14,26 +14,25 @@ import {filterLegalMoves} from "../../helpers/Checks";
 import PiecePromotionUI from "../PiecePromotionUI/PiecePromotionUI";
 
 interface Props {
-    board : number[],
-    currentTurn : number,
-    move : ( from : number, to : number, special? : SpecialMove, additional? : object ) => void,
-    unMove : () => void,
-    moves : ActualMove[],
-    whiteCaptured : number[],
-    blackCaptured : number[],
-    capturePiece : ( p:number ) => void,
-    whiteArmy: number[],
-    blackArmy: number[],
-    playerColour : number,
-    activePlayer : number,
-    opponentActive : boolean,
-    gameUUID: string
+    board : number[], //The game board
+    currentTurn : number, //The current player's turn, +1 or -1
+    move : ( from : number, to : number, special? : SpecialMove, additional? : object ) => void, //Move callback
+    unMove : () => void, //UnMove callback
+    moves : ActualMove[], //Move history
+    whiteCaptured : number[], //Pieces white has captured
+    blackCaptured : number[], //Pieces black has captured
+    capturePiece : ( p:number ) => void, //Capture piece callback
+    whiteArmy: number[], //White's starting army
+    blackArmy: number[], //Black's starting army
+    playerColour : number, //"Player 1"'s player colour
+    opponentActive : boolean, //true for computer opponent, false for local opponent
+    gameUUID: string //game UUID
 }
 
-export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, activePlayer, opponentActive, gameUUID } : Props) {
+export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive, gameUUID } : Props) {
 
     //Whether or not the board needs to be rotated
-    const rotated = activePlayer === -1 && !opponentActive;
+    const rotated = (playerColour === -1 && opponentActive) || ( currentTurn === -1 && !opponentActive );
 
     const [DEV_MODE_ENABLED] = useState(gameUUID === "dev-playground");
 
@@ -126,6 +125,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     isCapture={ board[move.to] !== Piece.None || move.special === "EP"}
                     isMove={ board[ move.to ] === Piece.None }
                     onDrop={ ev => onDrop( ev, move.to, move.special ) }
+                    rotated={rotated}
                 />
             )
         : null;
@@ -151,7 +151,8 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
         //We want to remove duplicates
         let filtered = pieces.filter(p => Math.abs(p) !== Piece.King)
             .reduce(( acc, cur ) => acc.indexOf( cur ) === -1 ? [ ...acc, cur ] : acc, [] as number[]);
-        return filtered.sort( (a, b) => a - b ).map( piece => colour > 0 ? piece : -piece )
+        //Also remove the king
+        return filtered.filter(p => Math.abs(p) !== Piece.King).sort( (a, b) => a - b ).map( piece => colour > 0 ? piece : -piece )
     }
 
     return <>

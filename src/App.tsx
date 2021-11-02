@@ -48,7 +48,7 @@ function App() {
     }
     return thisGame as GameInfo & { army : Army, opponentArmy : Army } || {
       colour: 1,
-      opponent: "LOCAL",
+      opponent: uuid === "fiesta" ? "COMP" : "LOCAL",
       army: FIDEARMY,
       opponentArmy: FIDEARMY,
     }
@@ -92,6 +92,8 @@ function App() {
   /// OPPONENT AI
   ///
   const beginBackgroundEvaluation = async () => {
+
+    if (uuid === "fiesta") return;
     const { BeginBackgroundEvaluation } = worker.current;
 
     let gMoves = game.current.getMoves();
@@ -115,7 +117,7 @@ function App() {
 
   }
 
-  const generateRandomMove = async () => {
+  const generateRandomMove = async ( col:number = -playerColour ) => {
     // const { MoveGenerator } = wrap<import("./WebWorker/worker").OpponentWebWorker>(worker.current)
     const { MoveGenerator } = worker.current;
 
@@ -128,7 +130,9 @@ function App() {
               from, to, moving, captured, special, specify
         } })
 
-    return await MoveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, { colour: -1 })
+    if ( uuid === "fiesta" ) col = currentTurn
+
+    return await MoveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, { colour: col })
   }
 
   ///
@@ -199,7 +203,7 @@ function App() {
     //When we make our move, stop performing background calculations
 
     let col = game.current.getBoard()[from] > 0 ? 1 : -1;
-    if ( col === 1 ) endBackgroundEvaluation();
+    if ( col === playerColour ) endBackgroundEvaluation();
 
     ///PLAYS AUDIO
     let audio = new Audio( "/assets/Sounds/wooden-piece-move.mp3" );
@@ -225,8 +229,8 @@ function App() {
 
     //IF NOT, THE OPPONENT PLAYS A MOVE
     setTimeout(() => {
-      if ( !gameOver && game.current.getCurrentTurn() === -1 && opponent === "COMP" ) {
-        generateRandomMove()
+      if ( !gameOver && ( game.current.getCurrentTurn() === -playerColour || uuid === "fiesta") && opponent === "COMP" ) {
+        generateRandomMove( -game.current.getCurrentTurn() )
             .then(
                 ( m ) => {
                   if (!gameOver && m) try {
@@ -243,7 +247,31 @@ function App() {
       }
 
     }, 0)
-  }
+  };
+
+  ///
+  /// OPPONENT MAKING THE FIRST MOVE
+  ///
+  useEffect(() => {
+
+    if ( opponent === "COMP" && playerColour === -1 ) {
+      //We're playing as black against a computer - computer must make the first move!
+      generateRandomMove()
+        .then(
+          m => {
+            if (m) try {
+              move( m.move.from, m.move.to, m.move.special, m.additional );
+              beginBackgroundEvaluation();
+            }
+            catch (e) {
+              console.log(e);
+              console.log(m);
+            }
+          }
+        )
+    }
+
+  }, [])
 
   const unMove = () => {
     let lastMove = game.current.getLastMove();
@@ -269,8 +297,9 @@ function App() {
     <div className={`chessBoardColumn ${ gameOver ? "gameOver" : "playing" }`}>
       <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves}
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
-                  whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces } playerColour={ playerColour } activePlayer={-1}
-                  opponentActive={opponent === "COMP"} gameUUID={ uuid }
+                  whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces }
+                  playerColour={ playerColour }
+                  opponentActive={ opponent === "COMP"} gameUUID={ uuid }
       />
     </div>
     <div className="boardRightColumn">

@@ -28,5 +28,5 @@ export interface GameInfo {
     opponent: "LOCAL" | "COMP",
     army: string,
     opponentArmy: string
-    colour: 1 | 0
+    colour: 1 | -1
 }

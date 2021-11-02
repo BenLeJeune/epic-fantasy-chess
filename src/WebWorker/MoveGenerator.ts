@@ -30,7 +30,7 @@ let table = new TranspositionTable();
 ///
 /// THE MAIN MOVE GENERATOR
 ///
-const moveGenerator = ( board: number[], history: moveProxy[], army: number[], options: {} = {}  ) => {
+const moveGenerator = ( board: number[], history: moveProxy[], army: number[], colour: number, options: {} = {}  ) => {
 
     //CREATE OUR NEW GAME
     let g = new Game(
@@ -64,7 +64,7 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], o
     let nodes = 0;
     let counter = () => nodes++
 
-    let move = miniMax( g, DEPTH, false, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter );
+    let move = miniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter );
 
     console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
     console.log(`Examined ${ nodes } nodes`)
