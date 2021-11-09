@@ -32,6 +32,8 @@ let table = new TranspositionTable();
 ///
 const moveGenerator = ( board: number[], history: moveProxy[], army: number[], colour: number, options: {} = {}  ) => {
 
+    console.log(colour)
+
     //CREATE OUR NEW GAME
     let g = new Game(
         [...board],
@@ -41,11 +43,18 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
 
     let randomMoves =  Board.getLegalMoves( g.getBoard(), g.getMoves(), options );
 
-    let legalMoves = filterLegalMoves( randomMoves, g.getBoard(), g.getMoves(), -1 )
+    let legalMoves = filterLegalMoves( randomMoves, g.getBoard(), g.getMoves(), colour )
 
-    if ( legalMoves.length === 0 ) return;
+    //if ( legalMoves.length === 0 ) return;
 
     //BEFORE WE SEARCH FOR ACTUAL MOVES, LET'S EXAMINE THE OPENING BOOK
+    console.log("Choosing Opening...")
+
+    if (history.length === 0) {
+        //THIS IS OUR FIRST MOVE!
+        let [ opening, openingName ] = queryOpeningBook( g, true );
+        if (opening) return opening;
+    }
 
     let [opening, openingName] = queryOpeningBook( g );
     const DEPTH = 2;

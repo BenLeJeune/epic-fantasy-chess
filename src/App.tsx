@@ -130,9 +130,7 @@ function App() {
               from, to, moving, captured, special, specify
         } })
 
-    if ( uuid === "fiesta" ) col = currentTurn
-
-    return await MoveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, { colour: col })
+    return await MoveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, col, { colour: col })
   }
 
   ///
@@ -222,15 +220,17 @@ function App() {
 
     setMoves( [...game.current.getMoves()] );
     setBoard( [...game.current.getBoard()] );
-    setCurrentTurn( game.current.getCurrentTurn() );
+    setTimeout(() => setCurrentTurn( game.current.getCurrentTurn() ), 500);
 
     /// CHECK TO SEE IF THE GAME IS OVER
     isGameOver( from, col );
 
     //IF NOT, THE OPPONENT PLAYS A MOVE
     setTimeout(() => {
-      if ( !gameOver && ( game.current.getCurrentTurn() === -playerColour || uuid === "fiesta") && opponent === "COMP" ) {
-        generateRandomMove( -game.current.getCurrentTurn() )
+      if ( !gameOver
+          && ( game.current.getCurrentTurn() === -playerColour || uuid === "fiesta")
+          && opponent === "COMP" ) {
+        generateRandomMove( game.current.getCurrentTurn() )
             .then(
                 ( m ) => {
                   if (!gameOver && m) try {
@@ -256,6 +256,7 @@ function App() {
 
     if ( opponent === "COMP" && playerColour === -1 ) {
       //We're playing as black against a computer - computer must make the first move!
+      console.log("Generating opening move");
       generateRandomMove()
         .then(
           m => {
@@ -299,7 +300,7 @@ function App() {
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
                   whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces }
                   playerColour={ playerColour }
-                  opponentActive={ opponent === "COMP"} gameUUID={ uuid }
+                  opponentActive={ opponent === "COMP"} gameUUID={ uuid } pieceIndexes={ game.current.getPieceIndexes() }
       />
     </div>
     <div className="boardRightColumn">

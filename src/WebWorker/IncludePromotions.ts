@@ -10,7 +10,7 @@ import {AdditionalOptions} from "../Classes/Game";
 const filterPromotionPieces = ( army : number[], colour : 1 | -1 ) => {
     //We want to remove duplicates
     let filtered = army.reduce(( acc, cur ) => acc.indexOf( cur ) === -1 ? [ ...acc, cur ] : acc, [] as number[]);
-    return filtered.sort( (a, b) => a - b ).map( piece => colour > 0 ? piece : -piece )
+    return filtered.filter( piece => Math.abs(piece) !== Piece.King ).sort( (a, b) => a - b ).map( piece => colour > 0 ? piece : -piece )
 }
 
 export type PromotionMove = {

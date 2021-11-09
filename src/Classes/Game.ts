@@ -13,6 +13,8 @@ export default class Game {
 
     private moves : ActualMove[]
 
+    private pieceIndexes : number[]; //Indexes where there are pieces
+
     public UnMove = () => {
 
         //Let's roll back the most recent move!
@@ -23,13 +25,20 @@ export default class Game {
         let colour = move.moving > 0 ? 1 : -1;
 
         //Let's replace any piece that was captured
-        if ( move.special !== "EP" ) this.board[ move.to ] = move.captured;
+        if ( move.special !== "EP" ) {
+            this.board[move.to] = move.captured;
+            //Update piece indexes
+            if ( move.captured !== Piece.None ) this.pieceIndexes.push( move.to )
+        }
         this.board[ move.from ] = move.moving;
+        //Update piece indexes
+        this.pieceIndexes[ this.pieceIndexes.indexOf( move.to ) ] = move.from;
 
         switch ( move.special ) {
             case "EP":
                 this.board[ move.to ] = Piece.None;
                 this.board[ move.to - 8 * colour ] = move.captured;
+                this.pieceIndexes.push( move.to - 8 * colour )
                 break;
             case "PROMOTION":
                 //We should be able to attach the piece we want to promote to
@@ -51,12 +60,15 @@ export default class Game {
                     let rookSquare = move.to - rookDistance;
                     this.board[rookSquare] = this.board[ move.to + 1 ];
                     this.board[ move.to + 1 ] = Piece.None;
+                    //Update pieceIndexes
+                    this.pieceIndexes[ this.pieceIndexes.indexOf( move.to + 1 ) ] = rookSquare;
                 }
                 //If we were castling Kingside
                 if ( move.from < move.to ) {
                     let rookSquare = move.to + 1;
                     this.board[rookSquare] = this.board[ move.to - 1 ];
                     this.board[ move.to - 1 ] = Piece.None;
+                    this.pieceIndexes[ this.pieceIndexes.indexOf( move.to - 1 ) ] = rookSquare;
                 }
 
                 break;
@@ -84,11 +96,17 @@ export default class Game {
             specify = ActualMove.FILE
         }
 
+        if (captured !== Piece.None) {
+            this.pieceIndexes.splice(this.pieceIndexes.indexOf(to), 1)
+        }
+
         //WE ALSO WANT TO HANDLE SPECIAL MOVES
         switch ( special ) {
             case "EP":
                 captured = this.board[ to - 8 * colour ];
                 this.board[ to - 8 * colour ] = Piece.None;
+                //Remove from piece indexes
+                this.pieceIndexes.splice( this.pieceIndexes.indexOf( to - 8 * colour ), 1);
                 break;
             case "PROMOTION":
                 //We should have the piece attached
@@ -114,12 +132,16 @@ export default class Game {
                     }
                     this.board[ to + 1 ] = this.board[rookSquare];
                     this.board[rookSquare] = Piece.None;
+                    //Update piece indexes
+                    this.pieceIndexes[ this.pieceIndexes.indexOf( rookSquare ) ] = to + 1
                 }
                 //If we're castling Kingside
                 if ( from < to ) {
                     let rookSquare = to + 1;
                     this.board[ to - 1 ] = this.board[rookSquare];
                     this.board[rookSquare] = Piece.None;
+                    //Update piece indexes
+                    this.pieceIndexes[ this.pieceIndexes.indexOf( rookSquare ) ] = to - 1
                 }
 
                 break;
@@ -134,6 +156,9 @@ export default class Game {
         this.board[to] = this.board[from];
         this.board[from] = Piece.None;
 
+        //Updater piece indexes
+        this.pieceIndexes[ this.pieceIndexes.indexOf( from ) ] = to
+
         this.currentTurn = -this.currentTurn;
 
     }
@@ -143,6 +168,12 @@ export default class Game {
         this.moves = _history;
         this.currentTurn = 1;
 
+        let _pieceIndexes = [] as number[];
+        [ ..._board ].forEach((piece, i) => {
+            if (piece !== Piece.None) _pieceIndexes.push(i);
+        })
+        this.pieceIndexes = _pieceIndexes;
+
         // FOR DEVELOPMENT PURPOSES
         if (global.window) ( global.window as any ).updateBoard = ( update:(board:number[])=>number[] ) => update(this.board).map((p, i) => this.board[i] = p);
 
@@ -151,6 +182,7 @@ export default class Game {
     public getBoard = () => this.board;
     public getMoves = () => this.moves;
     public getCurrentTurn = () => this.currentTurn;
+    public getPieceIndexes = () => this.pieceIndexes;
 
     public getLastMove = () => this.moves.length > 0 ? this.moves[ this.moves.length - 1 ] : undefined;
 

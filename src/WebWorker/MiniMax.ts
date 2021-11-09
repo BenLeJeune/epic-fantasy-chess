@@ -58,7 +58,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
     if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 )) {
         //We've reached the end! Return the final evaluation
         let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0
-        let ev = positionalEngineEvaluation( g.getBoard(), g.getMoves() );
+        let ev = positionalEngineEvaluation( g.getBoard(), g.getMoves(), g.getPieceIndexes() );
         hashSet( g.getBoard(), ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
         counter()
         return [ ev , { move: { from: -1, to: -1 } }, g.getMoves().length, quiescence_quiet || isCheckMate ] as [ number, PromotionMove, number, boolean ];

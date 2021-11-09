@@ -11,7 +11,7 @@ import {randomFromList} from "../helpers/Utils";
 /// QUERYING THE OPENING BOOK
 ///
 
-const queryOpeningBook = (g : Game ) => {
+const queryOpeningBook = ( g : Game, firstMove: boolean = false ) => {
 
     //We want to see if there are any openings left
     let b = g.getBoard();
@@ -23,6 +23,15 @@ const queryOpeningBook = (g : Game ) => {
     for ( let opening of OpeningBook ) {
 
         let om = opening.moves;
+
+        //However, if we're on the very first opening, we can just select one randomly
+        if (firstMove ) {
+            let randomOpening = randomFromList(Object.values(OpeningBook));
+            om = randomOpening.moves;
+        }
+
+        // console.log(`Random Opening: ${ randomOpening }`)
+
         //An array in form [ "e4", "Nf6", "e5", "Nd5" ]
         let parsedOM = om.split(" ").filter( m => m.indexOf(".") === -1 );
 
@@ -77,6 +86,7 @@ const queryOpeningBook = (g : Game ) => {
 
             if (validMove?.length > 0) {
                 moves.push(validMove[0])
+                if (firstMove) return [{ move: validMove[0]}, opening.name ]
                 if (parsedOM.length === h.length + 1) openingName = opening.name
                 // console.log(`Identified: the ${ opening.name }`)
             }

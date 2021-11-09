@@ -26,13 +26,14 @@ interface Props {
     blackArmy: number[], //Black's starting army
     playerColour : number, //"Player 1"'s player colour
     opponentActive : boolean, //true for computer opponent, false for local opponent
-    gameUUID: string //game UUID
+    gameUUID: string, //game UUID
+    pieceIndexes: number[]
 }
 
-export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive, gameUUID } : Props) {
+export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, pieceIndexes } : Props) {
 
     //Whether or not the board needs to be rotated
-    const rotated = (playerColour === -1 && opponentActive) || ( currentTurn === -1 && !opponentActive );
+    const rotated = ( (playerColour === -1 && opponentActive) || ( currentTurn === -1 && !opponentActive ) ) && gameUUID !== "dev-playground";
 
     const [DEV_MODE_ENABLED] = useState(gameUUID === "dev-playground");
 
@@ -73,7 +74,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
     ///
 
     const getSquares = () => board.map( (piece, pos) => <ChessSquare position={pos} rotated={rotated}
-                                         highlight={ moves.length >= 1 && ( pos === moves[moves.length - 1].to || pos === moves[moves.length - 1].from ) } /> )
+                                         highlight={ /*moves.length >= 1 && ( pos === moves[moves.length - 1].to || pos === moves[moves.length - 1].from )*/ pieceIndexes.indexOf(pos) !== -1  } /> )
 
     const getPieceKey = ( piece : number, pos : number ) => {
         //We will return simply the piece and its position
