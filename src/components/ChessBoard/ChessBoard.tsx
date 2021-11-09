@@ -12,6 +12,7 @@ import ActualMove from "../../Classes/Move";
 import {SpecialMove} from "../../types";
 import {filterLegalMoves} from "../../helpers/Checks";
 import PiecePromotionUI from "../PiecePromotionUI/PiecePromotionUI";
+import { generateEmptyBoard } from '../../helpers/BoardGenerators';
 
 interface Props {
     board : number[], //The game board
@@ -73,8 +74,8 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
     /// GENERATING UI ELEMENTS
     ///
 
-    const getSquares = () => board.map( (piece, pos) => <ChessSquare position={pos} rotated={rotated}
-                                         highlight={ /*moves.length >= 1 && ( pos === moves[moves.length - 1].to || pos === moves[moves.length - 1].from )*/ pieceIndexes.indexOf(pos) !== -1  } /> )
+    const getSquares = () => board.map( (piece, pos) => <ChessSquare position={pos} rotated={rotated} moveCircle={false}
+                                         highlight={ moves.length >= 1 && ( pos === moves[moves.length - 1].to || pos === moves[moves.length - 1].from ) /*pieceIndexes.indexOf(pos) !== -1*/  } /> )
 
     const getPieceKey = ( piece : number, pos : number ) => {
         //We will return simply the piece and its position
@@ -112,6 +113,8 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     draggable={ (currentTurn > 0 && piece > 0 && (playerColour > 0|| !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) ) || DEV_MODE_ENABLED }
                     target={ () => setTargeting([ piece, pos ])  }
                     unTarget={ () => setTargeting([ 0, -1 ]) }
+                    onHover={ () => setHoveringPos(pos) }
+                    onUnHover={ () => setHoveringPos(-1) }
                     active={ targeting[1] === pos || targeting[1] === -1 }
                     rotated={rotated} /> )
 
@@ -131,6 +134,11 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
             )
         : null;
 
+    const getMoveCircles = () => hoveringPos === -1 ? null : Piece.getPiece( board[hoveringPos] )?.getLegalMoves(
+        hoveringPos, generateEmptyBoard(), "all", board[hoveringPos] > 0 ? 1 : -1, moves
+    ).map(
+        legalMove => <ChessSquare position={legalMove.to} rotated={rotated} moveCircle={true} highlight={false}/>
+    )
 
 
     ///
@@ -138,6 +146,9 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
     ///
     // [ piece, position from ]
     const [ targeting, setTargeting ] = useState<[ number, number ]>([ 0, -1 ]);
+
+    // The position that is currently being hovered
+    const [ hoveringPos, setHoveringPos ] = useState<number>(-1);
 
 
     ///
@@ -173,6 +184,10 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
 
                 <div id="ChessBoardPieces" className={`board ${ targeting[0] !== 0 ? "targeting" : "" }`}>
                     { getPieces() }
+                </div>
+
+                <div id="ChessBoardMoveCircles" className="board">
+                    { getMoveCircles() }
                 </div>
 
                 {

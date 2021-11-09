@@ -7,13 +7,15 @@ interface props {
     piece : number,
     target: ( position : number ) => void,
     unTarget: ( position : number ) => void,
+    onHover: () => void,
+    onUnHover: () => void,
     active : boolean,
     id : string,
     draggable : boolean,
     rotated: boolean
 }
 
-export default function ChessPiece({position, piece, target, unTarget, active, id, draggable, rotated}:props) {
+export default function ChessPiece({position, piece, target, unTarget, onHover, onUnHover, active, id, draggable, rotated}:props) {
 
     let oldPos = useRef<number>(position);
 
@@ -63,6 +65,8 @@ export default function ChessPiece({position, piece, target, unTarget, active, i
                 draggable={ draggable }
                 onDragStart={ draggable ? onDragStart : () => false }
                 onDragEnd={ () => unTarget(piece) }
+                onMouseEnter={onHover}
+                onMouseLeave={onUnHover}
     >
         <img src={ Piece.getImage( piece ) } alt={ piece.toString() } className="pieceImg"/>
     </div>

@@ -34,5 +34,6 @@ div#ChessBoardWrapper div#ChessBoardOuter div.board {
 div#ChessBoardWrapper div#ChessBoardOuter div.board#ChessBoardPieces {
   pointer-events: none;
 }
-
-/*# sourceMappingURL=ChessBoard.css.map */
+div#ChessBoardWrapper div#ChessBoardOuter div.board#ChessBoardMoveCircles {
+  pointer-events: none;
+}/*# sourceMappingURL=ChessBoard.css.map */

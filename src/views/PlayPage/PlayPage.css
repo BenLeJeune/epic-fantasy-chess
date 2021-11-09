@@ -26,7 +26,10 @@ div.selectionItem {
   margin: 0 0.5em;
   color: #F8DC97;
   transition: transform 0.25s ease-in-out, background-color 0.25s ease-in-out;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 div.selectionItem:hover {
   background-color: #5F6EC3;
@@ -42,6 +45,4 @@ div.selectionItem.disabled {
   opacity: 0.5;
   background-color: #3A4377;
   cursor: not-allowed;
-}
-
-/*# sourceMappingURL=PlayPage.css.map */
+}/*# sourceMappingURL=PlayPage.css.map */

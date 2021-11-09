@@ -52,6 +52,4 @@ div#GameOverUI button:hover, div#GameOverUI button:active {
 }
 div#GameOverUI button:active {
   transform: translateY(0.25rem);
-}
-
-/*# sourceMappingURL=GameOverUI.css.map */
+}/*# sourceMappingURL=GameOverUI.css.map */
