@@ -36,4 +36,65 @@ div#ChessBoardWrapper div#ChessBoardOuter div.board#ChessBoardPieces {
 }
 div#ChessBoardWrapper div#ChessBoardOuter div.board#ChessBoardMoveCircles {
   pointer-events: none;
-}/*# sourceMappingURL=ChessBoard.css.map */
+}
+
+div#PieceInfoBubble {
+  background-color: #262836;
+  padding: 1rem;
+  border-radius: 1rem;
+  max-width: 20%;
+  box-shadow: 0.25rem 0.25rem 0.75rem rgba(0, 0, 0, 0.25);
+  text-align: center;
+  animation: pieceBubble-entrance 0.25s ease-out forwards;
+}
+div#PieceInfoBubble h3#PieceInfoPieceTitle {
+  color: #F8DC97;
+  padding: 0;
+  margin: 0.25rem 0;
+}
+div#PieceInfoBubble .imgRow {
+  display: flex;
+  width: 100%;
+  height: fit-content;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+div#PieceInfoBubble .imgRow img {
+  height: 4em;
+}
+div#PieceInfoBubble div.pieceDescBlock {
+  color: #464B66;
+  padding-top: 0.2em;
+}
+div#PieceInfoBubble div.pieceDescBlock.tags {
+  padding-top: 1em;
+}
+div#PieceInfoBubble div.pieceDescBlock > .tag {
+  font-style: italic;
+}
+div#PieceInfoBubble div.exit {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #E2E2E2;
+  transition: color 0.15s ease-in-out;
+  cursor: pointer;
+}
+div#PieceInfoBubble div.exit:hover {
+  color: #464B66;
+  transform-origin: center;
+}
+
+@keyframes pieceBubble-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*# sourceMappingURL=ChessBoard.css.map */

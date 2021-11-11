@@ -1,4 +1,5 @@
 div.piece {
+  user-select: none;
   width: 100%;
   height: 100%;
   pointer-events: all;
@@ -6,11 +7,9 @@ div.piece {
 div.piece img.pieceImg {
   width: 100%;
   height: 100%;
-  cursor: -webkit-grab;
   cursor: grab;
 }
 div.piece img.pieceImg:active {
-  cursor: -webkit-grabbing;
   cursor: grabbing;
 }
 
@@ -25,4 +24,6 @@ div#ChessBoardPieces.targeting > div.piece.active {
 
 div.gameOver div.piece {
   pointer-events: none;
-}/*# sourceMappingURL=ChessPiece.css.map */
+}
+
+/*# sourceMappingURL=ChessPiece.css.map */

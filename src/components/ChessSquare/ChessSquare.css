@@ -1,5 +1,6 @@
 div.chessSquare {
   position: relative;
+  user-select: none;
 }
 div.chessSquare.light {
   background-color: #F8DC97;
@@ -53,4 +54,6 @@ div.chessSquare.moveCircle::after {
 }
 div.chessSquare.moveCircle::after.fadedMoveCircle {
   opacity: 0.2;
-}/*# sourceMappingURL=ChessSquare.css.map */
+}
+
+/*# sourceMappingURL=ChessSquare.css.map */

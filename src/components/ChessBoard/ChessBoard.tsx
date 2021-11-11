@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {CSSProperties, useEffect, useLayoutEffect, useState} from 'react';
 import ChessSquare from "../ChessSquare/ChessSquare";
 import "./ChessBoard.css"
 import ChessPiece from "../ChessPiece/ChessPiece";
@@ -115,6 +115,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     unTarget={ () => setTargeting([ 0, -1 ]) }
                     onHover={ () => setHoveringPos(pos) }
                     onUnHover={ () => setHoveringPos(-1) }
+                    onRightClick={ id => showPieceInfo( pos, id ) }
                     active={ targeting[1] === pos || targeting[1] === -1 }
                     rotated={rotated} /> )
 
@@ -167,6 +168,110 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
         return filtered.filter(p => Math.abs(p) !== Piece.King).sort( (a, b) => a - b ).map( piece => colour > 0 ? piece : -piece )
     }
 
+    ///
+    /// PIECE INFO BUBBLE
+    ///
+
+    const [ pieceInfoPos, setPieceInfoPos ] = useState<number>(-1);
+    const [ pieceInfoId, setPieceInfoId ] = useState<string>("");
+
+    const showPieceInfo = ( pos: number, id: string ) => {
+        setPieceInfoPos(pos);
+        setPieceInfoId(id)
+        window.addEventListener("click", infoListener);
+        window.addEventListener("dragstart", infoListener)
+    }
+
+    const infoListener = ( e : MouseEvent | DragEvent ) => {
+        let bubble = document.getElementById("PieceInfoBubble");
+        if ( bubble ) {
+            let { x, y, width, height } = bubble.getBoundingClientRect();
+            //Check to see if the click was outside of the rect
+            if ( e.pageX < x || e.pageX > x + width || e.pageY < y || e.pageY > y + height ) {
+                ///The click was outside the rect!
+                setPieceInfoPos(-1);
+                window.removeEventListener("click", infoListener);
+            }
+        }
+    }
+
+    const pieceInfoBubble = () => {
+
+        if ( pieceInfoPos === -1 ) return null;
+        let pieceNum = board[pieceInfoPos]
+        let piece = Piece.getPiece(pieceNum)
+        if (!piece) return null;
+
+        const bubbleStyle = {
+            position: "absolute"
+        } as CSSProperties
+
+        return <>
+
+            <div id="PieceInfoBubble" style={ bubbleStyle }>
+
+                <div onContextMenu={e => e.preventDefault()} onMouseDown={() => setPieceInfoPos(-1)} className="exit">
+                    ✖
+                </div>
+
+                <h3 id="PieceInfoPieceTitle">{ piece.longName }</h3>
+                <div className="imgRow">
+                    <img src={ Piece.getImage(pieceNum) } />
+                </div>
+                <div className="pieceDescBlock moves">
+                    { piece.movesDescription }
+                </div>
+                <div className="pieceDescBlock moves">
+                    { piece.specialMoves.map((category, i) => <div className="move">{category}</div>) }
+                </div>
+                <div className="pieceDescBlock notes">
+                    { piece.notes }
+                </div>
+                <div className="pieceDescBlock tags">
+                    Tags: { piece.categories.map((category, i) =>
+                    <span className="tag">{category}{i !== (piece as GamePiece).categories.length - 1 ? ", " : ""}</span>) }
+                </div>
+            </div>
+        </>
+
+    }
+
+    useLayoutEffect(() => {
+        //We're gonna resize the element!
+        let pieceEl = document.getElementById(pieceInfoId);
+        let infoBubble = document.getElementById("PieceInfoBubble");
+        if (infoBubble && pieceEl) {
+            //That means we've just re-rendered the popul!
+            let { x: pieceX, y: pieceY, height: pieceHeight, width: pieceWidth } = pieceEl.getBoundingClientRect();
+            let { height: bubbleHeight, width: bubbleWidth } = infoBubble.getBoundingClientRect();
+
+            let topMin = 10; //min top is 0
+            let topMax = window.window.visualViewport.height - bubbleHeight / 2 //effectively touching the bottom
+            //Align centre with centre of piece - pieceX + pieceHeight/2 = top + bubbleHeight/2
+            let idealTop = pieceY + ( pieceHeight / 2 ) - ( bubbleHeight / 2 );
+            let boundedTop = Math.min( topMax, Math.max( topMin, idealTop ) );
+            infoBubble.style.top = `${boundedTop}px`
+
+
+            let leftSide = pieceX + 20 < window.innerWidth / 2
+
+            let distMin = 0, distMax = window.innerHeight - ( bubbleWidth / 2 );
+            let idealDist = leftSide ? pieceX - bubbleWidth - 10 : window.visualViewport.width - pieceX - pieceWidth - bubbleWidth -10
+            let bounded = Math.min( distMax, Math.max( distMin, idealDist ) );
+
+            if ( leftSide) {
+                infoBubble.style.left = `${bounded}px`;
+                infoBubble.style.right = "";
+            }
+            else {
+                infoBubble.style.right = `${bounded}px`
+                infoBubble.style.left = "";
+            }
+
+        }
+
+    }, [ pieceInfoId, pieceInfoPos ])
+
     return <>
         <InfoBar captures={ blackCaptured } evaluation={ -materialEvaluation( board ) }/>
         <div id="ChessBoardWrapper">
@@ -204,6 +309,8 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
             </div>
         </div>
         <InfoBar captures={ whiteCaptured } evaluation={ materialEvaluation( board ) }/>
+
+        { pieceInfoBubble() }
     </>
 
 }

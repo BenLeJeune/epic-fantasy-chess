@@ -9,13 +9,14 @@ interface props {
     unTarget: ( position : number ) => void,
     onHover: () => void,
     onUnHover: () => void,
+    onRightClick: ( id : string ) => void,
     active : boolean,
     id : string,
     draggable : boolean,
     rotated: boolean
 }
 
-export default function ChessPiece({position, piece, target, unTarget, onHover, onUnHover, active, id, draggable, rotated}:props) {
+export default function ChessPiece({position, piece, target, unTarget, onHover, onUnHover, active, id, draggable, rotated, onRightClick}:props) {
 
     let oldPos = useRef<number>(position);
 
@@ -55,7 +56,12 @@ export default function ChessPiece({position, piece, target, unTarget, onHover, 
         }
     }
 
-
+    const clickHandler = ( e: React.MouseEvent<HTMLDivElement, MouseEvent> ) => {
+        if ( e.button === 2 ) {
+            e.preventDefault();
+            onRightClick(id);
+        }
+    }
 
     return <div className={`piece ${ active ? "active" : "" }`}
                 ref={ pieceEl }
@@ -67,6 +73,8 @@ export default function ChessPiece({position, piece, target, unTarget, onHover, 
                 onDragEnd={ () => unTarget(piece) }
                 onMouseEnter={onHover}
                 onMouseLeave={onUnHover}
+                onMouseDown={ e => clickHandler(e)}
+                onContextMenu={ e => clickHandler(e) }
     >
         <img src={ Piece.getImage( piece ) } alt={ piece.toString() } className="pieceImg"/>
     </div>

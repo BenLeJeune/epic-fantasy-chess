@@ -36,3 +36,52 @@ div#ChessBoardWrapper
         pointer-events: none
       &#ChessBoardMoveCircles
         pointer-events: none
+
+div#PieceInfoBubble
+  background-color: colours.$mediumBlue
+  padding: 1rem
+  border-radius: 1rem
+  max-width: 20%
+  box-shadow: .25rem .25rem .75rem rgba(0, 0, 0, 0.25)
+  text-align: center
+
+  animation: pieceBubble-entrance 0.25s ease-out forwards
+
+  h3#PieceInfoPieceTitle
+    color: colours.$lightsquare
+    padding: 0
+    margin: .25rem 0
+  .imgRow
+    display: flex
+    width: 100%
+    height: fit-content
+    flex-flow: row nowrap
+    align-items: center
+    justify-content: center
+    img
+      height: 4em
+  div.pieceDescBlock
+    color: colours.$offLightBlue
+    padding-top: .2em
+    &.tags
+      padding-top: 1em
+    > .tag
+      font-style: italic
+  div.exit
+    position: absolute
+    top: 1rem
+    right: 1rem
+    color: colours.$offwhite
+    transition: color 0.15s ease-in-out
+    cursor: pointer
+    &:hover
+      color: colours.$offLightBlue
+      transform-origin: center
+
+@keyframes pieceBubble-entrance
+  0%
+    opacity: 0
+    transform: translateY(1rem)
+  100%
+    opacity: 1
+    transform: translateY(0)

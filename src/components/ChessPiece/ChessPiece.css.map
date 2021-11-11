@@ -1,1 +1,1 @@
-{"version":3,"sources":["ChessPiece.sass"],"names":[],"mappings":"AAAA;EACE,WAAA;EACA,YAAA;EACA,mBAAA;AACF;AACE;EACE,WAAA;EACA,YAAA;EACA,oBAAA;EAAA,YAAA;AACJ;AACI;EACE,wBAAA;EAAA,gBAAA;AACN;;AAEE;EACE,YAAA;EACA,uBAAA;AACJ;AAAI;EACE,mBAAA;EACA,UAAA;AAEN;;AACE;EACE,oBAAA;AAEJ","file":"ChessPiece.css"}
+{"version":3,"sourceRoot":"","sources":["ChessPiece.sass"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;EACA;;AAEA;EACE;EACA;EACA;;AAEA;EACE;;;AAGJ;EACE;EACA;;AACA;EACE;EACA;;;AAGJ;EACE","file":"ChessPiece.css"}
