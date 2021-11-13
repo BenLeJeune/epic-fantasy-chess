@@ -4,10 +4,11 @@ import "./MovesDisplay.css";
 
 interface props {
     moves : ActualMove[],
-    unMove : () => void
+    unMove : () => void,
+    canUndo: boolean
 }
 
-export default function MovesDisplay({ moves, unMove } : props ) {
+export default function MovesDisplay({ moves, unMove, canUndo } : props ) {
 
     return <>
         <div id="BoardMovesDisplay">
@@ -19,9 +20,12 @@ export default function MovesDisplay({ moves, unMove } : props ) {
 
                 )
             }
-            <button className="unMakeMove" onClick={ unMove }>
-                UnMove!
-            </button>
+            {
+                !canUndo ? null :
+                    <button className="unMakeMove" onClick={unMove}>
+                        UnMove!
+                    </button>
+            }
         </div>
     </>
 

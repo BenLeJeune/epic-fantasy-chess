@@ -20,7 +20,7 @@ const materialEvaluation = (board : number[] ) => {
     }, 0);
 }
 
-const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pieceIndexes?: number[] ) => {
+const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pieceIndexes?: number[], _pieces?: (GamePiece|null)[] ) => {
 
 
     let startTime = performance.now();
@@ -39,7 +39,7 @@ const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pi
     let val = 0;
 
     if (pieceIndexes) {
-        val = pieceIndexes.reduce(( t, pos ) => {
+        /*val = pieceIndexes.reduce(( t, pos ) => {
             const p = Piece.getPiece(board[pos]) as GamePiece;
             if ( !p ) return t;
             else {
@@ -53,10 +53,24 @@ const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pi
                     return t - value;
                 }
             }
-        }, 0)
+        }, 0)*/
+        let i = 0, len = pieceIndexes.length;
+        let pieces = _pieces || Piece.PIECE_OBJECTS;
+        while ( i < len ) {
+            let index = pieceIndexes[i];
+            const p = pieces[ Math.abs(board[index]) ];
+            if (p) {
+                let value = p.engineValue
+                if ( board[index] > 0 ) {
+                    val += value + p.valueGrid[63 - index]
+                }
+                else val -= ( value + p.valueGrid[index] )       ;
+            }
+            i++
+        }
     }
     else {
-        val = board.filter( p => p !== Piece.None ).reduce(( t, piece, pos ) => {
+        /*val = board.filter( p => p !== Piece.None ).reduce(( t, piece, pos ) => {
             const p = Piece.getPiece(piece) as GamePiece;
             if ( !p ) return t;
             else {
@@ -70,7 +84,21 @@ const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pi
                     return t - value;
                 }
             }
-        }, 0);
+        }, 0);*/
+        let i = 0, len = board.length;
+        let pieces = _pieces || Piece.PIECE_OBJECTS;
+        while ( i < len ) {
+            let index = i;
+            const p = pieces[ Math.abs(board[index]) ];
+            if (p) {
+                let value = p.engineValue
+                if ( board[index] > 0 ) {
+                    val += value + p.valueGrid[63 - index]
+                }
+                else val -= ( value + p.valueGrid[index] )       ;
+            }
+            i++
+        }
     }
 
     let endTime = performance.now();

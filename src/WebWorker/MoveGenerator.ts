@@ -73,7 +73,8 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
     let nodes = 0;
     let counter = () => nodes++
 
-    let move = miniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter );
+    let pieces = Piece.PIECE_OBJECTS;
+    let move = miniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter, undefined, undefined, undefined, pieces );
 
     console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
     console.log(`Examined ${ nodes } nodes`)

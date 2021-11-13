@@ -9,13 +9,13 @@ import {GameInfo} from "../../types";
 import {randomFromList} from "../../helpers/Utils";
 import { ARMY_KEY, GAME_KEY } from "../../KEYS";
 import Piece from "../../Classes/Piece";
+import { Link } from "react-router-dom";
 
 export default function PlayPage() {
 
     ///
     /// THE AVAILABLE ARMIES
     ///
-
     const [ armies, setArmies ] = useState<Army[]>([]);
 
     const getArmies = () => {
@@ -31,8 +31,25 @@ export default function PlayPage() {
         setArmies(armies);
     }
 
+    ///
+    /// CURRENTLY EXISTING GAMES
+    ///
+    const [ games, setGames ] = useState<GameInfo[]>([]);
+    const getGames = () => {
+        //Loading games from local storage
+        let gamesJSON = localStorage.getItem( GAME_KEY );
+        let games = [] as GameInfo[];
+        if ( gamesJSON ) {
+            let parsedGames = JSON.parse( gamesJSON ) as unknown as { [key: string]: GameInfo }
+            //Push games into the array, if any are found!
+            games.push( ...Object.values(parsedGames) );
+        }
+        setGames(games);
+    }
+
     useLayoutEffect(() => {
-        getArmies()
+        getArmies();
+        getGames();
     }, [] )
 
     ///
@@ -70,12 +87,41 @@ export default function PlayPage() {
 
     const getPointBuyTotal = ( armyPieces : number[] ) => armyPieces.filter( p => p !== 6 ).reduce((prev, next) => (Piece.getPiece(next)?.materialValue || 0) + prev, 0 );
 
+    ///
+    /// WHETHER OR NOT THE EXISTING GAMES ARE GOING TO BE SHOWN
+    ///
+    const [ showExistingGames, setShowExistingGames ] = useState<boolean>(false);
+    const renderExistingGame = ( g: GameInfo ) => {
+
+        let playerArmy = JSON.parse(g.army) as Army;
+        let opponentArmy = JSON.parse(g.opponentArmy) as Army;
+
+        return <Link to={`/play/game/${g.uuid}`}>
+            <div title={ `Game ${g.uuid}` } className="existingGame">
+                <p>{g.colour > 0 ? playerArmy.name : opponentArmy.name},</p>
+                <p>{g.colour < 0 ? playerArmy.name : opponentArmy.name}</p>
+                <p>vs { g.opponent === "LOCAL" ? "Local Opponent" : "Computer Opponent" }</p>
+            </div>
+        </Link>
+    }
+
+    const getExistingGames = () => games.map( renderExistingGame )
+
+
     return <div id="PlayPage" className="paddedTop">
 
         <NavBar/>
     
         <h1>Setup your game!</h1>
 
+        <p onClick={() => setShowExistingGames( prev => !prev )} className="toggleExistingGames">
+            { showExistingGames ? "Hide" : "Show" } current games
+        </p>
+        <div className="existingGames">
+        {
+            showExistingGames ? getExistingGames() : null
+        }
+        </div>
         <div className="playPageInner">
             <h3>Who do you want to face?</h3>
             <SelectionItem item="LOCAL OPPONENT" selected={opponent==="LOCAL"} onPress={()=>setOpponent("LOCAL")}/>
@@ -134,7 +180,7 @@ interface SelectionItemProps<T> {
 
 export function SelectionItem<T>({ selected, item, onPress, itemToString = item => item as unknown as string, disabled = false }: SelectionItemProps<T>) {
 
-    return <div className={`selectionItem ${ selected ? "selected" : "" } ${ disabled ? "disabled" : "" }`}
+    return <div title={disabled ? "Army too strong - edit it to play with it." : ""} className={`selectionItem ${ selected ? "selected" : "" } ${ disabled ? "disabled" : "" }`}
         onClick={ disabled ? () => {} : () => onPress(item) }
     >
         { itemToString(item) }

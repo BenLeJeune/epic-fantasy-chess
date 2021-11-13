@@ -17,6 +17,39 @@ div#PlayPage div.playPageInner div.centred {
   margin: 0.5em 0 1.5em;
 }
 
+p.toggleExistingGames {
+  padding: 0 1.5em;
+  color: #464B66;
+}
+
+div.existingGames {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 0 1.5em;
+}
+div.existingGames a:active, div.existingGames a:hover {
+  text-decoration: underline;
+  text-decoration-color: #464B66;
+}
+div.existingGames a:visited, div.existingGames a:link {
+  text-decoration-color: #464B66;
+  text-decoration: none;
+  color: #464B66;
+}
+div.existingGames a div.existingGame {
+  text-align: center;
+  color: #464B66;
+  background-color: #262836;
+  margin: 0 0.25rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+div.existingGames a div.existingGame p {
+  margin: 0.25rem;
+  text-decoration-color: #464B66;
+  text-decoration: none;
+}
+
 div.selectionItem {
   display: inline-block;
   background-color: #3A4377;
@@ -26,10 +59,7 @@ div.selectionItem {
   margin: 0 0.5em;
   color: #F8DC97;
   transition: transform 0.25s ease-in-out, background-color 0.25s ease-in-out;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 div.selectionItem:hover {
   background-color: #5F6EC3;
@@ -45,4 +75,6 @@ div.selectionItem.disabled {
   opacity: 0.5;
   background-color: #3A4377;
   cursor: not-allowed;
-}/*# sourceMappingURL=PlayPage.css.map */
+}
+
+/*# sourceMappingURL=PlayPage.css.map */

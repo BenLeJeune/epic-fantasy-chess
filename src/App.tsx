@@ -218,12 +218,27 @@ function App() {
     game.current.Move( from, to, special, additional );
 
 
-    setMoves( [...game.current.getMoves()] );
-    setBoard( [...game.current.getBoard()] );
-    setTimeout(() => setCurrentTurn( game.current.getCurrentTurn() ), 500);
-
     /// CHECK TO SEE IF THE GAME IS OVER
     isGameOver( from, col );
+
+    setMoves( [...game.current.getMoves()] );
+    setBoard( [...game.current.getBoard()] );
+
+    //Set the timer for the next turn to begin
+    //If we aren't rotating, then there is no reason for there to be any delay
+    if ( !allowRotation ) {
+      setCurrentTurn( game.current.getCurrentTurn() )
+    }
+    else {
+      //We're rotating.
+      setMoveLockout(true);
+      setTimeout(() => {
+        //After a delay, change the turn, and allow moves once again.
+        setCurrentTurn(game.current.getCurrentTurn())
+        setMoveLockout(false);
+      }, 500);
+    }
+
 
     //IF NOT, THE OPPONENT PLAYS A MOVE
     setTimeout(() => {
@@ -248,6 +263,13 @@ function App() {
 
     }, 0)
   };
+
+  ///
+  /// MOVE LOCKOUT WITH ROTATION
+  /// + For smooth rotation between turns, moves must be temporarily locked out
+  ///
+  const [ moveLockout, setMoveLockout ] = useState<boolean>(false);
+  const [ allowRotation, setAllowRotation ] = useState<boolean>(true);
 
   ///
   /// OPPONENT MAKING THE FIRST MOVE
@@ -301,11 +323,12 @@ function App() {
                   whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces }
                   playerColour={ playerColour }
                   opponentActive={ opponent === "COMP"} gameUUID={ uuid } pieceIndexes={ game.current.getPieceIndexes() }
+                  allowRotation={allowRotation} setAllowRotation={ v => setAllowRotation(v) } moveLockout={moveLockout}
       />
     </div>
     <div className="boardRightColumn">
       <p className="playerToMove">{ game.current.getCurrentTurn() > 0 ? "White" : "Black" } to move</p>
-      <MovesDisplay moves={ moves } unMove={ unMove }/>
+      <MovesDisplay moves={ moves } unMove={ unMove } canUndo={ opponent === "LOCAL" }/>
     </div>
 
     { gameOver ?  <GameOverUI message={gameOverMsg} winner={winner}/> : null}

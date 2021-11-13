@@ -78,6 +78,35 @@ div#PieceInfoBubble
       color: colours.$offLightBlue
       transform-origin: center
 
+div.allowRotationCheckbox
+  display: flex
+  align-items: center
+  justify-content: center
+  position: absolute
+  bottom: 2rem
+  left: 2rem
+  background-color: colours.$mediumBlue
+  border-radius: .25rem
+  padding: 0.5rem
+  label
+    color: colours.$offLightBlue
+    margin-left: 0.5rem
+    position: relative
+  input[type="checkbox"]
+    appearance: none
+    position: relative
+    &::after
+      content: ""
+      background-color: colours.$lightBlue
+      height: 100%
+      width: 100%
+      padding: 0 .5rem
+      cursor: pointer
+      border: .2rem solid colours.$darkBlue
+    &:checked::after
+      background-color: colours.$offLightBlue
+
+
 @keyframes pieceBubble-entrance
   0%
     opacity: 0

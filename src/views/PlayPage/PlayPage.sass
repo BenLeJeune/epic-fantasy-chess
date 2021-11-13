@@ -16,6 +16,34 @@ div#PlayPage
             align-items: center
             margin: 0.5em 0 1.5em
 
+p.toggleExistingGames
+    padding: 0 1.5em
+    color: colours.$offLightBlue
+
+div.existingGames
+    display: flex
+    flex-flow: row wrap
+    padding: 0 1.5em
+    a
+        &:active, &:hover
+            text-decoration: underline
+            text-decoration-color: colours.$offLightBlue
+        &:visited, &:link
+            text-decoration-color: colours.$offLightBlue
+            text-decoration: none
+            color: colours.$offLightBlue
+        div.existingGame
+            text-align: center
+            color: colours.$offLightBlue
+            background-color: colours.$mediumBlue
+            margin: 0 0.25rem
+            padding: 0.5rem
+            border-radius: 0.25rem
+            p
+                margin: 0.25rem
+                text-decoration-color: colours.$offLightBlue
+                text-decoration: none
+
 div.selectionItem
     display: inline-block
     background-color: colours.$darksquare

@@ -86,6 +86,39 @@ div#PieceInfoBubble div.exit:hover {
   transform-origin: center;
 }
 
+div.allowRotationCheckbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  background-color: #262836;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+div.allowRotationCheckbox label {
+  color: #464B66;
+  margin-left: 0.5rem;
+  position: relative;
+}
+div.allowRotationCheckbox input[type=checkbox] {
+  appearance: none;
+  position: relative;
+}
+div.allowRotationCheckbox input[type=checkbox]::after {
+  content: "";
+  background-color: #2C2F40;
+  height: 100%;
+  width: 100%;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  border: 0.2rem solid #161823;
+}
+div.allowRotationCheckbox input[type=checkbox]:checked::after {
+  background-color: #464B66;
+}
+
 @keyframes pieceBubble-entrance {
   0% {
     opacity: 0;

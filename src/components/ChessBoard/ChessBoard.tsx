@@ -28,13 +28,18 @@ interface Props {
     playerColour : number, //"Player 1"'s player colour
     opponentActive : boolean, //true for computer opponent, false for local opponent
     gameUUID: string, //game UUID
-    pieceIndexes: number[]
+    pieceIndexes: number[], //Indexes of the pieces currently on the board
+    moveLockout: boolean, //Whether or not moves are currently locked out - for ensuring smooth transitions between turns
+    allowRotation: boolean,
+    setAllowRotation: ( allowRotation: boolean ) => void //Call this whenever rotation is changed here, so app.tsx can know about it
 }
 
-export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, pieceIndexes } : Props) {
+export default function ChessBoard({ board, currentTurn, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, pieceIndexes, moveLockout, allowRotation, setAllowRotation } : Props) {
 
-    //Whether or not the board needs to be rotated
-    const rotated = ( (playerColour === -1 && opponentActive) || ( currentTurn === -1 && !opponentActive ) ) && gameUUID !== "dev-playground";
+    ///
+    /// BOARD ROTATING
+    ///
+    const rotated = ( (playerColour === -1 && opponentActive) || ( currentTurn === -1 && !opponentActive ) ) && gameUUID !== "dev-playground" && allowRotation;
 
     const [DEV_MODE_ENABLED] = useState(gameUUID === "dev-playground");
 
@@ -110,7 +115,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
                     key={ getPieceKey( piece, pos ) }
                     piece={ piece }
                     id={ getPieceKey( piece, pos ) }
-                    draggable={ (currentTurn > 0 && piece > 0 && (playerColour > 0|| !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) ) || DEV_MODE_ENABLED }
+                    draggable={ (((currentTurn > 0 && piece > 0 && (playerColour > 0|| !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) )) && !moveLockout) || DEV_MODE_ENABLED }
                     target={ () => setTargeting([ piece, pos ])  }
                     unTarget={ () => setTargeting([ 0, -1 ]) }
                     onHover={ () => setHoveringPos(pos) }
@@ -184,11 +189,11 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
 
     const infoListener = ( e : MouseEvent | DragEvent ) => {
         let bubble = document.getElementById("PieceInfoBubble");
-        if ( bubble ) {
-            let { x, y, width, height } = bubble.getBoundingClientRect();
+        if ( bubble ) { //There was a click, and the bubble exists!
+            let { x, y, width, height } = bubble.getBoundingClientRect(); //Where is the bubble?
             //Check to see if the click was outside of the rect
             if ( e.pageX < x || e.pageX > x + width || e.pageY < y || e.pageY > y + height ) {
-                ///The click was outside the rect!
+                ///The click was outside the bubble!
                 setPieceInfoPos(-1);
                 window.removeEventListener("click", infoListener);
             }
@@ -270,7 +275,7 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
 
         }
 
-    }, [ pieceInfoId, pieceInfoPos ])
+    }, [ pieceInfoId, pieceInfoPos ]);
 
     return <>
         <InfoBar captures={ blackCaptured } evaluation={ -materialEvaluation( board ) }/>
@@ -311,6 +316,11 @@ export default function ChessBoard({ board, currentTurn, move, unMove, moves, wh
         <InfoBar captures={ whiteCaptured } evaluation={ materialEvaluation( board ) }/>
 
         { pieceInfoBubble() }
+
+        <div className="allowRotationCheckbox">
+            <input type="checkbox" checked={ allowRotation } onChange={e => setAllowRotation( e.target.checked )} />
+            <label>Allow rotation?</label>
+        </div>
     </>
 
 }

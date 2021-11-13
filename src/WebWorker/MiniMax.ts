@@ -7,6 +7,7 @@ import {legalMove} from "../types";
 import TranspositionTable from "./HashTable";
 import {arraysAreEqual} from "../helpers/Utils";
 import Piece from "../Classes/Piece";
+import GamePiece from "../Pieces/GamePiece";
 
 ///
 /// MINIMAX ALGORITHM FOR FINDING MOVES
@@ -17,10 +18,12 @@ import Piece from "../Classes/Piece";
 // ALPHA represents the MIN score the MAXIMISING player is guaranteed
 // BETA represents the MAX score the MINIMISING player is guaranteed
 
-const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[],e:number,t:number,q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity ) => {
+const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[],e:number,t:number,q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[] ) => {
 
     ///Another exit point
     ///Returned values are meaningless, won't read them
+
+    let fastGetPiece = (p:number) => pieces[ Math.abs(p) ]
 
     let col = maximising ? 1 : -1 as 1 | -1;
 
@@ -35,9 +38,9 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
     //We want to order our moves.
     let orderedPromotionMoves = [...unorderedMoves, ...unorderedCaptures].filter( m => m.additional?.promotionTo )
         .sort(( p, n ) =>
-            (Piece.getPiece(n.additional?.promotionTo||1)?.engineValue || 0) - ( Piece.getPiece(p.additional?.promotionTo||1)?.engineValue || 0 ))
+            (fastGetPiece(n.additional?.promotionTo||1)?.engineValue || 0) - ( fastGetPiece(p.additional?.promotionTo||1)?.engineValue || 0 ))
 
-    let orderedCaptures = unorderedCaptures.sort(( p, n ) => (Piece.getPiece( g.getBoard()[n.move.to] )?.engineValue || 0) - (Piece.getPiece( g.getBoard()[p.move.to] )?.engineValue || 0) )
+    let orderedCaptures = unorderedCaptures.sort(( p, n ) => (fastGetPiece( g.getBoard()[n.move.to] )?.engineValue || 0) - (fastGetPiece( g.getBoard()[p.move.to] )?.engineValue || 0) )
 
     let orderedPawnMoves = unorderedMoves.filter( m => g.getBoard()[m.move.to] === 0 && g.getBoard()[m.move.from] === col * Piece.Pawn )
         .sort(( p, n ) => col * (Piece.getRank( n.move.to ) - Piece.getRank( n.move.to )) ) //Moving pawns further up
@@ -52,13 +55,13 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         ...remainingMoves /// THEN THE REST
     ];
 
-    let isCheckMate = isCheck( g.getBoard(), g.getMoves(), col) && legalMoves.length === 0; //am I in check?
+    let isCheckMate = isCheck( g.getBoard(), g.getMoves(), col, undefined, g.getPieceIndexes()) && legalMoves.length === 0; //am I in check?
     let oppoonentLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: -col, mode: "captures" } )
 
     if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 )) {
         //We've reached the end! Return the final evaluation
         let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0
-        let ev = positionalEngineEvaluation( g.getBoard(), g.getMoves(), g.getPieceIndexes() );
+        let ev = positionalEngineEvaluation( g.getBoard(), g.getMoves(), g.getPieceIndexes(), pieces );
         hashSet( g.getBoard(), ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
         counter()
         return [ ev , { move: { from: -1, to: -1 } }, g.getMoves().length, quiescence_quiet || isCheckMate ] as [ number, PromotionMove, number, boolean ];
@@ -109,7 +112,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
                     temp_quiet = hashedEval[2]
                 }
                 else {
-                    let minmax =  miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta);
+                    let minmax =  miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces);
                     ev = minmax[0]
 
                     //Here we can do some special evaluations

@@ -39,7 +39,11 @@ import b_cardinal from "../assets/Pieces/cardinal_black.svg";
 
 export default class Piece {
 
-    public static PIECES = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+    public static PIECES = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+    public static PIECE_OBJECTS = [
+        null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King(),
+        new Waffle(), new Warbishop(), new Bede(), new Cardinal()
+    ]
 
     ///
     /// PIECE NUMBER VALUES - negative for black!
@@ -99,9 +103,6 @@ export default class Piece {
                 return piece > 0 ? w_cardinal : b_cardinal;
         }
     }
-    public static getPiece : ( piece : number ) => GamePiece | null = (piece ) => [
-        null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King(),
-         new Waffle(), new Warbishop(), new Bede(), new Cardinal()
-    ][ Math.abs(piece) ]
+    public static getPiece : ( piece : number ) => GamePiece | null = (piece ) => Piece.PIECE_OBJECTS[ Math.abs(piece) ]
 
 }
