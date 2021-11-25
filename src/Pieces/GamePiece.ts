@@ -5,7 +5,6 @@ export default abstract class GamePiece {
 
     //This class will be used for storing data about chess pieces.
     //It will never be instantiated, but will be used
-    //Would be static class if js had these
 
     ///
     /// EVALUATION

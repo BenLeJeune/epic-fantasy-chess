@@ -21,6 +21,8 @@ import {
 import {useParams} from "react-router-dom";
 import {GAME_KEY} from "./KEYS";
 import {Army, FIDEARMY} from "./Presets/Armies";
+import PlayableCard from "./components/PlayableCard/PlayableCard";
+import Expendable_Card from "./Cards/FIDE/Expendable";
 
 
 const CHECKMATE = "via Checkmate",
@@ -313,15 +315,26 @@ function App() {
     }
   }
 
+  ///
+  /// CARD TARGETING
+  ///
+  const [ cardTargetingFunction, setCardTargetingFunction ] = useState<( (board:number[], colour:number, history:ActualMove[])=>number[] )|null>(null)
+  const dragStartCallback = () => {
+    setCardTargetingFunction( () => (new Expendable_Card()).getValidTargets );
+    console.log("CARD DRAG STARTED");
+  };
+  const onDragEnd = () => {
+    setCardTargetingFunction(null);
+  }
+
   return <div className="app">
     <div className="boardLeftColumn">
-
     </div>
     <div className={`chessBoardColumn ${ gameOver ? "gameOver" : "playing" }`}>
       <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves}
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
                   whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces }
-                  playerColour={ playerColour }
+                  playerColour={ playerColour } cardTargetingFunction={cardTargetingFunction} game={game.current}
                   opponentActive={ opponent === "COMP"} gameUUID={ uuid } pieceIndexes={ game.current.getPieceIndexes() }
                   allowRotation={allowRotation} setAllowRotation={ v => setAllowRotation(v) } moveLockout={moveLockout}
       />
@@ -329,6 +342,13 @@ function App() {
     <div className="boardRightColumn">
       <p className="playerToMove">{ game.current.getCurrentTurn() > 0 ? "White" : "Black" } to move</p>
       <MovesDisplay moves={ moves } unMove={ unMove } canUndo={ opponent === "LOCAL" }/>
+    </div>
+
+    <div id="PlayerHand">
+      <PlayableCard dragStartCallback={dragStartCallback} dragEndCallback={onDragEnd} handPosition={1} handSize={4} />
+      <PlayableCard dragStartCallback={dragStartCallback} dragEndCallback={onDragEnd} handPosition={2} handSize={4} />
+      <PlayableCard dragStartCallback={dragStartCallback} dragEndCallback={onDragEnd} handPosition={3} handSize={4} />
+      <PlayableCard dragStartCallback={dragStartCallback} dragEndCallback={onDragEnd} handPosition={4} handSize={4} />
     </div>
 
     { gameOver ?  <GameOverUI message={gameOverMsg} winner={winner}/> : null}

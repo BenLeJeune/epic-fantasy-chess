@@ -186,6 +186,13 @@ export default class Game {
 
     public getLastMove = () => this.moves.length > 0 ? this.moves[ this.moves.length - 1 ] : undefined;
 
+    ///
+    /// FOR PLAYING CARDS
+    /// We want to be able to directly access the game board, so we'll do this
+    ///
+
+    public updateGameBoard : ( callback : ( board: number[] ) => void ) => void = ( callback : (board:number[]) => void ) => callback( this.board );
+
 }
 
 export interface AdditionalOptions {
