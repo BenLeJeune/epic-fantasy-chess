@@ -9,14 +9,17 @@ export default abstract class Card {
     ///
     /// NAMING & DISPLAYING
     ///
-    public abstract cardName : string; //e.g "Expendable"
-    public abstract description: string; //e.g "Summon a pawn."
+    public abstract readonly cardName: string; //e.g "Expendable"
+    public abstract readonly shortName: string; //e.g "_Exp" (Begin Card moves with a _)
+    public abstract readonly description: string; //e.g "Summon a pawn."
+    public static readonly id: string;
+    public abstract readonly id: string;
 
     ///
     /// TARGETING & RESOLVING
     ///
-    public abstract targets: number; //the number of targets the card expects
-    public abstract fast: boolean; //true/false
+    public abstract readonly targets: number; //the number of targets the card expects
+    public abstract readonly fast: boolean; //true/false
 
     ///
     /// UNMOVING
@@ -27,6 +30,6 @@ export default abstract class Card {
     public abstract getValidTargets : ( board : number[], colour: number, history: ActualMove[] ) => number[]
 
     // Resolves the playing of the card
-    public abstract playCard : ( targets: number[], board: number[], colour: number, game: Game ) => void;
+    public abstract playCard : ( targets: number[], game: Game ) => void;
 
 }

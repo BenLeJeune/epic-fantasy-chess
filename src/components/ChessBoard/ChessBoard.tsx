@@ -14,6 +14,7 @@ import {filterLegalMoves} from "../../helpers/Checks";
 import PiecePromotionUI from "../PiecePromotionUI/PiecePromotionUI";
 import { generateEmptyBoard } from '../../helpers/BoardGenerators';
 import Expendable_Card from "../../Cards/FIDE/Expendable";
+import CardMove from '../../Classes/CardMove';
 
 interface Props {
     board : number[], //The game board
@@ -21,7 +22,7 @@ interface Props {
     game: Game,
     move : ( from : number, to : number, special? : SpecialMove, additional? : object ) => void, //Move callback
     unMove : () => void, //UnMove callback
-    moves : ActualMove[], //Move history
+    moves : (ActualMove | CardMove)[], //Move history
     whiteCaptured : number[], //Pieces white has captured
     blackCaptured : number[], //Pieces black has captured
     capturePiece : ( p:number ) => void, //Capture piece callback
@@ -64,11 +65,11 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
         let captured = special === "EP" ? board[destination - 8] : board[destination];
 
         move( position, destination, special );
-        setTargeting([0, 0])
+        setTargeting([0, 0]);
     }
 
     const onDropCard = ( ev : React.DragEvent, target : number ) => {
-        new Expendable_Card().playCard([target], board, currentTurn, game)
+        game.PlayCard( Expendable_Card.id, [target] );
     }
 
     ///
@@ -86,8 +87,11 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     /// GENERATING UI ELEMENTS
     ///
 
-    const getSquares = () => board.map( (piece, pos) => <ChessSquare position={pos} rotated={rotated} moveCircle={false}
-                                         highlight={ moves.length >= 1 && ( pos === moves[moves.length - 1].to || pos === moves[moves.length - 1].from ) /*pieceIndexes.indexOf(pos) !== -1*/  } /> )
+    const getSquares = () => board.map( (piece, pos) => {
+        let pMoves = moves.filter(m => m instanceof ActualMove) as ActualMove[];
+        return <ChessSquare position={pos} rotated={rotated} moveCircle={false}
+                            highlight={ moves.length >= 1 && ( pos === pMoves[pMoves.length - 1].to || pos === pMoves[pMoves.length - 1].from )  } />
+    })
 
     const getPieceKey = ( piece : number, pos : number ) => {
         //We will return simply the piece and its position
@@ -97,16 +101,22 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
         if ( moves.length > 0 ) {
             let inverseMoves = [...moves].reverse();
             //GO THROUGH EACH MOVE, AND TRACK THE POSITION OF THIS PIECE
-            startingPos = inverseMoves.reduce( ( p, m ) => m.to === p && m.moving === piece ? m.from : p , pos );
+            startingPos = inverseMoves.reduce( ( p, m ) => {
+                if ( m instanceof ActualMove ) return m.to === p && m.moving === piece ? m.from : p
+                else return p
+            } , pos );
 
             if ( Math.abs( piece ) === Piece.Rook || Math.abs( piece ) === Piece.Bede ) { //If a rook, we also want to retain it for castling
                 startingPos = inverseMoves.reduce(
                     ( p, m ) => {
-                        let regularMove = ( m.to === p && m.moving === piece );
-                        let castle = ( m.special === "CASTLE" && ( m.to === p + 1 || m.to === p - 1 ) );
-                        if ( regularMove ) return m.from
-                        else if (castle && Math.abs(piece) === Piece.Bede) return m.to === p + 1 ? m.to + 1 : m.to - 1;
-                        else if ( castle ) return m.to === p + 1 ? m.to + 1 : m.to - 2;
+                        if (m instanceof ActualMove) {
+                            let regularMove = ( m.to === p && m.moving === piece );
+                            let castle = ( m.special === "CASTLE" && ( m.to === p + 1 || m.to === p - 1 ) );
+                            if ( regularMove ) return m.from
+                            else if (castle && Math.abs(piece) === Piece.Bede) return m.to === p + 1 ? m.to + 1 : m.to - 1;
+                            else if ( castle ) return m.to === p + 1 ? m.to + 1 : m.to - 2;
+                            else return p
+                        }
                         else return p
                     }, pos
                 );
@@ -134,8 +144,8 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     const getTargetingSquares = () => {
         if (!cardTargetingFunction) return Piece.getPiece(targeting[0]) ?
             filterLegalMoves(
-                (Piece.getPiece(targeting[0]) as GamePiece).getLegalMoves(targeting[1], board, "all", targeting[0] > 0 ? 1 : -1, moves),
-                board, moves, targeting[0] > 0 ? 1 : -1
+                (Piece.getPiece(targeting[0]) as GamePiece).getLegalMoves(targeting[1], board, "all", targeting[0] > 0 ? 1 : -1, (moves.filter(m => m instanceof ActualMove) as ActualMove[])),
+                board, (moves.filter(m => m instanceof ActualMove) as ActualMove[]), targeting[0] > 0 ? 1 : -1
             )
                 .map(move =>
                     <TargetingSquare
@@ -147,7 +157,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                     />
                 )
             : null;
-        else return cardTargetingFunction( board, currentTurn, moves ).map( target =>
+        else return cardTargetingFunction( board, currentTurn, (moves.filter(m => m instanceof ActualMove) as ActualMove[]) ).map( target =>
             <TargetingSquare
                 position={target}
                 isCapture={false}
@@ -159,7 +169,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     }
 
     const getMoveCircles = () => hoveringPos === -1 ? null : Piece.getPiece( board[hoveringPos] )?.getLegalMoves(
-        hoveringPos, generateEmptyBoard(), "all", board[hoveringPos] > 0 ? 1 : -1, moves
+        hoveringPos, generateEmptyBoard(), "all", board[hoveringPos] > 0 ? 1 : -1, (moves.filter(m => m instanceof ActualMove) as ActualMove[])
     ).map(
         legalMove => <ChessSquare position={legalMove.to} rotated={rotated} moveCircle={true} highlight={false}/>
     )

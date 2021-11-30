@@ -8,6 +8,8 @@ import TranspositionTable from "./HashTable";
 import {arraysAreEqual} from "../helpers/Utils";
 import Piece from "../Classes/Piece";
 import GamePiece from "../Pieces/GamePiece";
+import ActualMove from "../Classes/Move";
+import { ActualMoves } from "../helpers/MoveFilter";
 
 ///
 /// MINIMAX ALGORITHM FOR FINDING MOVES
@@ -27,25 +29,28 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
 
     let col = maximising ? 1 : -1 as 1 | -1;
 
-    let partialLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col, mode: "captures" } )
-    let partialLegalMoves =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col, mode: "moves" } )
+    let g_board = g.getBoard(), g_moves = g.getMoves();
+    let g_moves_actual = ActualMoves(g_moves);
+
+    let partialLegalCaptures =  Board.getLegalMoves( g_board, g_moves_actual, { colour: col, mode: "captures" } )
+    let partialLegalMoves =  Board.getLegalMoves( g_board, g_moves_actual, { colour: col, mode: "moves" } )
     // let partialLegalMoves = Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col } )
     // let filteredLegalMoves = filterLegalMoves( partialLegalMoves, g.getBoard(), g.getMoves(), col )
-    // let filteredLegalCaptures = filterLegalMoves( partialLegalCaptures, g.getBoard(), g.getMoves(), col )
-    let unorderedMoves = includePromotion( g.getBoard(), partialLegalMoves, army, col );
-    let unorderedCaptures = includePromotion( g.getBoard(), partialLegalCaptures, army, col );
+    // let filteredLegalCaptures = filterLegalMoves( partialLegalCaptures, g_board, g.getMoves(), col )
+    let unorderedMoves = includePromotion( g_board, partialLegalMoves, army, col );
+    let unorderedCaptures = includePromotion( g_board, partialLegalCaptures, army, col );
 
     //We want to order our moves.
     let orderedPromotionMoves = [...unorderedMoves, ...unorderedCaptures].filter( m => m.additional?.promotionTo )
         .sort(( p, n ) =>
             (fastGetPiece(n.additional?.promotionTo||1)?.engineValue || 0) - ( fastGetPiece(p.additional?.promotionTo||1)?.engineValue || 0 ))
 
-    let orderedCaptures = unorderedCaptures.sort(( p, n ) => (fastGetPiece( g.getBoard()[n.move.to] )?.engineValue || 0) - (fastGetPiece( g.getBoard()[p.move.to] )?.engineValue || 0) )
+    let orderedCaptures = unorderedCaptures.sort(( p, n ) => (fastGetPiece(g_board[n.move.to] )?.engineValue || 0) - (fastGetPiece( g_board[p.move.to] )?.engineValue || 0) )
 
-    let orderedPawnMoves = unorderedMoves.filter( m => g.getBoard()[m.move.to] === 0 && g.getBoard()[m.move.from] === col * Piece.Pawn )
+    let orderedPawnMoves = unorderedMoves.filter( m => g_board[m.move.to] === 0 && g_board[m.move.from] === col * Piece.Pawn )
         .sort(( p, n ) => col * (Piece.getRank( n.move.to ) - Piece.getRank( n.move.to )) ) //Moving pawns further up
         .sort(( p, n ) => Math.abs( 4.5 - Piece.getFile(p.move.to) ) - Math.abs( 4.5 - Piece.getFile(n.move.to) )) //Moving pawns towards the centre
-    let remainingMoves = unorderedMoves.filter( m => g.getBoard()[m.move.to] === 0  && g.getBoard()[m.move.from] !== col * Piece.Pawn ) ;
+    let remainingMoves = unorderedMoves.filter( m => g_board[m.move.to] === 0  && g_board[m.move.from] !== col * Piece.Pawn ) ;
 
 
     let legalMoves = [
@@ -55,14 +60,14 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         ...remainingMoves /// THEN THE REST
     ];
 
-    let isCheckMate = isCheck( g.getBoard(), g.getMoves(), col, undefined, g.getPieceIndexes()) && legalMoves.length === 0; //am I in check?
-    let oppoonentLegalCaptures =  Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: -col, mode: "captures" } )
+    let isCheckMate = isCheck( g_board, g_moves_actual, col, undefined, g.getPieceIndexes()) && legalMoves.length === 0; //am I in check?
+    let oppoonentLegalCaptures =  Board.getLegalMoves( g_board, g_moves_actual, { colour: -col, mode: "captures" } )
 
-    if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0 )) {
+    if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col).length === 0 )) {
         //We've reached the end! Return the final evaluation
-        let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g.getBoard(), g.getMoves(), col).length === 0
-        let ev = positionalEngineEvaluation( g.getBoard(), g.getMoves(), g.getPieceIndexes(), pieces );
-        hashSet( g.getBoard(), ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
+        let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col).length === 0
+        let ev = positionalEngineEvaluation( g_board, g_moves_actual, g.getPieceIndexes(), pieces );
+        hashSet( g_board, ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
         counter()
         return [ ev , { move: { from: -1, to: -1 } }, g.getMoves().length, quiescence_quiet || isCheckMate ] as [ number, PromotionMove, number, boolean ];
     }
@@ -78,11 +83,11 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         let partFilter = legalMoves.filter( ({move}) => {
             //THERE ARE SOME SPECIAL RULES FOR SPECIAL MOVES
             if ( move.special === "CASTLE") {
-                if ( isCheck( g.getBoard(), g.getMoves(), col ) ) return false; //Cannot castle out of check
+                if ( isCheck( g_board, g_moves_actual, col ) ) return false; //Cannot castle out of check
                 let kingsRook = col > 0 ? 7 : 63;
                 let queensRook = col > 0 ? 0 : 56;
-                if ( move.to === kingsRook - 1 && Board.isThreatened( kingsRook - 2, g.getBoard(), g.getMoves(), -col )) return false;
-                if ( move.to === queensRook + 2 && Board.isThreatened( queensRook + 3, g.getBoard(), g.getMoves(), -col ) ) return false;
+                if ( move.to === kingsRook - 1 && Board.isThreatened( kingsRook - 2, g_board, g_moves_actual, -col )) return false;
+                if ( move.to === queensRook + 2 && Board.isThreatened( queensRook + 3, g_board, g_moves_actual, -col ) ) return false;
             }
 
             return true;
@@ -96,7 +101,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
 
             g.Move( m.from, m.to, m.special, additional );
 
-            if (!isCheck(g.getBoard(), g.getMoves(), col)) {
+            if (!isCheck(g.getBoard(), ActualMoves(g.getMoves()), col)) {
 
                 let hashedEval = hashGet(g.getBoard());
                 let ev:number = 0;

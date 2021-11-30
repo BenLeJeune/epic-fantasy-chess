@@ -1,9 +1,12 @@
 import {Move, SpecialMove} from "../types";
 import {generateFIDEBoard} from "../helpers/BoardGenerators";
 import ActualMove from "./Move";
+import CardMove from "./CardMove";
 import Piece from "./Piece";
 import Pawn from "../Pieces/FIDE/Pawn";
 import Rook from "../Pieces/FIDE/Rook";
+import Card from "../Cards/Card";
+import ALL_CARDS from "../Cards/Cards";
 
 export default class Game {
 
@@ -11,77 +14,89 @@ export default class Game {
 
     private currentTurn : number; //1 for white, -1 for black
 
-    private moves : ActualMove[]
+    private moves : ( ActualMove | CardMove )[]
 
     private pieceIndexes : number[]; //Indexes where there are pieces
 
     public UnMove = () => {
-
+        
         //Let's roll back the most recent move!
         let move = this.moves.pop();
-        this.moves = [ ...this.moves ]
-        if ( move === undefined ) return;
 
-        let colour = move.moving > 0 ? 1 : -1;
-
-        //Let's replace any piece that was captured
-        if ( move.special !== "EP" ) {
-            this.board[move.to] = move.captured;
+        //
+        /// IS THE MOVE IS A NORMAL MOVE, DO THE FOLLOWING
+        ///
+        if ( move instanceof ActualMove ) {
+            this.moves = [ ...this.moves ]
+            if ( move === undefined ) return;
+    
+            let colour = move.moving > 0 ? 1 : -1;
+    
+            //Let's replace any piece that was captured
+            if ( move.special !== "EP" ) {
+                this.board[move.to] = move.captured;
+                //Update piece indexes
+                if ( move.captured !== Piece.None ) this.pieceIndexes.push( move.to )
+            }
+            this.board[ move.from ] = move.moving;
             //Update piece indexes
-            if ( move.captured !== Piece.None ) this.pieceIndexes.push( move.to )
-        }
-        this.board[ move.from ] = move.moving;
-        //Update piece indexes
-        this.pieceIndexes[ this.pieceIndexes.indexOf( move.to ) ] = move.from;
-
-        switch ( move.special ) {
-            case "EP":
-                this.board[ move.to ] = Piece.None;
-                this.board[ move.to - 8 * colour ] = move.captured;
-                this.pieceIndexes.push( move.to - 8 * colour )
-                break;
-            case "PROMOTION":
-                //We should be able to attach the piece we want to promote to
-                break;
-            case "CASTLE":
-                //CASTLING RULES
-                //We've already moved the king. Now, we want to move the rook.
-
-                //If we were castling Queenside
-                if ( move.from > move.to ) {
-                    let rookDistance = 0;
-                    if ( Math.abs(this.board[move.to + 1]) === Piece.Rook) {
-                        //CASTLING WITH A SIMPLE ROOK
-                        rookDistance = 2; //Rook is 2 after where the king moves to
+            this.pieceIndexes[ this.pieceIndexes.indexOf( move.to ) ] = move.from;
+    
+            switch ( move.special ) {
+                case "EP":
+                    this.board[ move.to ] = Piece.None;
+                    this.board[ move.to - 8 * colour ] = move.captured;
+                    this.pieceIndexes.push( move.to - 8 * colour )
+                    break;
+                case "PROMOTION":
+                    //We should be able to attach the piece we want to promote to
+                    break;
+                case "CASTLE":
+                    //CASTLING RULES
+                    //We've already moved the king. Now, we want to move the rook.
+    
+                    //If we were castling Queenside
+                    if ( move.from > move.to ) {
+                        let rookDistance = 0;
+                        if ( Math.abs(this.board[move.to + 1]) === Piece.Rook) {
+                            //CASTLING WITH A SIMPLE ROOK
+                            rookDistance = 2; //Rook is 2 after where the king moves to
+                        }
+                        else if ( Math.abs(this.board[move.to + 1]) === Piece.Bede) {
+                            rookDistance = 1; //Bede is only 1 after where the king moves to
+                        }
+                        let rookSquare = move.to - rookDistance;
+                        this.board[rookSquare] = this.board[ move.to + 1 ];
+                        this.board[ move.to + 1 ] = Piece.None;
+                        //Update pieceIndexes
+                        this.pieceIndexes[ this.pieceIndexes.indexOf( move.to + 1 ) ] = rookSquare;
                     }
-                    else if ( Math.abs(this.board[move.to + 1]) === Piece.Bede) {
-                        rookDistance = 1; //Bede is only 1 after where the king moves to
+                    //If we were castling Kingside
+                    if ( move.from < move.to ) {
+                        let rookSquare = move.to + 1;
+                        this.board[rookSquare] = this.board[ move.to - 1 ];
+                        this.board[ move.to - 1 ] = Piece.None;
+                        this.pieceIndexes[ this.pieceIndexes.indexOf( move.to - 1 ) ] = rookSquare;
                     }
-                    let rookSquare = move.to - rookDistance;
-                    this.board[rookSquare] = this.board[ move.to + 1 ];
-                    this.board[ move.to + 1 ] = Piece.None;
-                    //Update pieceIndexes
-                    this.pieceIndexes[ this.pieceIndexes.indexOf( move.to + 1 ) ] = rookSquare;
-                }
-                //If we were castling Kingside
-                if ( move.from < move.to ) {
-                    let rookSquare = move.to + 1;
-                    this.board[rookSquare] = this.board[ move.to - 1 ];
-                    this.board[ move.to - 1 ] = Piece.None;
-                    this.pieceIndexes[ this.pieceIndexes.indexOf( move.to - 1 ) ] = rookSquare;
-                }
-
-                break;
-            case undefined:
-            default:
-                break;
-        }
-
-
+    
+                    break;
+                case undefined:
+                default:
+                    break;
+            }
         this.currentTurn = -this.currentTurn; //THE NEXT PLAYER'S TURN
+
+        }
+
+        ///
+        /// IF THE MOVE IS A CARD MOVE, DO THIS INSTEAD!
+        ///
 
     };
 
+    ///
+    /// MAKING A NORMAL CHESS MOVE
+    ///
     public Move = ( from : number, to : number, special? : SpecialMove, additional: Partial<AdditionalOptions> = {}) => {
         //Let's add the move function
         //Keeping it simple for now, let's just make the move. Forcefully.
@@ -162,6 +177,42 @@ export default class Game {
         this.currentTurn = -this.currentTurn;
 
     }
+
+    ///
+    /// PLAYING A CARD
+    ///
+    public PlayCard = ( cardId: string, targets: number[] ) => {
+
+        let card = ALL_CARDS[cardId] as Card | undefined;
+        if ( !card ) {
+            console.log("Tried to play a card that does not exist!");
+            return;
+        }
+
+        if (targets.length !== card.targets) {
+            console.log("Tried to play a card with the improper amount of targets");
+            return;
+        }
+
+        //
+        // CARD FUNCTIONALITY WORKS VIA CALLBACKS, SO WE USE THE CALLBACK!
+        //
+
+        // Save the board state
+        let boardBefore = [ ...this.board ];
+
+        card.playCard( targets, this );
+
+        //Now we create the card move
+        let cardMove = new CardMove( card.id, boardBefore );
+        this.moves.push( cardMove );
+
+        //Now, we change the current turn - IF the card was fast.
+        if ( !card.fast ) this.currentTurn = -this.currentTurn;
+
+    }
+
+
 
     constructor( _board : number[] = generateFIDEBoard(), _history : ActualMove[] = [] ) {
         this.board = [..._board]

@@ -6,13 +6,17 @@ import {differentColours, sameColour} from "../../helpers/DifferentColours";
 
 export default class Expendable_Card extends Card {
 
-    public cardName = "Expendable";
-    public description = "Summon a pawn.";
+    public readonly cardName = "Expendable";
+    public readonly description = "Summon a pawn.";
 
-    public targets = 1; //Simply choose a square
-    public fast = false;
+    public readonly targets = 1; //Simply choose a square
+    public readonly fast = false;
 
-    public unMoveType = "boardState" as "boardState";
+    public readonly shortName = "_Exp";
+    public static readonly id = "expendable";
+    public readonly id = Expendable_Card.id;
+
+    public readonly unMoveType = "boardState" as "boardState";
 
     public getValidTargets = ( board: number[], colour:number, history:ActualMove[] ) => {
         let validTargets : number[] = [];
@@ -27,10 +31,10 @@ export default class Expendable_Card extends Card {
         return validTargets;
     }
 
-    public playCard = ( targets: number[], board:number[], colour: number, game: Game ) => {
+    public playCard = ( targets: number[], game: Game ) => {
         let targetSquare = targets[0]; //Only have one target
         game.updateGameBoard( board => {
-            board[targetSquare] = Piece.Pawn * colour > 0 ? 1 : -1
+            board[targetSquare] = Piece.Pawn * game.getCurrentTurn() > 0 ? 1 : -1
         });
     }
 }

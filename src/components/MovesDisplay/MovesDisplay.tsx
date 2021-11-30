@@ -1,9 +1,10 @@
 import React from 'react';
+import CardMove from '../../Classes/CardMove';
 import ActualMove from "../../Classes/Move";
 import "./MovesDisplay.css";
 
 interface props {
-    moves : ActualMove[],
+    moves : (ActualMove | CardMove)[],
     unMove : () => void,
     canUndo: boolean
 }
@@ -14,7 +15,7 @@ export default function MovesDisplay({ moves, unMove, canUndo } : props ) {
         <div id="BoardMovesDisplay">
             {
                 moves.map(
-                    ( move, i ) => <p className="move" key={`${move.from}${move.to}${i}`}>
+                    ( move, i ) => <p className="move" key={ move instanceof ActualMove ?  `${move.from}${move.to}${i}` : `${move.cardName}${i}`}>
                         <span>{ move.getMoveName() }</span>
                     </p>
 

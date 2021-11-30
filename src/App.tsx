@@ -23,6 +23,8 @@ import {GAME_KEY} from "./KEYS";
 import {Army, FIDEARMY} from "./Presets/Armies";
 import PlayableCard from "./components/PlayableCard/PlayableCard";
 import Expendable_Card from "./Cards/FIDE/Expendable";
+import CardMove from './Classes/CardMove';
+import { ActualMoves } from './helpers/MoveFilter';
 
 
 const CHECKMATE = "via Checkmate",
@@ -75,7 +77,7 @@ function App() {
   //The Game
   const [ board, setBoard ] = useState<number[]>( game.current.getBoard() );
   const [ currentTurn, setCurrentTurn ] = useState<number>( game.current.getCurrentTurn() );
-  const [ moves, setMoves ] = useState<ActualMove[]>( game.current.getMoves() );
+  const [ moves, setMoves ] = useState<(ActualMove|CardMove)[]>( game.current.getMoves() );
 
   //Ending the game
   const [ winner, setWinner ] = useState<number>(0); //1 for white win, -1 for black win, 0 for draw
@@ -101,7 +103,7 @@ function App() {
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
 
-    let parsedMoves = gMoves.map(
+    let parsedMoves = ActualMoves(gMoves).map(
         ({ from, to, moving, captured, special, specify }) => {
           return {
             from, to, moving, captured, special, specify
@@ -126,7 +128,7 @@ function App() {
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
 
-    let parsedMoves = gMoves.map(
+    let parsedMoves = ActualMoves(gMoves).map(
         ({ from, to, moving, captured, special, specify }) => {
           return {
               from, to, moving, captured, special, specify
@@ -170,8 +172,8 @@ function App() {
     /// CHECK FOR FIFTY-MOVE RULE
     if ( gMoves.length >= 100 ) {
       let recentMoves = gMoves.slice( gMoves.length - 100, gMoves.length );
-      let pawnMoves = recentMoves.filter( m => Math.abs( m.moving ) === Piece.Pawn );
-      let captures = recentMoves.filter( m => m.captured !== 0 );
+      let pawnMoves = ActualMoves(recentMoves).filter( m => Math.abs( m.moving ) === Piece.Pawn );
+      let captures = ActualMoves(recentMoves).filter( m => m.captured !== 0 );
       if ( pawnMoves.length === 0 && captures.length === 0 ) {
         setGameOver(true);
         setWinner(0);
@@ -179,13 +181,13 @@ function App() {
       }
     }
 
-    let moves= Board.getLegalMoves( gBoard, gMoves, { colour: -col } );
-    let legalMoves = filterLegalMoves( moves, gBoard, gMoves, -col )
+    let moves= Board.getLegalMoves( gBoard, ActualMoves(gMoves), { colour: -col } );
+    let legalMoves = filterLegalMoves( moves, gBoard, ActualMoves(gMoves), -col )
     if ( legalMoves.length === 0 ) {
       ///THERE ARE NO LEGAL MOVES!
       //The game is now over
       setGameOver(true);
-      if ( isCheck( gBoard, gMoves, -col ) ) {
+      if ( isCheck( gBoard, ActualMoves(gMoves), -col ) ) {
         //Is in check - checkmate! Set a winner!
         setWinner( col > 0 ? 1 : -1 )
         setGameOverMsg( CHECKMATE );
@@ -305,13 +307,15 @@ function App() {
     setBoard( [...game.current.getBoard()] );
     setMoves( [...game.current.getMoves()] );
     setCurrentTurn( game.current.getCurrentTurn() );
-    if ( whiteCaptured.length > 0 && lastMove.captured === whiteCaptured[whiteCaptured.length - 1] ) {
-      //If white captured a piece, un-capture it!
-      setWhiteCaptured( prev => prev.slice(0, prev.length - 1)  );
-    }
-    else if ( blackCaptured.length > 0 && lastMove.captured === blackCaptured[blackCaptured.length - 1] ) {
-      //If black captured a piece, un-capture it!
-      setBlackCaptured( prev => prev.slice(0, prev.length - 1)  );
+    if ( lastMove instanceof ActualMove ) {
+      if ( whiteCaptured.length > 0 && lastMove.captured === whiteCaptured[whiteCaptured.length - 1] ) {
+        //If white captured a piece, un-capture it!
+        setWhiteCaptured( prev => prev.slice(0, prev.length - 1)  );
+      }
+      else if ( blackCaptured.length > 0 && lastMove.captured === blackCaptured[blackCaptured.length - 1] ) {
+        //If black captured a piece, un-capture it!
+        setBlackCaptured( prev => prev.slice(0, prev.length - 1)  );
+      }
     }
   }
 

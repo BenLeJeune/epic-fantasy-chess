@@ -10,6 +10,7 @@ import queryOpeningBook from "./QueryOpeningBook";
 import TranspositionTable from "./HashTable";
 import Queen from "../Pieces/FIDE/Queen";
 import {randomFromList} from "../helpers/Utils";
+import { ActualMoves } from "../helpers/MoveFilter";
 
 /// FIRST STAGE - COMPLETELY RANDOM
 
@@ -41,9 +42,11 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
     )
 
 
-    let randomMoves =  Board.getLegalMoves( g.getBoard(), g.getMoves(), options );
+    let g_moves_actual = ActualMoves(g.getMoves());
 
-    let legalMoves = filterLegalMoves( randomMoves, g.getBoard(), g.getMoves(), colour )
+    let randomMoves =  Board.getLegalMoves( g.getBoard(), g_moves_actual, options );
+
+    let legalMoves = filterLegalMoves( randomMoves, g.getBoard(), g_moves_actual, colour )
 
     //if ( legalMoves.length === 0 ) return;
 
@@ -79,11 +82,11 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
     console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
     console.log(`Examined ${ nodes } nodes`)
 
-    console.log(`Evaulation before move: ${ positionalEngineEvaluation( g.getBoard(), g.getMoves() ) }`)
+    console.log(`Evaulation before move: ${ positionalEngineEvaluation( g.getBoard(), g_moves_actual ) }`)
 
     g.Move(move[1].move.from, move[1].move.to, move[1].move.special, move[1].additional);
 
-    console.log(`Evaulation after move: ${ positionalEngineEvaluation( g.getBoard(), g.getMoves() ) }`)
+    console.log(`Evaulation after move: ${ positionalEngineEvaluation( g.getBoard(), g_moves_actual ) }`)
 
     g.UnMove();
 
