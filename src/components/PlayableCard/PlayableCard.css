@@ -6,6 +6,11 @@ div#PlayerHand {
   position: absolute;
   bottom: 0;
   width: 100%;
+  transition: transform 0.2s ease-out;
+  transform: translateY(50%);
+}
+div#PlayerHand:hover {
+  transform: translateY(0);
 }
 div#PlayerHand div.playableCard {
   width: 10em;

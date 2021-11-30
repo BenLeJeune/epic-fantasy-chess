@@ -3,7 +3,7 @@
 ///
 
 import Piece from "../Classes/Piece";
-import {isOpposingCapture} from "./IsOpposingCapture";
+import {differentColours} from "./DifferentColours";
 import {legalMove} from "../types";
 
 const getLegalSingleMoves : ( board : number[], position : number, piece : number, callbacks: ((p : number) => number)[], mode : "all" | "moves" | "captures" ) => legalMove[]
@@ -33,7 +33,7 @@ const getLegalRiderMoves: ( board : number[], position : number, piece : number,
             //If the square isn't empty
             else {
                 //If it's an opposing piece, don't push if we're only after captures
-                if ( isOpposingCapture( piece, board[nextSquare] ) ) {
+                if ( differentColours( piece, board[nextSquare] ) ) {
                     if ( mode !== "moves" ) {
                         moves.push({from: position, to: nextSquare})
                     } //Push, unless we only want moves

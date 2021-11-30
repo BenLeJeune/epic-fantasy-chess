@@ -15,7 +15,13 @@ export default abstract class Card {
     ///
     /// TARGETING & RESOLVING
     ///
-    public abstract targets: number; //e.g 2
+    public abstract targets: number; //the number of targets the card expects
+    public abstract fast: boolean; //true/false
+
+    ///
+    /// UNMOVING
+    ///
+    public abstract unMoveType: "boardState" | "move"; // "boardState" means the board state is reverted on unMove. "move" means the card makes a regular move.
 
     // Returns an array of all valid target indexes
     public abstract getValidTargets : ( board : number[], colour: number, history: ActualMove[] ) => number[]

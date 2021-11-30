@@ -9,6 +9,12 @@ div#PlayerHand
   bottom: 0
   width: 100%
 
+  transition: transform 0.2s ease-out
+  transform: translateY(50%)
+
+  &:hover
+    transform: translateY(0)
+
   div.playableCard
     width: 10em
     height: 14em
