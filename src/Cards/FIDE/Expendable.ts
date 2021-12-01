@@ -7,10 +7,11 @@ import {differentColours, sameColour} from "../../helpers/DifferentColours";
 export default class Expendable_Card extends Card {
 
     public readonly cardName = "Expendable";
-    public readonly description = "Summon a pawn.";
+    public readonly description = "Summon a pawn adjacent to a friendly piece.";
 
     public readonly targets = 1; //Simply choose a square
     public readonly fast = false;
+    public readonly cost = 4;
 
     public readonly shortName = "_Exp";
     public static readonly id = "expendable";

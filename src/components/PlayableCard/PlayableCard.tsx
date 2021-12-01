@@ -1,11 +1,14 @@
 import React, {useLayoutEffect, useRef, useState} from "react";
 import "./PlayableCard.css";
+import Card from "../../Cards/Card";
 
 interface props {
+    card: Card,
     handPosition: number,
     handSize: number,
     dragStartCallback: () => void,
-    dragEndCallback: () => void
+    dragEndCallback: () => void,
+    draggable: boolean
 }
 
 
@@ -18,6 +21,7 @@ export default function PlayableCard(props: props) {
         //Fired when the dragging starts
         if ( e.dataTransfer ) {
             props.dragStartCallback();
+            e.dataTransfer.setData( "text/plain", props.card.id )
         }
     }
 
@@ -42,19 +46,19 @@ export default function PlayableCard(props: props) {
     }, [props.handPosition, props.handSize])
 
     return <div ref={containerRef}
-                draggable
+                draggable={props.draggable}
                 onDragStart={ e => onDragStart(e) }
                 onDragEnd={ () => onDragEnd() }
                 className="playableCardContainer">
         <div ref={cardRef} className="playableCard">
             <div className="cardChaosScore">
-                4
+                { props.card.cost }
             </div>
             <div className="cardTitle">
-                Expendable
+                { props.card.cardName }
             </div>
             <div className="cardDescription">
-                Summon a pawn adjacent to a friendly piece.
+                { props.card.description }
             </div>
         </div>
     </div>

@@ -7,18 +7,28 @@ div#PlayerHand
   justify-content: center
   position: absolute
   bottom: 0
-  width: 100%
-
   transition: transform 0.2s ease-out
-  transform: translateY(50%)
+  transform: translateY(50%) translateX(-50%)
+  left: 50%
+  padding: 0 2.5rem
 
   &:hover
-    transform: translateY(0)
+    transform: translateY(0) translateX(-50%)
+    &.forceLower
+      transform: translateY(35%) translateX(-50%)
 
+  div.playableCardContainer
+    z-index: 5
+    &:hover
+      z-index: 20
   div.playableCard
     width: 10em
     height: 14em
     background-color: colours.$lightBlue
+    border: 1px solid colours.$mediumBlue
     transition: transform 0.1s ease-out
+    cursor: pointer
+    border-radius: .25rem
+    padding: .5rem
     &:hover
       transform: scale(1.2)

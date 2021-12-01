@@ -15,6 +15,9 @@ import PiecePromotionUI from "../PiecePromotionUI/PiecePromotionUI";
 import { generateEmptyBoard } from '../../helpers/BoardGenerators';
 import Expendable_Card from "../../Cards/FIDE/Expendable";
 import CardMove from '../../Classes/CardMove';
+import {ActualMoves} from "../../helpers/MoveFilter";
+import Card from "../../Cards/Card";
+import ALL_CARDS from "../../Cards/Cards";
 
 interface Props {
     board : number[], //The game board
@@ -35,10 +38,11 @@ interface Props {
     moveLockout: boolean, //Whether or not moves are currently locked out - for ensuring smooth transitions between turns
     allowRotation: boolean,
     setAllowRotation: ( allowRotation: boolean ) => void, //Call this whenever rotation is changed here, so app.tsx can know about it
-    cardTargetingFunction: (( board:number[], colour:number, history:ActualMove[] ) => number[] ) | null //The function to get card targets
+    cardTargetingFunction: (( board:number[], colour:number, history:ActualMove[] ) => number[] ) | null, //The function to get card targets
+    playCard: ( card: string, target: number ) => void
 }
 
-export default function ChessBoard({ board, currentTurn, game, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, pieceIndexes, moveLockout, allowRotation, setAllowRotation, cardTargetingFunction } : Props) {
+export default function ChessBoard({ board, currentTurn, game, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, pieceIndexes, moveLockout, allowRotation, setAllowRotation, cardTargetingFunction, playCard } : Props) {
 
     ///
     /// BOARD ROTATING
@@ -69,7 +73,10 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     }
 
     const onDropCard = ( ev : React.DragEvent, target : number ) => {
-        game.PlayCard( Expendable_Card.id, [target] );
+        if (ev.dataTransfer) {
+            let cardId = ev.dataTransfer.getData("text/plain");
+            playCard( cardId, target );
+        }
     }
 
     ///
@@ -90,7 +97,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     const getSquares = () => board.map( (piece, pos) => {
         let pMoves = moves.filter(m => m instanceof ActualMove) as ActualMove[];
         return <ChessSquare position={pos} rotated={rotated} moveCircle={false}
-                            highlight={ moves.length >= 1 && ( pos === pMoves[pMoves.length - 1].to || pos === pMoves[pMoves.length - 1].from )  } />
+                            highlight={ pMoves.length >= 1 && ( pos === pMoves[pMoves.length - 1].to || pos === pMoves[pMoves.length - 1].from )  } />
     })
 
     const getPieceKey = ( piece : number, pos : number ) => {
@@ -157,7 +164,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                     />
                 )
             : null;
-        else return cardTargetingFunction( board, currentTurn, (moves.filter(m => m instanceof ActualMove) as ActualMove[]) ).map( target =>
+        else return cardTargetingFunction( board, currentTurn, ActualMoves(moves) ).map( target =>
             <TargetingSquare
                 position={target}
                 isCapture={false}

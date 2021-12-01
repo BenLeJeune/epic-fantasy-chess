@@ -25,6 +25,7 @@ import PlayableCard from "./components/PlayableCard/PlayableCard";
 import Expendable_Card from "./Cards/FIDE/Expendable";
 import CardMove from './Classes/CardMove';
 import { ActualMoves } from './helpers/MoveFilter';
+import Card from "./Cards/Card";
 
 
 const CHECKMATE = "via Checkmate",
@@ -322,14 +323,57 @@ function App() {
   ///
   /// CARD TARGETING
   ///
-  const [ cardTargetingFunction, setCardTargetingFunction ] = useState<( (board:number[], colour:number, history:ActualMove[])=>number[] )|null>(null)
-  const dragStartCallback = () => {
-    setCardTargetingFunction( () => (new Expendable_Card()).getValidTargets );
+  const [ cardTargetingFunction, setCardTargetingFunction ] = useState<( (board:number[], colour:number, history:ActualMove[])=>number[] )|null>(null);
+  const dragStartCallback = ( index : number ) => {
+    setCardTargetingFunction( () => ( currentTurn > 0 ? game.current.getWhiteHand()[index] : game.current.getBlackHand()[index] ).getValidTargets );
     console.log("CARD DRAG STARTED");
+
+    //make the user's hand lower
+    let hand = document.getElementById("PlayerHand");
+    if (hand) hand.className = "forceLower";
   };
   const onDragEnd = () => {
     setCardTargetingFunction(null);
+    //make the user's hand lower
+    let hand = document.getElementById("PlayerHand");
+    if (hand) hand.className = "";
   }
+
+  const playCard = ( card: string, target: number ) => {
+    //Play the card
+    game.current.PlayCard( card, [target] );
+
+    setMoves(game.current.getMoves());
+    setBoard(game.current.getBoard());
+
+    //Handles turn switching
+    if (game.current.getCurrentTurn() !== currentTurn) {
+      //Set the timer for the next turn to begin
+      //If we aren't rotating, then there is no reason for there to be any delay
+      if ( !allowRotation ) {
+        setCurrentTurn( game.current.getCurrentTurn() )
+      }
+      else {
+        //We're rotating.
+        setMoveLockout(true);
+        setTimeout(() => {
+          //After a delay, change the turn, and allow moves once again.
+          setCurrentTurn(game.current.getCurrentTurn())
+          setMoveLockout(false);
+        }, 500);
+      }
+    }
+  }
+
+  ///
+  /// HAND DISPLAY
+  ///
+  const getHandCards = () => {
+    const handSize = currentTurn > 0 ? game.current.getWhiteHand().length : game.current.getBlackHand().length;
+    const cardMapping = ( card : Card, i : number ) => <PlayableCard draggable={!moveLockout} card={card} dragStartCallback={() => dragStartCallback(i)} dragEndCallback={onDragEnd} handPosition={i + 1} handSize={handSize}/>
+    return currentTurn > 0 ? game.current.getWhiteHand().map(cardMapping) : game.current.getBlackHand().map(cardMapping)
+  }
+
 
   return <div className="app">
     <div className="boardLeftColumn">
@@ -341,19 +385,19 @@ function App() {
                   playerColour={ playerColour } cardTargetingFunction={cardTargetingFunction} game={game.current}
                   opponentActive={ opponent === "COMP"} gameUUID={ uuid } pieceIndexes={ game.current.getPieceIndexes() }
                   allowRotation={allowRotation} setAllowRotation={ v => setAllowRotation(v) } moveLockout={moveLockout}
+                  playCard={playCard}
       />
     </div>
     <div className="boardRightColumn">
       <p className="playerToMove">{ game.current.getCurrentTurn() > 0 ? "White" : "Black" } to move</p>
       <MovesDisplay moves={ moves } unMove={ unMove } canUndo={ opponent === "LOCAL" }/>
     </div>
-
     <div id="PlayerHand">
-      <PlayableCard dragStartCallback={dragStartCallback} dragEndCallback={onDragEnd} handPosition={1} handSize={4} />
-      <PlayableCard dragStartCallback={dragStartCallback} dragEndCallback={onDragEnd} handPosition={2} handSize={4} />
-      <PlayableCard dragStartCallback={dragStartCallback} dragEndCallback={onDragEnd} handPosition={3} handSize={4} />
-      <PlayableCard dragStartCallback={dragStartCallback} dragEndCallback={onDragEnd} handPosition={4} handSize={4} />
+      {
+        getHandCards()
+      }
     </div>
+
 
     { gameOver ?  <GameOverUI message={gameOverMsg} winner={winner}/> : null}
 

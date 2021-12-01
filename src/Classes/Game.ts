@@ -7,6 +7,7 @@ import Pawn from "../Pieces/FIDE/Pawn";
 import Rook from "../Pieces/FIDE/Rook";
 import Card from "../Cards/Card";
 import ALL_CARDS from "../Cards/Cards";
+import Expendable_Card from "../Cards/FIDE/Expendable";
 
 export default class Game {
 
@@ -17,6 +18,13 @@ export default class Game {
     private moves : ( ActualMove | CardMove )[]
 
     private pieceIndexes : number[]; //Indexes where there are pieces
+
+    ///
+    /// PLAYER HANDS
+    ///
+    private readonly whiteHand : Card[];
+    private readonly blackHand : Card[];
+
 
     public UnMove = () => {
         
@@ -91,6 +99,23 @@ export default class Game {
         ///
         /// IF THE MOVE IS A CARD MOVE, DO THIS INSTEAD!
         ///
+
+        if ( move instanceof CardMove ) {
+            //We want to roll back to what the board was before the card move
+            this.board.forEach((piece, position) => {
+                //If the piece has changed, then we update it
+                if ( piece !== (move as CardMove).boardBefore[position] ) {
+                    this.board[position] = (move as CardMove).boardBefore[position];
+                }
+                // If the piece didn't change, don't update it
+            })
+
+            //If the card we just un-did wasn't fast, then we change back the turn.
+            let card = ALL_CARDS[ move.cardName ];
+            if ( card && !card.fast ) {
+                this.currentTurn = -this.currentTurn;
+            }
+        }
 
     };
 
@@ -225,6 +250,9 @@ export default class Game {
         })
         this.pieceIndexes = _pieceIndexes;
 
+        this.whiteHand = [ new Expendable_Card(), new Expendable_Card(), new Expendable_Card(), new Expendable_Card() ];
+        this.blackHand = [ new Expendable_Card(), new Expendable_Card(), new Expendable_Card(), new Expendable_Card() ];
+
         // FOR DEVELOPMENT PURPOSES
         if (global.window) ( global.window as any ).updateBoard = ( update:(board:number[])=>number[] ) => update(this.board).map((p, i) => this.board[i] = p);
 
@@ -234,6 +262,9 @@ export default class Game {
     public getMoves = () => this.moves;
     public getCurrentTurn = () => this.currentTurn;
     public getPieceIndexes = () => this.pieceIndexes;
+
+    public getWhiteHand = () => this.whiteHand;
+    public getBlackHand = () => this.blackHand;
 
     public getLastMove = () => this.moves.length > 0 ? this.moves[ this.moves.length - 1 ] : undefined;
 

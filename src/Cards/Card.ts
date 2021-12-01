@@ -20,6 +20,7 @@ export default abstract class Card {
     ///
     public abstract readonly targets: number; //the number of targets the card expects
     public abstract readonly fast: boolean; //true/false
+    public abstract readonly cost: number; //chaos cost
 
     ///
     /// UNMOVING

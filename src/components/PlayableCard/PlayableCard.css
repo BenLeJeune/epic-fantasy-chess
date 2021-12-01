@@ -5,18 +5,32 @@ div#PlayerHand {
   justify-content: center;
   position: absolute;
   bottom: 0;
-  width: 100%;
   transition: transform 0.2s ease-out;
-  transform: translateY(50%);
+  transform: translateY(50%) translateX(-50%);
+  left: 50%;
+  padding: 0 2.5rem;
 }
 div#PlayerHand:hover {
-  transform: translateY(0);
+  transform: translateY(0) translateX(-50%);
+}
+div#PlayerHand:hover.forceLower {
+  transform: translateY(35%) translateX(-50%);
+}
+div#PlayerHand div.playableCardContainer {
+  z-index: 5;
+}
+div#PlayerHand div.playableCardContainer:hover {
+  z-index: 20;
 }
 div#PlayerHand div.playableCard {
   width: 10em;
   height: 14em;
   background-color: #2C2F40;
+  border: 1px solid #262836;
   transition: transform 0.1s ease-out;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
 }
 div#PlayerHand div.playableCard:hover {
   transform: scale(1.2);
