@@ -7,4 +7,9 @@ div.targetingSquare.move {
 }
 div.targetingSquare.capture {
   background-color: crimson;
-}/*# sourceMappingURL=TargetingSqaure.css.map */
+}
+div.targetingSquare:hover {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=TargetingSqaure.css.map */

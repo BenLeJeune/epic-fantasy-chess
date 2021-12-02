@@ -28,7 +28,7 @@ export default abstract class Card {
     public abstract unMoveType: "boardState" | "move"; // "boardState" means the board state is reverted on unMove. "move" means the card makes a regular move.
 
     // Returns an array of all valid target indexes
-    public abstract getValidTargets : ( board : number[], colour: number, history: ActualMove[] ) => number[]
+    public abstract getValidTargets : (( board : number[], colour: number, history: ActualMove[], previousTargets?: number[] ) => number[])[]
 
     // Resolves the playing of the card
     public abstract playCard : ( targets: number[], game: Game ) => void;

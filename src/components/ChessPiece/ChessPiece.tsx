@@ -5,22 +5,27 @@ import Piece from "../../Classes/Piece";
 interface props {
     position : number,
     piece : number,
-    target: ( position : number ) => void,
-    unTarget: ( position : number ) => void,
+    target: ( source: TargetingType ) => void,
+    unTarget: ( source : TargetingType ) => void,
     onHover: () => void,
     onUnHover: () => void,
     onRightClick: ( id : string ) => void,
     active : boolean,
     id : string,
     draggable : boolean,
+    clickable: boolean,
     rotated: boolean
 }
+
+type TargetingType = "piece-click" | "piece-drag" | "card-drag" | "card-click";
+
 
 export default function ChessPiece({position, piece, target, unTarget, onHover, onUnHover, active, id, draggable, rotated, onRightClick}:props) {
 
     let oldPos = useRef<number>(position);
 
     let pieceEl = useRef<HTMLDivElement>(null);
+    let imgRef = useRef<HTMLImageElement>(null);
 
     useLayoutEffect(() => {
         if (pieceEl.current) {
@@ -47,10 +52,17 @@ export default function ChessPiece({position, piece, target, unTarget, onHover, 
 
     }, [ position ])
 
+    useLayoutEffect(() => {
+        if (imgRef.current) {
+            if (!active) imgRef.current.style.transform = ""
+        }
+    }, [active])
+
     const onDragStart: ( e : React.DragEvent ) => void = e => {
         //This is fired when the dragging starts
+        if (imgRef.current) imgRef.current.style.transform = "";
         if ( e.dataTransfer ) {
-            target(piece);
+            target("piece-drag");
             e.dataTransfer.setData("text/plain", JSON.stringify( [ piece, position ] ));
             e.dataTransfer.effectAllowed = "move";
         }
@@ -61,22 +73,27 @@ export default function ChessPiece({position, piece, target, unTarget, onHover, 
             e.preventDefault();
             onRightClick(id);
         }
+        if ( e.button === 0 && (draggable) ) {
+            //Left click
+            target("piece-click");
+            if (imgRef.current) imgRef.current.style.transform = "translateY(.25rem) scale(0.95)";
+        }
     }
 
-    return <div className={`piece ${ active ? "active" : "" }`}
+    return <div className={`piece ${ active ? "active" : "" } ${ piece > 0 ? "white" : "black" }`}
                 ref={ pieceEl }
                 id={ id }
                 key={ id }
                 style={ Piece.getStyle(position, rotated) }
                 draggable={ draggable }
                 onDragStart={ draggable ? onDragStart : () => false }
-                onDragEnd={ () => unTarget(piece) }
+                onDragEnd={ () => unTarget("piece-drag") }
                 onMouseEnter={onHover}
                 onMouseLeave={onUnHover}
                 onMouseDown={ e => clickHandler(e)}
                 onContextMenu={ e => clickHandler(e) }
     >
-        <img src={ Piece.getImage( piece ) } alt={ piece.toString() } className="pieceImg"/>
+        <img ref={imgRef} src={ Piece.getImage( piece ) } alt={ piece.toString() } className="pieceImg"/>
     </div>
 
 }

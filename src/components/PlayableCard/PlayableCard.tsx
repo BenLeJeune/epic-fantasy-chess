@@ -41,7 +41,7 @@ export default function PlayableCard(props: props) {
             let currentRotation = 5 * ( props.handPosition - closestPoint );
             if (currentRotation === 0 && !oddHand) currentRotation += props.handPosition === centreOfHandStart ? -2.5 : 2.5
 
-            containerRef.current.style.transform = `rotateZ(${currentRotation}deg) translateY(${Math.abs((currentRotation * 10)) - 20}px)`;
+            containerRef.current.style.transform = `rotateZ(${currentRotation}deg) translateY(${Math.abs((currentRotation * 5)) - 20}px)`;
         }
     }, [props.handPosition, props.handSize])
 

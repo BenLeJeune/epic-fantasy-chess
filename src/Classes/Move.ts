@@ -2,6 +2,7 @@ import {FILES, Move, SpecialMove} from "../types";
 import Piece from "./Piece";
 import GamePiece from "../Pieces/GamePiece";
 import Pawn from "../Pieces/FIDE/Pawn";
+import {AdditionalOptions} from "./Game";
 
 export default class ActualMove {
 
@@ -12,6 +13,7 @@ export default class ActualMove {
     public readonly specify : number;
 
     public readonly special : SpecialMove | undefined
+    public readonly additional: Partial<AdditionalOptions>
 
     public static NONE = 0;
     public static RANK = 1;
@@ -36,10 +38,12 @@ export default class ActualMove {
             specification += Piece.getRank( this.from );
         }
 
-        return `${ pieceName }${ specification }${ captureText }${ destination }`
+        let promotionTo = this.additional && this.additional.promotionTo ? `=${Piece.getPiece(this.additional.promotionTo)?.shortName}` : "";
+
+        return `${ pieceName }${ specification }${ captureText }${ destination }${ promotionTo }`
     }
 
-    constructor( _from : number, _to : number, _moving : number, _captured : number, _specify : number = ActualMove.NONE, _special?: SpecialMove) {
+    constructor( _from : number, _to : number, _moving : number, _captured : number, _specify : number = ActualMove.NONE, _special?: SpecialMove, _additional: Partial<AdditionalOptions> = {}) {
 
         this.from = _from;
         this.to = _to;
@@ -47,6 +51,7 @@ export default class ActualMove {
         this.captured = _captured;
         this.specify = _specify;
         this.special = _special;
+        this.additional = _additional;
 
     }
 

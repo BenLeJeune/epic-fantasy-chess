@@ -22,7 +22,7 @@ import {useParams} from "react-router-dom";
 import {GAME_KEY} from "./KEYS";
 import {Army, FIDEARMY} from "./Presets/Armies";
 import PlayableCard from "./components/PlayableCard/PlayableCard";
-import Expendable_Card from "./Cards/FIDE/Expendable";
+import Expendable_Card from "./Cards/FIDE/Expendable_Card";
 import CardMove from './Classes/CardMove';
 import { ActualMoves } from './helpers/MoveFilter';
 import Card from "./Cards/Card";
@@ -323,25 +323,52 @@ function App() {
   ///
   /// CARD TARGETING
   ///
-  const [ cardTargetingFunction, setCardTargetingFunction ] = useState<( (board:number[], colour:number, history:ActualMove[])=>number[] )|null>(null);
+  const [ cardTargetingIndex, setCardTargetingIndex ] = useState<number|null>(null);
+  const [ cardTargetsRemaining, setCardTargetsRemaining ] = useState<number>(0);
+  const [ cardTargets, setCardTargets ] = useState<number[]>([] as number[]);
+
   const dragStartCallback = ( index : number ) => {
-    setCardTargetingFunction( () => ( currentTurn > 0 ? game.current.getWhiteHand()[index] : game.current.getBlackHand()[index] ).getValidTargets );
-    console.log("CARD DRAG STARTED");
+    setCardTargetingIndex( index );
+    setCardTargets([]);
+    console.log(`Card drag started on ${ index }, card ${ game.current.getCurrentPlayerHand()[index].cardName }`);
 
     //make the user's hand lower
     let hand = document.getElementById("PlayerHand");
     if (hand) hand.className = "forceLower";
   };
+
   const onDragEnd = () => {
-    setCardTargetingFunction(null);
+    console.log(`Drag ended, ${ cardTargetsRemaining } remaining`);
+    endTargeting();
+  }
+
+  const appendCardTarget = ( card: string, target: number ) => {
+    let targetsRemaining = cardTargetsRemaining, targets = cardTargets;
+    if ( cardTargetsRemaining <= 0 && cardTargetingIndex !== null ) targetsRemaining = game.current.getCurrentPlayerHand()[cardTargetingIndex].targets; //Initialises if not set
+    //We want to decrement the number of targets left
+    targetsRemaining--;
+    console.log(`APPEND CARD TARGET - ${ targetsRemaining } remaining of ${ game.current.getCurrentPlayerHand()[cardTargetingIndex || 0].targets }`)
+    //Push this target to the array of targets
+    targets.push(target);
+    setCardTargetsRemaining(targetsRemaining);
+    setCardTargets(targets);
+    if ( targetsRemaining === 0 ) {
+      endTargeting(targetsRemaining);
+      playCard(card, targets);
+    }
+  }
+
+  const endTargeting = ( targetsRemaining = cardTargetsRemaining ) => {
+    console.log(`Ending targeting with ${ targetsRemaining } remaining`)
+    if (targetsRemaining === 0) setCardTargetingIndex(null);
     //make the user's hand lower
     let hand = document.getElementById("PlayerHand");
     if (hand) hand.className = "";
   }
 
-  const playCard = ( card: string, target: number ) => {
+  const playCard = ( card: string, targets: number []) => {
     //Play the card
-    game.current.PlayCard( card, [target] );
+    game.current.PlayCard( card, targets );
 
     setMoves(game.current.getMoves());
     setBoard(game.current.getBoard());
@@ -382,10 +409,10 @@ function App() {
       <ChessBoard board={ board } currentTurn={ currentTurn } move={ move } unMove={ unMove } moves={moves}
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
                   whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces }
-                  playerColour={ playerColour } cardTargetingFunction={cardTargetingFunction} game={game.current}
+                  playerColour={ playerColour } cardTargetingIndex={cardTargetingIndex} game={game.current}
                   opponentActive={ opponent === "COMP"} gameUUID={ uuid } pieceIndexes={ game.current.getPieceIndexes() }
                   allowRotation={allowRotation} setAllowRotation={ v => setAllowRotation(v) } moveLockout={moveLockout}
-                  playCard={playCard}
+                  playCard={appendCardTarget} cardTargetsRemaining={cardTargetsRemaining} currentTargets={cardTargets}
       />
     </div>
     <div className="boardRightColumn">

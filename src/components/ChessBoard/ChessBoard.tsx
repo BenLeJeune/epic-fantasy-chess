@@ -13,7 +13,7 @@ import {SpecialMove} from "../../types";
 import {filterLegalMoves} from "../../helpers/Checks";
 import PiecePromotionUI from "../PiecePromotionUI/PiecePromotionUI";
 import { generateEmptyBoard } from '../../helpers/BoardGenerators';
-import Expendable_Card from "../../Cards/FIDE/Expendable";
+import Expendable_Card from "../../Cards/FIDE/Expendable_Card";
 import CardMove from '../../Classes/CardMove';
 import {ActualMoves} from "../../helpers/MoveFilter";
 import Card from "../../Cards/Card";
@@ -38,11 +38,15 @@ interface Props {
     moveLockout: boolean, //Whether or not moves are currently locked out - for ensuring smooth transitions between turns
     allowRotation: boolean,
     setAllowRotation: ( allowRotation: boolean ) => void, //Call this whenever rotation is changed here, so app.tsx can know about it
-    cardTargetingFunction: (( board:number[], colour:number, history:ActualMove[] ) => number[] ) | null, //The function to get card targets
-    playCard: ( card: string, target: number ) => void
+    cardTargetingIndex: number | null, //The function to get card targets
+    playCard: ( card: string, target: number ) => void,
+    cardTargetsRemaining: number,
+    currentTargets: number[]
 }
 
-export default function ChessBoard({ board, currentTurn, game, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece, whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, pieceIndexes, moveLockout, allowRotation, setAllowRotation, cardTargetingFunction, playCard } : Props) {
+export default function ChessBoard({ board, currentTurn, game, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece,
+       whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, pieceIndexes, moveLockout, allowRotation, setAllowRotation,
+       cardTargetingIndex, playCard, cardTargetsRemaining, currentTargets } : Props) {
 
     ///
     /// BOARD ROTATING
@@ -58,7 +62,10 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     //THIS HANDLES MOVING
     const onDrop = ( ev : React.DragEvent, destination : number, special?: SpecialMove ) => {
         let [ piece, position ] = JSON.parse( ev.dataTransfer.getData("text/plain") ) as [number, number];
+        moveHandler( piece, position, destination, special );
+    }
 
+    const moveHandler = ( piece:number, position: number, destination: number, special?: SpecialMove ) => {
         if ( Math.abs(piece) === Piece.Pawn && Piece.getRank( destination ) === ( piece > 0 ? 7 : 0 ) ) {
             setPromotion([ position, destination ]);
             let captured = special === "EP" ? board[destination - 8] : board[destination];
@@ -77,6 +84,22 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
             let cardId = ev.dataTransfer.getData("text/plain");
             playCard( cardId, target );
         }
+    }
+
+    //Click playing card
+    const onClickCard = ( target: number ) => {
+        if (cardTargetingIndex !== null) {
+            let card = game.getCurrentPlayerHand()[cardTargetingIndex];
+            playCard(card.id, target);
+        }
+    }
+
+    ///
+    /// THIS TRACKS THE NUMBER OF TARGETS REMAINING
+    ///
+
+    const appendCardTarget = ( target: number ) => {
+
     }
 
     ///
@@ -139,9 +162,10 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                     key={ getPieceKey( piece, pos ) }
                     piece={ piece }
                     id={ getPieceKey( piece, pos ) }
-                    draggable={ (((currentTurn > 0 && piece > 0 && (playerColour > 0|| !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) )) && !moveLockout) || DEV_MODE_ENABLED }
-                    target={ () => setTargeting([ piece, pos ])  }
-                    unTarget={ () => setTargeting([ 0, -1 ]) }
+                    draggable={ (((currentTurn > 0 && piece > 0 && (playerColour > 0 || !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) )) && !moveLockout) || DEV_MODE_ENABLED }
+                    clickable={ (((currentTurn > 0 && piece > 0 && (playerColour > 0 || !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) )) && !moveLockout) || DEV_MODE_ENABLED }
+                    target={ source => target([ piece, pos ], source)  }
+                    unTarget={ source => target([ 0, -1 ], source) }
                     onHover={ () => setHoveringPos(pos) }
                     onUnHover={ () => setHoveringPos(-1) }
                     onRightClick={ id => showPieceInfo( pos, id ) }
@@ -149,7 +173,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                     rotated={rotated} /> )
 
     const getTargetingSquares = () => {
-        if (!cardTargetingFunction) return Piece.getPiece(targeting[0]) ?
+        if ( cardTargetingIndex === null ) return Piece.getPiece(targeting[0]) ?
             filterLegalMoves(
                 (Piece.getPiece(targeting[0]) as GamePiece).getLegalMoves(targeting[1], board, "all", targeting[0] > 0 ? 1 : -1, (moves.filter(m => m instanceof ActualMove) as ActualMove[])),
                 board, (moves.filter(m => m instanceof ActualMove) as ActualMove[]), targeting[0] > 0 ? 1 : -1
@@ -159,27 +183,49 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                         position={move.to}
                         isCapture={board[move.to] !== Piece.None || move.special === "EP"}
                         isMove={board[move.to] === Piece.None}
+                        onClick={ () => moveHandler( targeting[0], move.from, move.to, move.special ) }
                         onDrop={ev => onDrop(ev, move.to, move.special)}
                         rotated={rotated}
                     />
                 )
             : null;
-        else return cardTargetingFunction( board, currentTurn, ActualMoves(moves) ).map( target =>
-            <TargetingSquare
-                position={target}
-                isCapture={false}
-                isMove={true}
-                onDrop={ ev => onDropCard(ev, target) }
-                rotated={rotated}
-            />
-        )
+        else {
+            let currentCard = game.getCurrentPlayerHand()[cardTargetingIndex];
+            let index = cardTargetsRemaining === 0 ? 0 : currentCard.targets - cardTargetsRemaining;
+            let currentFunction = currentCard.getValidTargets[ index ];
+            currentFunction = currentFunction as typeof currentFunction || currentCard.getValidTargets[0];
+            return currentFunction as unknown ? currentFunction( board, currentTurn, ActualMoves(moves), currentTargets )
+                    .map( target =>
+                        <TargetingSquare
+                            position={target}
+                            isCapture={false}
+                            isMove={true}
+                            onClick={ () => onClickCard( target ) }
+                            onDrop={ ev => onDropCard(ev, target) }
+                            rotated={rotated}
+                        />
+                    ) : null
+        }
     }
 
-    const getMoveCircles = () => hoveringPos === -1 ? null : Piece.getPiece( board[hoveringPos] )?.getLegalMoves(
-        hoveringPos, generateEmptyBoard(), "all", board[hoveringPos] > 0 ? 1 : -1, (moves.filter(m => m instanceof ActualMove) as ActualMove[])
-    ).map(
-        legalMove => <ChessSquare position={legalMove.to} rotated={rotated} moveCircle={true} highlight={false}/>
-    )
+    const getMoveCircles = () => {
+        let squares: JSX.Element[] = [];
+        let hoveringSquares = hoveringPos === -1 ? [] as JSX.Element[] : Piece.getPiece(board[hoveringPos])?.getLegalMoves(
+            hoveringPos, generateEmptyBoard(), "all", board[hoveringPos] > 0 ? 1 : -1, (moves.filter(m => m instanceof ActualMove) as ActualMove[])
+        ).filter(move => move.to !== move.from).map(
+            legalMove => <ChessSquare position={legalMove.to} rotated={rotated} moveCircle={true} highlight={false}/>
+        );
+        if (hoveringSquares) squares.push(...hoveringSquares);
+        if (hoveringPos !== targeting[1] && Piece.getPiece(targeting[0])) squares.push(
+            ...filterLegalMoves(
+                (Piece.getPiece(targeting[0]) as GamePiece).getLegalMoves(targeting[1], board, "all", targeting[0] > 0 ? 1 : -1, (moves.filter(m => m instanceof ActualMove) as ActualMove[])),
+                board, (moves.filter(m => m instanceof ActualMove) as ActualMove[]), targeting[0] > 0 ? 1 : -1
+            ).map(
+                legalMove => <ChessSquare position={legalMove.to} rotated={rotated} moveCircle={true} highlight={false}/>
+            )
+        )
+        return squares;
+    }
 
 
     ///
@@ -187,7 +233,17 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     ///
     // [ piece, position from ]
     const [ targeting, setTargeting ] = useState<[ number, number ]>([ 0, -1 ]);
-    const [ targetingType, setTargetingType ] = useState<"CARD" | "PIECE">("CARD");
+    type TargetingType = "piece-click" | "piece-drag" | "card-drag" | "card-click";
+    const [ targetingType, setTargetingType ] = useState<TargetingType>("piece-click");
+
+    const target = ( target: [number, number], type: TargetingType ) => {
+        setTargeting(target);
+        setTargetingType(type);
+    }
+
+    useLayoutEffect(() => {
+        if (cardTargetingIndex !== null) setTargetingType("card-drag")
+    }, [cardTargetingIndex])
 
     // The position that is currently being hovered
     const [ hoveringPos, setHoveringPos ] = useState<number>(-1);
@@ -323,12 +379,12 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                 </div>
 
                 {
-                  targeting[0] !== 0 || cardTargetingFunction !== null ? <div id="ChessBoardTargeting" className="board">
+                  targeting[0] !== 0 || cardTargetingIndex !== null ? <div id="ChessBoardTargeting" className="board" onMouseDown={() => target([0, -1], targetingType)}>
                       { getTargetingSquares() }
                   </div> : null
                 }
 
-                <div id="ChessBoardPieces" className={`board ${ targeting[0] !== 0 ? "targeting" : "" }`}>
+                <div id="ChessBoardPieces" className={`board ${ targeting[0] !== 0 ? `targeting ${ targetingType } ${ targeting[0] > 0 ? "whitemove" : "blackmove" }` : "" } ${ cardTargetingIndex === null ? "" : "card-targeting" }`}>
                     { getPieces() }
                 </div>
 

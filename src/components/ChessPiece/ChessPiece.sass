@@ -1,8 +1,11 @@
-div.piece
+.piece
   user-select: none
   width: 100%
   height: 100%
   pointer-events: all
+
+  &:active
+    transform: translateY(10%)
 
   img.pieceImg
     width: 100%
@@ -13,13 +16,19 @@ div.piece
       cursor: grabbing
 
 div#ChessBoardPieces.targeting
-  &> div.piece
+  &> .piece
     opacity: 0.5
     pointer-events: inherit
     &.active
       pointer-events: all
       opacity: 1.0
+div#ChessBoardPieces.targeting.piece-click.whitemove> .piece.white
+  pointer-events: all
+div#ChessBoardPieces.targeting.piece-click.blackmove> .piece.black
+  pointer-events: all
+div#ChessBoardPieces.card-targeting > .piece
+  pointer-events: none
 
 div.gameOver
-  div.piece
+  .piece
     pointer-events: none

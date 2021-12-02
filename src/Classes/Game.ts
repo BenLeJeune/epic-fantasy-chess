@@ -7,7 +7,7 @@ import Pawn from "../Pieces/FIDE/Pawn";
 import Rook from "../Pieces/FIDE/Rook";
 import Card from "../Cards/Card";
 import ALL_CARDS from "../Cards/Cards";
-import Expendable_Card from "../Cards/FIDE/Expendable";
+import Expendable_Card from "../Cards/FIDE/Expendable_Card";
 
 export default class Game {
 
@@ -92,7 +92,12 @@ export default class Game {
                 default:
                     break;
             }
-        this.currentTurn = -this.currentTurn; //THE NEXT PLAYER'S TURN
+            if ( !move.additional.isCardMove ) this.currentTurn = -this.currentTurn; //THE NEXT PLAYER'S TURN
+            else {
+                //IF WE JUST UN-MADE A CARD MOVE
+                //Repeat
+                this.UnMove();
+            }
 
         }
 
@@ -130,7 +135,7 @@ export default class Game {
         let colour = this.board[from] > 0 ? 1 : -1;
         let specify = ActualMove.NONE;
         let moving = this.board[from];
-        let captured = this.board[to];
+        let captured = to === from ? Piece.None : this.board[to]; //Not capturing if moving to own square
 
         if ( Math.abs( this.board[from] ) === Piece.Pawn && this.board[to] !== 0) {
             specify = ActualMove.FILE
@@ -190,16 +195,16 @@ export default class Game {
                 break;
         }
 
-        this.moves.push( new ActualMove( from, to, moving, captured, specify, special) );
+        this.moves.push( new ActualMove( from, to, moving, captured, specify, special, additional) );
 
         //Let's move the piece on To to From.
         this.board[to] = this.board[from];
-        this.board[from] = Piece.None;
+        if (to !== from) this.board[from] = Piece.None;
 
         //Updater piece indexes
         this.pieceIndexes[ this.pieceIndexes.indexOf( from ) ] = to
 
-        this.currentTurn = -this.currentTurn;
+        if ( !additional.isCardMove ) this.currentTurn = -this.currentTurn;
 
     }
 
@@ -226,11 +231,12 @@ export default class Game {
         // Save the board state
         let boardBefore = [ ...this.board ];
 
+        let cardMove = new CardMove( card.id, boardBefore );
+        this.moves.push( cardMove );
+
         card.playCard( targets, this );
 
         //Now we create the card move
-        let cardMove = new CardMove( card.id, boardBefore );
-        this.moves.push( cardMove );
 
         //Now, we change the current turn - IF the card was fast.
         if ( !card.fast ) this.currentTurn = -this.currentTurn;
@@ -250,8 +256,8 @@ export default class Game {
         })
         this.pieceIndexes = _pieceIndexes;
 
-        this.whiteHand = [ new Expendable_Card(), new Expendable_Card(), new Expendable_Card(), new Expendable_Card() ];
-        this.blackHand = [ new Expendable_Card(), new Expendable_Card(), new Expendable_Card(), new Expendable_Card() ];
+        this.whiteHand = Object.values(ALL_CARDS);
+        this.blackHand = Object.values(ALL_CARDS);
 
         // FOR DEVELOPMENT PURPOSES
         if (global.window) ( global.window as any ).updateBoard = ( update:(board:number[])=>number[] ) => update(this.board).map((p, i) => this.board[i] = p);
@@ -265,6 +271,7 @@ export default class Game {
 
     public getWhiteHand = () => this.whiteHand;
     public getBlackHand = () => this.blackHand;
+    public getCurrentPlayerHand = () => this.currentTurn > 0 ? this.whiteHand : this.blackHand;
 
     public getLastMove = () => this.moves.length > 0 ? this.moves[ this.moves.length - 1 ] : undefined;
 
@@ -278,5 +285,6 @@ export default class Game {
 }
 
 export interface AdditionalOptions {
-    promotionTo : number
+    promotionTo : number,
+    isCardMove: boolean
 }
