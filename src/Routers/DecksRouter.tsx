@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom';
+import DecksPage from "../views/DecksPage/DecksPage";
+import DecksBuilderPage from "../views/DecksBuilderPage/DecksBuilderPage";
 
 export default function DecksRouter() {
 
@@ -8,11 +10,11 @@ export default function DecksRouter() {
     return <Switch>
 
         <Route path={`${url}`} exact>
-            <h1>AN OVERVIEW OF YOUR DECKS</h1>
+            <DecksPage/>
         </Route>
 
-        <Route path={`${url}/:armyID`}>
-            <h1>BUILDING A DECK</h1>
+        <Route path={`${url}/:deckId`}>
+            <DecksBuilderPage/>
         </Route>
 
     </Switch>

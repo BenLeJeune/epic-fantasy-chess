@@ -1,0 +1,59 @@
+div#DecksPage h1.pageHeading {
+  color: #F8DC97;
+  font-size: 3em;
+  padding-left: 0.5em;
+}
+div#DecksPage p.pageSubtitle {
+  color: #E2E2E2;
+  padding-left: 1.5em;
+  font-size: 1em;
+}
+div#DecksPage div.decksButtonRow {
+  padding: 0 1.5em;
+  font-size: 1em;
+}
+div#DecksPage div.decksListing {
+  font-size: 1em;
+  padding: 0 1.5em;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+div.deckPreview {
+  display: inline-block;
+  background-color: #2C2F40;
+  max-width: 20em;
+  min-width: 10em;
+  position: relative;
+  padding: 0.5em;
+  margin: 1em;
+  border-radius: 0.5em;
+  cursor: pointer;
+  transform: translateY(0);
+  transition: transform 0.25s ease-out;
+}
+div.deckPreview:hover {
+  transform: translateY(-0.5em);
+}
+div.deckPreview:hover div.delete {
+  opacity: 1;
+}
+div.deckPreview div.delete {
+  opacity: 0;
+  transition: opacity 0.25s ease, color 0.25s ease-in-out;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: #E2E2E2;
+}
+div.deckPreview div.delete:hover {
+  color: #464B66;
+}
+div.deckPreview h3.DeckName {
+  color: #F8DC97;
+}
+div.deckPreview div.cards > p {
+  color: #464B66;
+}
+
+/*# sourceMappingURL=DecksPage.css.map */

@@ -1,0 +1,119 @@
+@use "../../modules/colours"
+
+div.saveChanges
+    position: fixed
+    bottom: 2vh
+    left: 2vh
+    width: calc(100% - 4vh)
+    padding: 0.5em
+    background-color: colours.$mediumBlue
+    animation: save-change-entrance 0.5s forwards
+    border-radius: 0.5em
+
+@keyframes save-change-entrance
+    0%
+        transform: translateY(200%)
+    100%
+        transform: translateY(0)
+
+@keyframes invalid-pulse
+    0%
+        transform: scale(1.25)
+    100%
+        transform: scale(1)
+
+div#DecksBuilderPage
+    h1
+        
+        color: colours.$lightsquare
+        font-size: 3em
+        padding-left: .5em
+    div.decksManager
+        padding: 0 .5em
+        display: grid
+        grid-template-columns: 1fr 2fr
+        
+        div.cardListPreview
+            grid-column: 1 / 2
+            position: relative
+            div.cardListBox
+                background-color: colours.$lightBlue
+                height: 100%
+                display: flex
+                flex-flow: column nowrap
+                width: 95%
+                border-radius: .5em
+                position: absolute
+                top: 0
+                left: 2.5%
+                padding: .5rem
+                align-items: center
+                overflow: auto
+                h2.cardListingTitle
+                    font-size: 1.5rem
+                div.listedCard
+                    width: 80%
+                    display: flex
+                    padding: .5rem
+                    margin: 0.1rem
+                    font-size: 1.25rem
+                    border-radius: .25rem
+                    background-color: colours.$mediumBlue
+                    cursor: pointer
+                    &:hover
+                        background-color: colours.$offLightBlue
+                    span.chaosValue
+                        margin-right: 1rem
+                    span.cardQuantity
+                        margin: 0 1rem 0 auto
+                div.libDragReceiverOuter
+                    background-color: colours.$mediumBlue
+                    position: absolute
+                    top: 0
+                    left: 0
+                    width: 100%
+                    height: 100%
+                    border-radius: .5rem
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    div.dragHereNotice
+                        text-align: center
+                        color: colours.$offLightBlue
+                        font-size: 1.25rem
+        div.cardsList
+            grid-column: 2 / 3
+
+            div.cardLibrary
+                display: flex
+                padding: .5em
+                flex-flow: row wrap
+                position: relative
+                div.libraryCard
+                    width: 10em
+                    min-height: 14em
+                    background-color: colours.$lightBlue
+                    margin: .5em
+                    cursor: pointer
+                    border: 1px solid colours.$mediumBlue
+                    border-radius: .25rem
+                    padding: .5rem
+                    transition: transform 0.25s ease-out, background-color 0.5s ease
+                    &:hover
+                        background-color: colours.$offLightBlue
+                        transform: translateY(-5%)
+                div.listDragReceiver
+                    background-color: colours.$mediumBlue
+                    position: absolute
+                    top: 0
+                    left: 0
+                    width: 100%
+                    height: 100%
+                    border-radius: .5rem
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    div.dragHereNotice
+                        text-align: center
+                        color: colours.$offLightBlue
+                        font-size: 1.25rem
