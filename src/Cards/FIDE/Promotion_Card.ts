@@ -39,7 +39,7 @@ export default class Promotion_Card extends Card {
                 || (Piece.getRank(final.to) === 0 && game.getCurrentTurn() < 0) ) {
                 game.Move(target, final.to, "PROMOTION", {isCardMove: true, promotionTo: Piece.Rook * game.getCurrentTurn()})
             }
-            else game.Move(target, final.to)
+            else game.Move(target, final.to, undefined, {isCardMove: true})
         } )
     }
 }

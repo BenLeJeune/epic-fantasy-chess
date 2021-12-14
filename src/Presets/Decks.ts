@@ -23,10 +23,16 @@ export class Deck {
 
 export const FIDEDECK = new Deck([
     Advance_Card.id,
+    Advance_Card.id,
+    Expendable_Card.id,
     Expendable_Card.id,
     TacticalRetreat_Card.id,
+    TacticalRetreat_Card.id,
+    Reposition_Card.id,
     Reposition_Card.id,
     Mount_Card.id,
+    Mount_Card.id,
+    Demote_Card.id,
     Demote_Card.id,
     Maneuver_Card.id,
     Flee_Card.id,

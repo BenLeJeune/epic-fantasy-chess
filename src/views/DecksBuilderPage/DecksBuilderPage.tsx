@@ -76,73 +76,19 @@ export default function DecksBuilderPage() {
         }
     }
 
-
-    /*const getChessBoard = () => {
-        let chessSquares = [];
-        for (let i = 0; i <= 7; i++) {
-            chessSquares.push(
-                <div style={{ left: `${ ( i ) * 12.5 }%` }} className={`lowerBoardSquare ${ i % 2 === 0 ? "dark" : "light" }`}/>
-            )
-        }
-
-        return chessSquares
-    }
-
-    const getChessPieces = () => armyPieces.map(
-        ( piece, i ) => <div className="lowerBoardPiece"
-                style={{ left: `${ ( i ) * 12.5 }%` }}
-                 onDrop={ e => onDrop( e, i ) }
-                 onDragOver={ e => {
-                     e.preventDefault();
-                     e.dataTransfer.dropEffect = "move";
-                 } }
-        >
-            <img src={ Piece.getImage(piece) } />
-        </div>
-    )
-
-    const pieceDragStart = ( e : React.DragEvent, piece : number ) => {
-        if ( e.dataTransfer ) {
-            e.dataTransfer.setData("text", `${piece}`);
-            e.dataTransfer.effectAllowed = "move";
-        }
-    }
-
-    const pieceDragEnd = ( piece : number ) => {
-
-    }
-
-    let pointBuyRef = useRef<HTMLElement>(null);
-    const getPointBuyTotal = () => armyPieces.filter( p => p !== 6 ).reduce((prev, next) => (Piece.getPiece(next)?.materialValue || 0) + prev, 0 );
-
-    const onDrop = ( e : React.DragEvent, i : number ) => {
-        let piece : number = Number(e.dataTransfer.getData("text"));
-        //We dragged this piece to the target location
-        if ( i !== 4 ) { //We can't replace the king!
-            let newPieces = [
-            ...armyPieces.slice(0, i), piece, ...armyPieces.slice(i+1)
-            ]
-            setArmyPieces( newPieces )
-            setChangesMade(true);
-
-            if (pointBuyRef.current) {
-                pointBuyRef.current.className = "";
-                if (newPieces.filter( p => p !== 6 ).reduce((prev, next) => (Piece.getPiece(next)?.materialValue || 0) + prev, 0 ) > 31) {
-                    setTimeout(() => {
-                            if (pointBuyRef.current) pointBuyRef.current.className = "invalid";
-
-                        }, 0)
-                }
-            }
-        }
-    }
-*/
     const getCardLibrary = () => Object.values(ALL_CARDS).map(
-        ( card, i ) => <div className="libraryCard" draggable onDragStart={e => onDragStart(e, card.id, "lib")} onDragEnd={onDragEnd}>
+        ( card, i ) => <div className={`libraryCard ${getDeckQuantity(card.id) >= 2 ? "disabled" : ""}`} draggable={getDeckQuantity(card.id) < 2} onDragStart={e => onDragStart(e, card.id, "lib")} onDragEnd={onDragEnd}>
             <div>
                 <p>({ card.cost }) { card.cardName }</p>
                 <p>{ card.description }</p>
             </div>
+            {
+                getDeckQuantity(card.id) >= 2 ? <>
+                    <div className="limitReached limitBackground"/>
+                    <div className="limitReached limitText">
+                    Maximum number of copies reached
+                </div></>: null
+            }
         </div>
     )
 
@@ -157,9 +103,14 @@ export default function DecksBuilderPage() {
     const getDeckQuantity = ( cardId: string ) => deckCards.filter(c => c === cardId).length
 
     const saveChanges = () => {
+        let cont = true;
+        if ( deckCards.length !== 15 ) {
+            cont = window.confirm("Your deck has an improper number of cards - you won't be able to play with it. Are you sure you want to continue?")
+        }
+
         let decksJSON = localStorage.getItem(DECK_KEY);
 
-        if (decksJSON) {
+        if (decksJSON && cont) {
             let decks = JSON.parse(decksJSON);
             let newName = prompt("Choose your deck's name", deckName) || deckName;
 
@@ -184,6 +135,7 @@ export default function DecksBuilderPage() {
                 <div className={`cardListBox`}>
                     <h2 className="cardListingTitle">Decklist</h2>
                     {   getCardListing()    }
+                    <div className="counter">{deckCards.length}/15</div>
                     {
                         cardDragging !== "lib" ? null :
                             <div className="libDragReceiverOuter"

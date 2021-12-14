@@ -7,9 +7,10 @@ import NiceButton from "../../components/NiceButton/NiceButton";
 import { v4 as generateUUID } from "uuid";
 import {GameInfo} from "../../types";
 import {randomFromList} from "../../helpers/Utils";
-import { ARMY_KEY, GAME_KEY } from "../../KEYS";
+import {ARMY_KEY, DECK_KEY, GAME_KEY} from "../../KEYS";
 import Piece from "../../Classes/Piece";
 import { Link } from "react-router-dom";
+import {Deck, FIDEDECK} from "../../Presets/Decks";
 
 export default function PlayPage() {
 
@@ -30,6 +31,23 @@ export default function PlayPage() {
         }
         setArmies(armies);
     }
+    ///
+    /// THE AVAILABLE DECKS
+    ///
+    const [ decks, setDecks ] = useState<Deck[]>([]);
+
+    const getDecks = () => {
+        //Loading the army from local storage
+        let decksJSON = localStorage.getItem( DECK_KEY );
+        let decks = [] as Deck[];
+        decks.push( FIDEDECK );
+        if (decksJSON) {
+            let parsedDecks = JSON.parse(decksJSON) as unknown as { [key:string]: Deck };
+            //Pushing the armies to an array, if any are found!
+            decks.push( ...Object.values(parsedDecks) );
+        }
+        setDecks(decks);
+    }
 
     ///
     /// CURRENTLY EXISTING GAMES
@@ -49,6 +67,7 @@ export default function PlayPage() {
 
     useLayoutEffect(() => {
         getArmies();
+        getDecks();
         getGames();
     }, [] )
 
@@ -60,6 +79,9 @@ export default function PlayPage() {
     const [ army, setArmy ] = useState<number>(0);
     const [ opponentArmy, setOpponentArmy ] = useState<number>(0);
 
+    const [ deck, setDeck ] = useState<number>(0);
+    const [ opponentDeck, setOpponentDeck ] = useState<number>(0);
+
     ///
     /// LOADING INTO GAME
     ///
@@ -69,13 +91,17 @@ export default function PlayPage() {
         let _colour = colour === "RANDOM" ? randomFromList([-1, 1]) : ["BLACK", "", "WHITE"].indexOf(colour) - 1;
         let _army = army === -1 ? randomFromList(armies) : armies[army];
         let _opponentArmy = opponentArmy === -1 ? randomFromList(armies) : armies[opponentArmy];
+        let _deck = deck === -1 ? randomFromList(decks) : decks[deck];
+        let _opponentDeck = opponentDeck === -1 ? randomFromList(decks) : decks[opponentDeck];
 
         const gameInfo = { // Game Info
             uuid,
             opponent,
             colour: _colour,
             army: JSON.stringify(_army),
-            opponentArmy: JSON.stringify(_opponentArmy)
+            opponentArmy: JSON.stringify(_opponentArmy),
+            deck: JSON.stringify(_deck),
+            opponentDeck: JSON.stringify(_opponentDeck)
         } as GameInfo
 
         const gamesData = localStorage.getItem(GAME_KEY) || "{}"; //Get existing game information
@@ -136,7 +162,7 @@ export default function PlayPage() {
             {
                 armies.map(
                     ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={army===i} onPress={()=>setArmy(i)}
-                                               disabled={getPointBuyTotal(a.pieces) > 31} />
+                                               disabled={getPointBuyTotal(a.pieces) > 31} toolTip={ARMY_TIP} />
                 )
             }
             <SelectionItem item="RANDOM" selected={army===-1} onPress={()=>setArmy(-1)}/>
@@ -145,18 +171,30 @@ export default function PlayPage() {
             {
                 armies.map(
                     ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={opponentArmy===i} onPress={()=>setOpponentArmy(i)}
-                                               disabled={getPointBuyTotal(a.pieces) > 31} />
+                                               disabled={getPointBuyTotal(a.pieces) > 31} toolTip={ARMY_TIP} />
                 )
             }
             <SelectionItem item="RANDOM" selected={opponentArmy===-1} onPress={()=>setOpponentArmy(-1)}/>
 
             
             <h3>Which deck do you want to use?</h3>
-            <SelectionItem item="COMING SOON" selected={true} onPress={()=>{}}/>
+            {
+                decks.map(
+                    ( d, i ) => <SelectionItem item={d.name.toUpperCase()} selected={deck===i} onPress={()=>setDeck(i)}
+                                               disabled={ d.cards.length !== 15 } toolTip={DECK_TIP} />
+                )
+            }
+            <SelectionItem item="RANDOM" selected={deck===-1} onPress={()=>setDeck(-1)}/>
 
-            
+
             <h3>Which deck do you want your opponent to use?</h3>
-            <SelectionItem item="COMING SOON" selected={true} onPress={()=>{}}/>
+            {
+                decks.map(
+                    ( d, i ) => <SelectionItem item={d.name.toUpperCase()} selected={opponentDeck===i} onPress={()=>setOpponentDeck(i)}
+                                               disabled={ d.cards.length !== 15 } toolTip={DECK_TIP} />
+                )
+            }
+            <SelectionItem item="RANDOM" selected={opponentDeck===-1} onPress={()=>setOpponentDeck(-1)}/>
 
             <div className="centred">
 
@@ -170,17 +208,21 @@ export default function PlayPage() {
 
 }
 
+const ARMY_TIP = "Army too strong - edit it to play with it.";
+const DECK_TIP = "Your deck has the incorrect number of cards - edit it to play with it."
+
 interface SelectionItemProps<T> {
     selected: boolean,
     item: T
     onPress: ( item : T ) => void,
     itemToString?: ( item : T ) => String,
-    disabled?: boolean
+    disabled?: boolean,
+    toolTip?: string
 }
 
-export function SelectionItem<T>({ selected, item, onPress, itemToString = item => item as unknown as string, disabled = false }: SelectionItemProps<T>) {
+export function SelectionItem<T>({ selected, item, onPress, itemToString = item => item as unknown as string, toolTip, disabled = false }: SelectionItemProps<T>) {
 
-    return <div title={disabled ? "Army too strong - edit it to play with it." : ""} className={`selectionItem ${ selected ? "selected" : "" } ${ disabled ? "disabled" : "" }`}
+    return <div title={disabled ? toolTip : ""} className={`selectionItem ${ selected ? "selected" : "" } ${ disabled ? "disabled" : "" }`}
         onClick={ disabled ? () => {} : () => onPress(item) }
     >
         { itemToString(item) }

@@ -27,6 +27,8 @@ export interface GameInfo {
     uuid: string,
     opponent: "LOCAL" | "COMP",
     army: string,
-    opponentArmy: string
+    opponentArmy: string,
+    deck: string,
+    opponentDeck: string,
     colour: 1 | -1
 }

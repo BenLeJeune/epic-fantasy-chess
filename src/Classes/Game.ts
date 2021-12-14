@@ -8,6 +8,8 @@ import Rook from "../Pieces/FIDE/Rook";
 import Card from "../Cards/Card";
 import ALL_CARDS from "../Cards/Cards";
 import Expendable_Card from "../Cards/FIDE/Expendable_Card";
+import {Deck, FIDEDECK} from "../Presets/Decks";
+import {randomFromList} from "../helpers/Utils";
 
 export default class Game {
 
@@ -16,14 +18,19 @@ export default class Game {
     private currentTurn : number; //1 for white, -1 for black
 
     private moves : ( ActualMove | CardMove )[]
+    private gameLength : number;
 
     private pieceIndexes : number[]; //Indexes where there are pieces
 
     ///
-    /// PLAYER HANDS
+    /// PLAYER DECKS & HANDS
     ///
     private readonly whiteHand : Card[];
     private readonly blackHand : Card[];
+    private readonly whiteDeck : Deck;
+    private readonly blackDeck : Deck;
+    private readonly whiteCurrentDeck : Card[];
+    private readonly blackCurrentDeck : Card[];
 
 
     public UnMove = () => {
@@ -92,7 +99,10 @@ export default class Game {
                 default:
                     break;
             }
-            if ( !move.additional.isCardMove ) this.currentTurn = -this.currentTurn; //THE NEXT PLAYER'S TURN
+            if ( !move.additional.isCardMove ) {
+                if (this.currentTurn > 0) this.gameLength-- //If undoing a white move, reduce turn number
+                this.currentTurn = -this.currentTurn; //THE NEXT PLAYER'S TURN
+            }
             else {
                 //IF WE JUST UN-MADE A CARD MOVE
                 //Repeat
@@ -118,6 +128,7 @@ export default class Game {
             //If the card we just un-did wasn't fast, then we change back the turn.
             let card = ALL_CARDS[ move.cardName ];
             if ( card && !card.fast ) {
+                if (this.currentTurn > 0) this.gameLength--; //If un-making a white move, reduce the game length counter
                 this.currentTurn = -this.currentTurn;
             }
         }
@@ -204,7 +215,10 @@ export default class Game {
         //Updater piece indexes
         this.pieceIndexes[ this.pieceIndexes.indexOf( from ) ] = to
 
-        if ( !additional.isCardMove ) this.currentTurn = -this.currentTurn;
+        if ( !additional.isCardMove ) {
+            if (this.currentTurn < 0) this.gameLength++ //If made a black move, incrementing game length (turn number)
+            this.currentTurn = -this.currentTurn;
+        }
 
     }
 
@@ -239,16 +253,41 @@ export default class Game {
         //Now we create the card move
 
         //Now, we change the current turn - IF the card was fast.
-        if ( !card.fast ) this.currentTurn = -this.currentTurn;
+        if ( !card.fast ) {
+            if (this.currentTurn < 0) this.gameLength++;
+            this.currentTurn = -this.currentTurn;
+        }
 
     }
 
+    ///
+    /// DRAWING CARDS
+    ///
+    public DrawCard = ( colour: number, quantity: number = 1 ) => {
+        if ( colour > 0 ) {
+            //Drawn for white
+            for (let i = 0; i < quantity; i++) {
+                let drawn = Number.parseInt(randomFromList( Object.keys(this.whiteCurrentDeck) ));
+                this.whiteHand.push( this.whiteCurrentDeck[drawn] );
+                this.whiteCurrentDeck.filter((c, i) => i !== drawn);
+            }
+        }
+        else {
+            //Drawn for black
+            for (let i = 0; i < quantity; i++) {
+                let drawn = Number.parseInt(randomFromList( Object.keys(this.blackCurrentDeck) ));
+                this.blackHand.push( this.blackCurrentDeck[drawn] );
+                this.blackCurrentDeck.filter((c, i) => i !== drawn);
+            }
+        }
+    }
 
 
-    constructor( _board : number[] = generateFIDEBoard(), _history : ActualMove[] = [] ) {
+    constructor( _board : number[] = generateFIDEBoard(), _history : ActualMove[] = [], _whiteDeck: Deck = FIDEDECK, _blackDeck: Deck = FIDEDECK  ) {
         this.board = [..._board]
         this.moves = _history;
         this.currentTurn = 1;
+        this.gameLength = 1;
 
         let _pieceIndexes = [] as number[];
         [ ..._board ].forEach((piece, i) => {
@@ -256,8 +295,16 @@ export default class Game {
         })
         this.pieceIndexes = _pieceIndexes;
 
-        this.whiteHand = Object.values(ALL_CARDS);
-        this.blackHand = Object.values(ALL_CARDS);
+        this.whiteHand = [];
+        this.blackHand = [];
+        this.whiteDeck = _whiteDeck;
+        this.blackDeck = _blackDeck;
+        this.whiteCurrentDeck = this.whiteDeck.cards.map(c => ALL_CARDS[c]);
+        this.blackCurrentDeck = this.blackDeck.cards.map(c => ALL_CARDS[c]);
+
+        //DRAWING THE INITIAL CARDS
+        this.DrawCard(1, 2); //Draw 2 cards for white
+        this.DrawCard(-1, 3); //Draw 3 cards for black
 
         // FOR DEVELOPMENT PURPOSES
         if (global.window) ( global.window as any ).updateBoard = ( update:(board:number[])=>number[] ) => update(this.board).map((p, i) => this.board[i] = p);

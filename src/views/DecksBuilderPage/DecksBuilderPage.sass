@@ -99,9 +99,30 @@ div#DecksBuilderPage
                     border-radius: .25rem
                     padding: .5rem
                     transition: transform 0.25s ease-out, background-color 0.5s ease
+                    position: relative
                     &:hover
                         background-color: colours.$offLightBlue
                         transform: translateY(-5%)
+                    &.disabled
+                        cursor: not-allowed
+                        &:hover
+                            background-color: colours.$lightBlue
+                            transform: none
+                    div.limitReached
+                        position: absolute
+                        top: 0
+                        left: 0
+                        width: 100%
+                        height: 100%
+                        display: flex
+                        align-items: center
+                        justify-content: center
+                        &.limitBackground
+                            background-color: colours.$lightBlue
+                            opacity: 0.5
+                        &.limitText
+                            text-align: center
+                            user-select: none
                 div.listDragReceiver
                     background-color: colours.$mediumBlue
                     position: absolute

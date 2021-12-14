@@ -26,6 +26,7 @@ import Expendable_Card from "./Cards/FIDE/Expendable_Card";
 import CardMove from './Classes/CardMove';
 import { ActualMoves } from './helpers/MoveFilter';
 import Card from "./Cards/Card";
+import {Deck, FIDEDECK} from "./Presets/Decks";
 
 
 const CHECKMATE = "via Checkmate",
@@ -40,22 +41,26 @@ function App() {
   /// GAME START DATA
   ///
   const { uuid } = useParams<{ uuid : string }>();
-  const [{ colour : playerColour, opponent, army, opponentArmy } ] = useState(() => {
+  const [{ colour : playerColour, opponent, army, opponentArmy, deck, opponentDeck } ] = useState(() => {
     const rawGamesData = localStorage.getItem(GAME_KEY) || "{}";
     const parsedGamesData = JSON.parse(rawGamesData) as { [uuid : string]: GameInfo };
     const thisGame = parsedGamesData[uuid];
     try {
       thisGame.army = JSON.parse(thisGame.army);
       thisGame.opponentArmy = JSON.parse(thisGame.opponentArmy);
+      thisGame.deck = JSON.parse(thisGame.deck);
+      thisGame.opponentDeck = JSON.parse(thisGame.opponentDeck);
     }
     catch (e) {
       console.log(e)
     }
-    return thisGame as GameInfo & { army : Army, opponentArmy : Army } || {
+    return thisGame as GameInfo & { army : Army, opponentArmy : Army, deck: Deck, opponentDeck: Deck } || {
       colour: 1,
       opponent: uuid === "fiesta" ? "COMP" : "LOCAL",
       army: FIDEARMY,
       opponentArmy: FIDEARMY,
+      deck: FIDEDECK,
+      opponentDecl: FIDEARMY
     }
   })
 
@@ -65,8 +70,8 @@ function App() {
   // const [ opponent ] = useState(false); //THIS DISABLES THE AI AND LETS YOU MOVE BOTH COLOUR PIECES
 
 
-  const game = useRef( new Game( playerColour > 0 ? generateBoardFromArmies( army, opponentArmy ) : generateBoardFromArmies( opponentArmy, army ) ) );
-
+  const game = useRef( playerColour > 0 ? new Game(generateBoardFromArmies(army, opponentArmy), undefined, deck, opponentDeck) :
+                        new Game(generateBoardFromArmies(opponentArmy, army), undefined, opponentDeck, deck));
   /// THE OPPONENT
 
   const worker = useRef<any>()
