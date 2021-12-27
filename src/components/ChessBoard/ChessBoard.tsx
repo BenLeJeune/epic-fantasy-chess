@@ -1,4 +1,4 @@
-import React, {CSSProperties, useEffect, useLayoutEffect, useState} from 'react';
+import React, {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import ChessSquare from "../ChessSquare/ChessSquare";
 import "./ChessBoard.css"
 import ChessPiece from "../ChessPiece/ChessPiece";
@@ -18,6 +18,7 @@ import CardMove from '../../Classes/CardMove';
 import {ActualMoves} from "../../helpers/MoveFilter";
 import Card from "../../Cards/Card";
 import ALL_CARDS from "../../Cards/Cards";
+import InformationBubble from "../InformationBubble/InformationBubble";
 
 interface Props {
     board : number[], //The game board
@@ -369,8 +370,16 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
 
     }, [ pieceInfoId, pieceInfoPos ]);
 
+
+    ///
+    /// CHAOS VALUE
+    ///
+
+    const getChaosValue = () => blackCaptured.reduce((prev, current) => prev + (Piece.getPiece(current)?.materialValue || 0), 0) +
+        whiteCaptured.reduce((prev, current) => prev + (Piece.getPiece(current)?.materialValue || 0), 0)
+
     return <>
-        <InfoBar captures={ blackCaptured } evaluation={ -materialEvaluation( board ) }/>
+        <InfoBar captures={ rotated? whiteCaptured : blackCaptured } evaluation={ -materialEvaluation( board ) * (rotated ? -1 : 1) }/>
         <div id="ChessBoardWrapper">
             <div id="ChessBoardOuter">
 
@@ -404,8 +413,18 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                 }
 
             </div>
+
+            <div id="ChaosValue" title="Chaos Value - the material value of all pieces captured. Must meet a threshold before cards can be played.">
+                <div className="val" id="ChaosValueScore">
+                    { getChaosValue() }
+                </div>
+                <div className="sub">
+                    CHAOS VALUE
+                </div>
+            </div>
+
         </div>
-        <InfoBar captures={ whiteCaptured } evaluation={ materialEvaluation( board ) }/>
+        <InfoBar captures={ rotated? blackCaptured : whiteCaptured } evaluation={ materialEvaluation( board ) * (rotated ? -1 : 1) }/>
 
         { pieceInfoBubble() }
 

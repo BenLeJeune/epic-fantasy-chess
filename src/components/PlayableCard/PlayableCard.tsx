@@ -49,7 +49,7 @@ export default function PlayableCard(props: props) {
                 draggable={props.draggable}
                 onDragStart={ e => onDragStart(e) }
                 onDragEnd={ () => onDragEnd() }
-                className="playableCardContainer">
+                className={`playableCardContainer ${props.draggable ? "drag" : "noDrag"}`}>
         <div ref={cardRef} className="playableCard">
             <div className="cardChaosScore">
                 { props.card.cost }

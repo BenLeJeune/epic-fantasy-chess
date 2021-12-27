@@ -1,5 +1,7 @@
 import ActualMove from "../Classes/Move";
 import Game from "../Classes/Game";
+import { v4 as generateUUID } from "uuid";
+import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 
 export default abstract class Card {
 
@@ -32,5 +34,13 @@ export default abstract class Card {
 
     // Resolves the playing of the card
     public abstract playCard : ( targets: number[], game: Game ) => void;
+
+    //
+    /// TRACKING THE CARD
+    ///
+    private uuid: string = generateUUID();
+    public getUUID = () => this.uuid;
+    public getUUIDWithInfo = () => `${this.id}::${this.uuid}`
+    public regenerateUUID = () => this.uuid = generateUUID()
 
 }

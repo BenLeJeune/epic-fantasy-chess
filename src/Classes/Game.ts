@@ -25,8 +25,8 @@ export default class Game {
     ///
     /// PLAYER DECKS & HANDS
     ///
-    private readonly whiteHand : Card[];
-    private readonly blackHand : Card[];
+    private whiteHand : Card[];
+    private blackHand : Card[];
     private readonly whiteDeck : Deck;
     private readonly blackDeck : Deck;
     private readonly whiteCurrentDeck : Card[];
@@ -218,16 +218,24 @@ export default class Game {
         if ( !additional.isCardMove ) {
             if (this.currentTurn < 0) this.gameLength++ //If made a black move, incrementing game length (turn number)
             this.currentTurn = -this.currentTurn;
+            this.checkForCardDraw()
         }
 
+    }
+
+    private checkForCardDraw = () => {
+        if (this.gameLength % 3 === 0 && this.currentTurn > 0) {
+            this.DrawCard(1, 1);
+            this.DrawCard(-1, 1);
+            console.log("DRAWING CARDS!");
+        }
     }
 
     ///
     /// PLAYING A CARD
     ///
-    public PlayCard = ( cardId: string, targets: number[] ) => {
+    public PlayCard = ( card: Card, targets: number[] ) => {
 
-        let card = ALL_CARDS[cardId] as Card | undefined;
         if ( !card ) {
             console.log("Tried to play a card that does not exist!");
             return;
@@ -245,17 +253,31 @@ export default class Game {
         // Save the board state
         let boardBefore = [ ...this.board ];
 
+        //Now we create the card move
         let cardMove = new CardMove( card.id, boardBefore );
         this.moves.push( cardMove );
 
         card.playCard( targets, this );
 
-        //Now we create the card move
+        ///
+        /// NOW, WE REMOVE THE CARD FROM THE PLAYER'S HAND
+        ///
+
+        if (this.currentTurn > 0) {
+            let removalIndex = this.whiteHand.map(c => c.getUUID()).indexOf(card.getUUID());
+            this.whiteHand = this.whiteHand.filter((c, i) => i !== removalIndex);
+        }
+        else {
+            let removalIndex = this.blackHand.map(c => c.getUUID()).indexOf(card.getUUID());
+            this.blackHand = this.blackHand.filter((c, i) => i !== removalIndex);
+        }
+
 
         //Now, we change the current turn - IF the card was fast.
         if ( !card.fast ) {
             if (this.currentTurn < 0) this.gameLength++;
             this.currentTurn = -this.currentTurn;
+            this.checkForCardDraw();
         }
 
     }
@@ -299,8 +321,16 @@ export default class Game {
         this.blackHand = [];
         this.whiteDeck = _whiteDeck;
         this.blackDeck = _blackDeck;
-        this.whiteCurrentDeck = this.whiteDeck.cards.map(c => ALL_CARDS[c]);
-        this.blackCurrentDeck = this.blackDeck.cards.map(c => ALL_CARDS[c]);
+        this.whiteCurrentDeck = this.whiteDeck.cards.map(c => {
+            let _c = Object.assign({}, ALL_CARDS[c]);
+            _c.regenerateUUID();
+            return _c;
+        });
+        this.blackCurrentDeck = this.blackDeck.cards.map(c => {
+            let _c = Object.assign({}, ALL_CARDS[c]);
+            _c.regenerateUUID();
+            return _c;
+        });
 
         //DRAWING THE INITIAL CARDS
         this.DrawCard(1, 2); //Draw 2 cards for white

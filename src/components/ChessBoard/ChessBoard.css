@@ -86,6 +86,30 @@ div#PieceInfoBubble div.exit:hover {
   transform-origin: center;
 }
 
+@keyframes chaosValAnim {
+  0% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+div#ChaosValue {
+  color: #464B66;
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 100%;
+  margin-right: 1rem;
+}
+div#ChaosValue.animated .val {
+  animation: chaosValAnim forwards 1s ease-out;
+}
+div#ChaosValue .val {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
 div.allowRotationCheckbox {
   display: flex;
   align-items: center;

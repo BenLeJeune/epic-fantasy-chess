@@ -78,6 +78,26 @@ div#PieceInfoBubble
       color: colours.$offLightBlue
       transform-origin: center
 
+@keyframes chaosValAnim
+  0%
+    transform: scale(1.2)
+  100%
+    transform: scale(1.0)
+
+div#ChaosValue
+  color: colours.$offLightBlue
+  text-align: right
+  position: absolute
+  bottom: 0
+  right: 100%
+  margin-right: 1rem
+  &.animated
+    .val
+      animation: chaosValAnim forwards 1s ease-out
+  .val
+    font-size: 2rem
+    font-weight: bold
+
 div.allowRotationCheckbox
   display: flex
   align-items: center

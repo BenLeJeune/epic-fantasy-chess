@@ -358,8 +358,8 @@ function App() {
     setCardTargetsRemaining(targetsRemaining);
     setCardTargets(targets);
     if ( targetsRemaining === 0 ) {
-      endTargeting(targetsRemaining);
       playCard(card, targets);
+      endTargeting(targetsRemaining);
     }
   }
 
@@ -372,8 +372,13 @@ function App() {
   }
 
   const playCard = ( card: string, targets: number []) => {
+
+    //Gets the card from the hand
+    let playedCard = currentTurn > 0 ? game.current.getWhiteHand()[cardTargetingIndex||0] : game.current.getBlackHand()[cardTargetingIndex||0];
+
+
     //Play the card
-    game.current.PlayCard( card, targets );
+    game.current.PlayCard( playedCard, targets );
 
     setMoves(game.current.getMoves());
     setBoard(game.current.getBoard());
@@ -398,13 +403,23 @@ function App() {
   }
 
   ///
+  /// CHAOS VALUE
+  ///
+  const getChaosValue = () => blackCaptured.reduce((prev, current) => prev + (Piece.getPiece(current)?.materialValue || 0), 0) +
+      whiteCaptured.reduce((prev, current) => prev + (Piece.getPiece(current)?.materialValue || 0), 0);
+
+  ///
   /// HAND DISPLAY
   ///
   const getHandCards = () => {
     const handSize = currentTurn > 0 ? game.current.getWhiteHand().length : game.current.getBlackHand().length;
-    const cardMapping = ( card : Card, i : number ) => <PlayableCard draggable={!moveLockout} card={card} dragStartCallback={() => dragStartCallback(i)} dragEndCallback={onDragEnd} handPosition={i + 1} handSize={handSize}/>
+    const cardMapping = ( card : Card, i : number ) =>
+        <PlayableCard draggable={!moveLockout && getChaosValue() >= card.cost} card={card}
+                      dragStartCallback={() => dragStartCallback(i)}
+                      dragEndCallback={onDragEnd} handPosition={i + 1} handSize={handSize}/>
     return currentTurn > 0 ? game.current.getWhiteHand().map(cardMapping) : game.current.getBlackHand().map(cardMapping)
   }
+
 
 
   return <div className="app">

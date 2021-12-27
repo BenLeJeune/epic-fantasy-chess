@@ -18,6 +18,10 @@ div#PlayerHand
       transform: translateY(35%) translateX(-50%)
 
   div.playableCardContainer
+    &.noDrag div.playableCard
+      cursor: not-allowed
+      opacity: 0.9
+
     z-index: 5
     &:hover
       z-index: 20

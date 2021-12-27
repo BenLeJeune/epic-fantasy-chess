@@ -19,6 +19,10 @@ div#PlayerHand:hover.forceLower {
 div#PlayerHand div.playableCardContainer {
   z-index: 5;
 }
+div#PlayerHand div.playableCardContainer.noDrag div.playableCard {
+  cursor: not-allowed;
+  opacity: 0.9;
+}
 div#PlayerHand div.playableCardContainer:hover {
   z-index: 20;
 }
