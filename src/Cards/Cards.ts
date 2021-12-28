@@ -8,6 +8,14 @@ import Demote_Card from "./FIDE/Demote_Card";
 import Maneuver_Card from "./FIDE/Maneuver_Card";
 import Flee_Card from "./FIDE/Flee_Card";
 import Promotion_Card from "./FIDE/Promotion_Card";
+import BattlePlan_Card from "./FIDE/BattlePlan_Card";
+import Adjust_Card from "./CRUSADERS/Adjust_Card";
+import Inquisition_Card from "./CRUSADERS/Inquisition_Card";
+import Anoint_Card from "./CRUSADERS/Anoint_Card";
+import Deception_Card from "./CRUSADERS/Deception_Card";
+import Clergy_Card from "./CRUSADERS/Clergy_Card";
+import Convert_Card from "./CRUSADERS/Convert_Card";
+import Envoy_Card from "./CRUSADERS/Envoy_Card";
 
 const ALL_CARDS : { [ cardId : string ] : Card } = {
     [Advance_Card.id]: new Advance_Card(),
@@ -16,10 +24,27 @@ const ALL_CARDS : { [ cardId : string ] : Card } = {
     [Reposition_Card.id]: new Reposition_Card(),
     [Mount_Card.id]: new Mount_Card(),
     [Demote_Card.id]: new Demote_Card(),
+    [BattlePlan_Card.id]: new BattlePlan_Card(),
     [Maneuver_Card.id]: new Maneuver_Card(),
     [Flee_Card.id]: new Flee_Card(),
     [Promotion_Card.id]: new Promotion_Card(),
-
+    [Adjust_Card.id]: new Adjust_Card(),
+    [Inquisition_Card.id]: new Inquisition_Card(),
+    [Envoy_Card.id]: new Envoy_Card(),
+    [Anoint_Card.id]: new Anoint_Card(),
+    [Deception_Card.id]: new Deception_Card(),
+    [Clergy_Card.id]: new Clergy_Card(),
+    [Convert_Card.id]: new Convert_Card()
 };
+
+export const TEST_HAND = [
+    new Adjust_Card(),
+    new Inquisition_Card(),
+    new Envoy_Card(),
+    new Anoint_Card(),
+    new Deception_Card(),
+    new Clergy_Card(),
+    new Convert_Card()
+]
 
 export default ALL_CARDS;

@@ -21,7 +21,7 @@ export interface legalMove {
 
 export type SpecialMove =  "EP" | "PROMOTION" | "CASTLE" | "DOUBLE"
 
-export type tag = "Major" | "Minor" | "Castler" | "Colour-bound" | "Knight" | "Bishop" | "Rook" | "Queen" | "King" | "Pawn" | "FIDE" | "Crusader"
+export type tag = "Major" | "Minor" | "Castler" | "Colour-bound" | "Knight" | "Bishop" | "Rook" | "Queen" | "King" | "Pawn" | "FIDE" | "Crusader" | "Token"
 
 export interface GameInfo {
     uuid: string,

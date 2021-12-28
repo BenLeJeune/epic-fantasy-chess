@@ -6,7 +6,7 @@ import Piece from "./Piece";
 import Pawn from "../Pieces/FIDE/Pawn";
 import Rook from "../Pieces/FIDE/Rook";
 import Card from "../Cards/Card";
-import ALL_CARDS from "../Cards/Cards";
+import ALL_CARDS, {TEST_HAND} from "../Cards/Cards";
 import Expendable_Card from "../Cards/FIDE/Expendable_Card";
 import {Deck, FIDEDECK} from "../Presets/Decks";
 import {randomFromList} from "../helpers/Utils";
@@ -34,7 +34,7 @@ export default class Game {
 
 
     public UnMove = () => {
-        
+
         //Let's roll back the most recent move!
         let move = this.moves.pop();
 
@@ -44,9 +44,9 @@ export default class Game {
         if ( move instanceof ActualMove ) {
             this.moves = [ ...this.moves ]
             if ( move === undefined ) return;
-    
+
             let colour = move.moving > 0 ? 1 : -1;
-    
+
             //Let's replace any piece that was captured
             if ( move.special !== "EP" ) {
                 this.board[move.to] = move.captured;
@@ -56,7 +56,7 @@ export default class Game {
             this.board[ move.from ] = move.moving;
             //Update piece indexes
             this.pieceIndexes[ this.pieceIndexes.indexOf( move.to ) ] = move.from;
-    
+
             switch ( move.special ) {
                 case "EP":
                     this.board[ move.to ] = Piece.None;
@@ -69,7 +69,7 @@ export default class Game {
                 case "CASTLE":
                     //CASTLING RULES
                     //We've already moved the king. Now, we want to move the rook.
-    
+
                     //If we were castling Queenside
                     if ( move.from > move.to ) {
                         let rookDistance = 0;
@@ -93,7 +93,7 @@ export default class Game {
                         this.board[ move.to - 1 ] = Piece.None;
                         this.pieceIndexes[ this.pieceIndexes.indexOf( move.to - 1 ) ] = rookSquare;
                     }
-    
+
                     break;
                 case undefined:
                 default:
@@ -336,8 +336,20 @@ export default class Game {
         this.DrawCard(1, 2); //Draw 2 cards for white
         this.DrawCard(-1, 3); //Draw 3 cards for black
 
+        this.whiteHand = TEST_HAND;
+        this.blackHand = TEST_HAND;
+
         // FOR DEVELOPMENT PURPOSES
-        if (global.window) ( global.window as any ).updateBoard = ( update:(board:number[])=>number[] ) => update(this.board).map((p, i) => this.board[i] = p);
+        if (global.window) {
+            (global.window as any).updateBoard = (update: (board: number[]) => number[]) => update(this.board).map((p, i) => this.board[i] = p);
+            (global.window as any).ADD_CARD_TO_HAND = ( id: string ) => {
+                if (ALL_CARDS[id]) {
+                    if (this.currentTurn > 0) this.whiteHand.push( ALL_CARDS[id] )
+                    else this.blackHand.push( ALL_CARDS[id] );
+                }
+            }
+        }
+
 
     }
 
