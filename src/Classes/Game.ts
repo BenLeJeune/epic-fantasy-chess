@@ -10,6 +10,7 @@ import ALL_CARDS, {TEST_HAND} from "../Cards/Cards";
 import Expendable_Card from "../Cards/FIDE/Expendable_Card";
 import {Deck, FIDEDECK} from "../Presets/Decks";
 import {randomFromList} from "../helpers/Utils";
+import OngoingEffect from "./OngoingEffect";
 
 export default class Game {
 
@@ -31,6 +32,11 @@ export default class Game {
     private readonly blackDeck : Deck;
     private readonly whiteCurrentDeck : Card[];
     private readonly blackCurrentDeck : Card[];
+
+    ///
+    /// ONGOING EFFECTS
+    ///
+    private ongoingEffects : OngoingEffect[]
 
 
     public UnMove = () => {
@@ -56,6 +62,11 @@ export default class Game {
             this.board[ move.from ] = move.moving;
             //Update piece indexes
             this.pieceIndexes[ this.pieceIndexes.indexOf( move.to ) ] = move.from;
+
+            //Any effects affecting the piece move with it
+            this.getCurrentOngoingEffects()
+                .filter(effect => effect.getSquare() === (move as ActualMove).to && effect.getTarget() === "piece")
+                .forEach(effect => effect.updateSquare((move as ActualMove).from))
 
             switch ( move.special ) {
                 case "EP":
@@ -100,8 +111,7 @@ export default class Game {
                     break;
             }
             if ( !move.additional.isCardMove ) {
-                if (this.currentTurn > 0) this.gameLength-- //If undoing a white move, reduce turn number
-                this.currentTurn = -this.currentTurn; //THE NEXT PLAYER'S TURN
+                this.undoEndOfTurnCheck();
             }
             else {
                 //IF WE JUST UN-MADE A CARD MOVE
@@ -128,8 +138,7 @@ export default class Game {
             //If the card we just un-did wasn't fast, then we change back the turn.
             let card = ALL_CARDS[ move.cardName ];
             if ( card && !card.fast ) {
-                if (this.currentTurn > 0) this.gameLength--; //If un-making a white move, reduce the game length counter
-                this.currentTurn = -this.currentTurn;
+                this.undoEndOfTurnCheck();
             }
         }
 
@@ -212,14 +221,33 @@ export default class Game {
         this.board[to] = this.board[from];
         if (to !== from) this.board[from] = Piece.None;
 
+        //Any effects affecting the piece move with it
+        this.getCurrentOngoingEffects().filter(effect => effect.getSquare() === from && effect.getTarget() === "piece").forEach(effect => effect.updateSquare(to))
+
         //Updater piece indexes
         this.pieceIndexes[ this.pieceIndexes.indexOf( from ) ] = to
 
         if ( !additional.isCardMove ) {
-            if (this.currentTurn < 0) this.gameLength++ //If made a black move, incrementing game length (turn number)
-            this.currentTurn = -this.currentTurn;
-            this.checkForCardDraw()
+            this.endOfTurnCheck();
         }
+
+    }
+
+    private endOfTurnCheck = () => {
+        if (this.currentTurn < 0) {
+            this.gameLength++ //If made a black move, incrementing game length (turn number)
+        }
+        this.currentTurn = -this.currentTurn;
+        this.checkForCardDraw()
+        this.ongoingEffects.forEach( e => e.tickDownDuration() )
+    }
+
+    private undoEndOfTurnCheck = () => {
+        if (this.currentTurn > 0) {
+            this.gameLength--; //If un-making a white move, reduce the game length counter
+        }
+        this.currentTurn = -this.currentTurn;
+        this.ongoingEffects.forEach( e => e.unTickDuration() )
 
     }
 
@@ -275,9 +303,7 @@ export default class Game {
 
         //Now, we change the current turn - IF the card was fast.
         if ( !card.fast ) {
-            if (this.currentTurn < 0) this.gameLength++;
-            this.currentTurn = -this.currentTurn;
-            this.checkForCardDraw();
+            this.endOfTurnCheck();
         }
 
     }
@@ -339,6 +365,9 @@ export default class Game {
         this.whiteHand = TEST_HAND;
         this.blackHand = TEST_HAND;
 
+        //ONGOING EFFECTS
+        this.ongoingEffects = [];
+
         // FOR DEVELOPMENT PURPOSES
         if (global.window) {
             (global.window as any).updateBoard = (update: (board: number[]) => number[]) => update(this.board).map((p, i) => this.board[i] = p);
@@ -361,6 +390,10 @@ export default class Game {
     public getWhiteHand = () => this.whiteHand;
     public getBlackHand = () => this.blackHand;
     public getCurrentPlayerHand = () => this.currentTurn > 0 ? this.whiteHand : this.blackHand;
+
+    public getOngoingEffects = () => this.ongoingEffects;
+    public getCurrentOngoingEffects = () => this.ongoingEffects.filter(e => e.getDurationRemaining() >= 0);
+    public addOngoingEffect = ( effect: OngoingEffect ) => this.ongoingEffects.push(effect);
 
     public getLastMove = () => this.moves.length > 0 ? this.moves[ this.moves.length - 1 ] : undefined;
 

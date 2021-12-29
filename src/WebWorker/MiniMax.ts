@@ -10,6 +10,7 @@ import Piece from "../Classes/Piece";
 import GamePiece from "../Pieces/GamePiece";
 import ActualMove from "../Classes/Move";
 import { ActualMoves } from "../helpers/MoveFilter";
+import OngoingEffect from "../Classes/OngoingEffect";
 
 ///
 /// MINIMAX ALGORITHM FOR FINDING MOVES
@@ -20,7 +21,7 @@ import { ActualMoves } from "../helpers/MoveFilter";
 // ALPHA represents the MIN score the MAXIMISING player is guaranteed
 // BETA represents the MAX score the MINIMISING player is guaranteed
 
-const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[],e:number,t:number,q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[] ) => {
+const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[],e:number,t:number,q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], effects?: OngoingEffect[] ) => {
 
     ///Another exit point
     ///Returned values are meaningless, won't read them
@@ -63,9 +64,9 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
     let isCheckMate = isCheck( g_board, g_moves_actual, col, undefined, g.getPieceIndexes()) && legalMoves.length === 0; //am I in check?
     let oppoonentLegalCaptures =  Board.getLegalMoves( g_board, g_moves_actual, { colour: -col, mode: "captures" } )
 
-    if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col).length === 0 )) {
+    if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col, effects || []).length === 0 )) {
         //We've reached the end! Return the final evaluation
-        let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col).length === 0
+        let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col, effects || []).length === 0
         let ev = positionalEngineEvaluation( g_board, g_moves_actual, g.getPieceIndexes(), pieces );
         hashSet( g_board, ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
         counter()
@@ -117,7 +118,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
                     temp_quiet = hashedEval[2]
                 }
                 else {
-                    let minmax =  miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces);
+                    let minmax = miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces, effects);
                     ev = minmax[0]
 
                     //Here we can do some special evaluations

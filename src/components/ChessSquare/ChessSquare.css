@@ -31,8 +31,11 @@ div.chessSquare div.highlight {
   position: absolute;
   height: 100%;
   width: 100%;
-  background-color: deepskyblue;
+  background-color: #1ca7cf;
   opacity: 0.5;
+}
+div.chessSquare.border {
+  border: 5px solid #9148d6;
 }
 
 div.chessSquare.moveCircle {

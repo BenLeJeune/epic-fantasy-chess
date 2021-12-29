@@ -120,7 +120,9 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
 
     const getSquares = () => board.map( (piece, pos) => {
         let pMoves = moves.filter(m => m instanceof ActualMove) as ActualMove[];
-        return <ChessSquare position={pos} rotated={rotated} moveCircle={false}
+        let ongoingEffects = game.getCurrentOngoingEffects();
+        let affectedSquares = ongoingEffects.reduce((prev, e) => prev.indexOf(e.getSquare()) === -1 ? [...prev, e.getSquare()] : prev,[] as number[])
+        return <ChessSquare position={pos} rotated={rotated} moveCircle={false} border={ affectedSquares.indexOf(pos) !== -1 }
                             highlight={ pMoves.length >= 1 && ( pos === pMoves[pMoves.length - 1].to || pos === pMoves[pMoves.length - 1].from )  } />
     })
 
@@ -177,7 +179,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
         if ( cardTargetingIndex === null ) return Piece.getPiece(targeting[0]) ?
             filterLegalMoves(
                 (Piece.getPiece(targeting[0]) as GamePiece).getLegalMoves(targeting[1], board, "all", targeting[0] > 0 ? 1 : -1, (moves.filter(m => m instanceof ActualMove) as ActualMove[])),
-                board, (moves.filter(m => m instanceof ActualMove) as ActualMove[]), targeting[0] > 0 ? 1 : -1
+                board, (moves.filter(m => m instanceof ActualMove) as ActualMove[]), targeting[0] > 0 ? 1 : -1, game.getCurrentOngoingEffects()
             )
                 .map(move =>
                     <TargetingSquare
@@ -195,7 +197,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
             let index = cardTargetsRemaining === 0 ? 0 : currentCard.targets - cardTargetsRemaining;
             let currentFunction = currentCard.getValidTargets[ index ];
             currentFunction = currentFunction as typeof currentFunction || currentCard.getValidTargets[0];
-            return currentFunction as unknown ? currentFunction( board, currentTurn, ActualMoves(moves), currentTargets )
+            return currentFunction as unknown ? currentFunction( board, currentTurn, ActualMoves(moves), currentTargets, game.getCurrentOngoingEffects() )
                     .map( target =>
                         <TargetingSquare
                             position={target}
@@ -220,7 +222,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
         if (hoveringPos !== targeting[1] && Piece.getPiece(targeting[0])) squares.push(
             ...filterLegalMoves(
                 (Piece.getPiece(targeting[0]) as GamePiece).getLegalMoves(targeting[1], board, "all", targeting[0] > 0 ? 1 : -1, (moves.filter(m => m instanceof ActualMove) as ActualMove[])),
-                board, (moves.filter(m => m instanceof ActualMove) as ActualMove[]), targeting[0] > 0 ? 1 : -1
+                board, (moves.filter(m => m instanceof ActualMove) as ActualMove[]), targeting[0] > 0 ? 1 : -1, game.getCurrentOngoingEffects()
             ).map(
                 legalMove => <ChessSquare position={legalMove.to} rotated={rotated} moveCircle={true} highlight={false}/>
             )
@@ -324,6 +326,10 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                 </div>
                 <div className="pieceDescBlock notes">
                     { piece.notes }
+                </div>
+                <div className="pieceDescBlock effects">
+                    { game.getCurrentOngoingEffects().filter(e => e.getSquare() === pieceInfoPos).map((e, i) =>
+                        <p>{ e.getToolTip() } { e.getDurationRemaining() } turn{e.getDurationRemaining() === 1 ? "" : "s"} remaining.</p> ) }
                 </div>
                 <div className="pieceDescBlock tags">
                     Tags: { piece.categories.map((category, i) =>

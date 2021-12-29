@@ -157,6 +157,7 @@ function App() {
 
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
+    let gEffects = game.current.getCurrentOngoingEffects();
 
     ///CHECK FOR THREEFOLD REPETITION
     if ( gMoves.length >= 12 ) {
@@ -187,8 +188,8 @@ function App() {
       }
     }
 
-    let moves= Board.getLegalMoves( gBoard, ActualMoves(gMoves), { colour: -col } );
-    let legalMoves = filterLegalMoves( moves, gBoard, ActualMoves(gMoves), -col )
+    let moves = Board.getLegalMoves( gBoard, ActualMoves(gMoves), { colour: -col } );
+    let legalMoves = filterLegalMoves( moves, gBoard, ActualMoves(gMoves), -col, gEffects )
     if ( legalMoves.length === 0 ) {
       ///THERE ARE NO LEGAL MOVES!
       //The game is now over

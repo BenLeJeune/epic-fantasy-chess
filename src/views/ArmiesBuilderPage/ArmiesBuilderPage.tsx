@@ -94,7 +94,7 @@ export default function ArmiesBuilderPage() {
         }
     }
 
-    const getPieceLibrary = () => Piece.PIECES.map(
+    const getPieceLibrary = () => Piece.PIECES.filter( p => Piece.getPiece(p) && Piece.getPiece(p)?.categories.indexOf("Token") === -1 ).map(
         ( piece, i ) => <div className="libraryPiece" onMouseOver={ () => setPiecePreview(piece) }>
             <img src={ Piece.getImage(piece) }
              draggable={ piece !== Piece.King }

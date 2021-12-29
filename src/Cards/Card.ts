@@ -2,6 +2,7 @@ import ActualMove from "../Classes/Move";
 import Game from "../Classes/Game";
 import { v4 as generateUUID } from "uuid";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
+import OngoingEffect from "../Classes/OngoingEffect";
 
 export default abstract class Card {
 
@@ -30,7 +31,7 @@ export default abstract class Card {
     public abstract unMoveType: "boardState" | "move"; // "boardState" means the board state is reverted on unMove. "move" means the card makes a regular move.
 
     // Returns an array of all valid target indexes
-    public abstract getValidTargets : (( board : number[], colour: number, history: ActualMove[], previousTargets?: number[] ) => number[])[]
+    public abstract getValidTargets : (( board : number[], colour: number, history: ActualMove[], previousTargets?: number[], effects?: OngoingEffect[]) => number[])[]
 
     // Resolves the playing of the card
     public abstract playCard : ( targets: number[], game: Game ) => void;

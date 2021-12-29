@@ -5,18 +5,8 @@ div.saveChanges {
   width: calc(100% - 4vh);
   padding: 0.5em;
   background-color: #262836;
-  -webkit-animation: save-change-entrance 0.5s forwards;
-          animation: save-change-entrance 0.5s forwards;
+  animation: save-change-entrance 0.5s forwards;
   border-radius: 0.5em;
-}
-
-@-webkit-keyframes save-change-entrance {
-  0% {
-    transform: translateY(200%);
-  }
-  100% {
-    transform: translateY(0);
-  }
 }
 
 @keyframes save-change-entrance {
@@ -25,14 +15,6 @@ div.saveChanges {
   }
   100% {
     transform: translateY(0);
-  }
-}
-@-webkit-keyframes invalid-pulse {
-  0% {
-    transform: scale(1.25);
-  }
-  100% {
-    transform: scale(1);
   }
 }
 @keyframes invalid-pulse {
@@ -137,10 +119,9 @@ div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.pointBuyCounter {
   color: #464B66;
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.pointBuyCounter .invalid {
-  color: #DF5F53;
+  color: #ff1b36;
   display: inline-block;
-  -webkit-animation: invalid-pulse 0.5s forwards;
-          animation: invalid-pulse 0.5s forwards;
+  animation: invalid-pulse 0.5s forwards;
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding {
   height: 100%;
@@ -182,4 +163,6 @@ div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div.chessBoard div.lowerBoardSquare.dark {
   background-color: #3A4377;
-}/*# sourceMappingURL=DecksBuilderPage.css.map */
+}
+
+/*# sourceMappingURL=ArmiesBuilderPage.css.map */

@@ -1,9 +1,11 @@
+@use "../../modules/colours"
+
 div.targetingSquare
   position: relative
   opacity: 0.5
   &.move
-    background-color: limegreen
+    background-color: colours.$green
   &.capture
-    background-color: crimson
+    background-color: colours.$red
   &:hover
-    opacity: 0.75
+    opacity: 0.8

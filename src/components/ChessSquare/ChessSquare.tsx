@@ -8,9 +8,10 @@ interface props {
     highlight : boolean,
     rotated : boolean,
     moveCircle: boolean
+    border?: boolean
 }
 
-export default function ChessSquare( { position, highlight, rotated, moveCircle = false } : props ) {
+export default function ChessSquare( { position, highlight, rotated, moveCircle = false, border = false } : props ) {
 
     const getCol = () => {
         if ( ( 7 * Piece.getRank(position) + Piece.getFile(position) ) % 2 === 1 ) return "light";
@@ -30,7 +31,7 @@ export default function ChessSquare( { position, highlight, rotated, moveCircle 
     }
 
     return <div style={Piece.getStyle( position, rotated )}
-                className={`chessSquare ${ getCol() } ${ moveCircle ? "moveCircle" : "" }`}
+                className={`chessSquare ${ getCol() } ${ moveCircle ? "moveCircle" : "" } ${ border ? "border" : "" }`}
                 id={ `square-${ Piece.getSquareName(position) }` }
                 key={ `square-${ Piece.getSquareName(position) }` }>
         {

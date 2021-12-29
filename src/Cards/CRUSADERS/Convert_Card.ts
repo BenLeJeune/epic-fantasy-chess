@@ -5,6 +5,7 @@ import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import {filterLegalMoves} from "../../helpers/Checks";
 import GamePiece from "../../Pieces/GamePiece";
+import OngoingEffect from "../../Classes/OngoingEffect";
 
 export default class Convert_Card extends Card {
 
@@ -21,14 +22,14 @@ export default class Convert_Card extends Card {
 
     public readonly unMoveType = "boardState" as "boardState";
 
-    public getValidTargets = [( board: number[], colour:number, history:ActualMove[], previousTargets?:number[] ) => {
+    public getValidTargets = [( board: number[], colour:number, history:ActualMove[], previousTargets?:number[], effects?:OngoingEffect[] ) => {
         let validTargets : number[] = [];
         board.forEach((piece, index) => {
             if (sameColour(piece, colour)) {
                 if (Piece.getPiece(piece)) {
                     filterLegalMoves(
                         (Piece.getPiece(piece) as GamePiece).getLegalMoves(index, board, "captures", colour, history),
-                        board, history, colour
+                        board, history, colour, effects || ([] as OngoingEffect[])
                     ).forEach((capture) => {
                         validTargets.push(capture.to)
                     })

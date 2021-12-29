@@ -10,6 +10,7 @@ import {legalMove} from "../types";
 import {PromotionMove} from "../WebWorker/IncludePromotions";
 import Board from "../Classes/Board";
 import {arraysAreEqual} from "./Utils";
+import OngoingEffect from "../Classes/OngoingEffect";
 
 const materialEvaluation = (board : number[] ) => {
     return board.filter(p => p !== Piece.None).reduce((t, piece) => {
@@ -20,18 +21,18 @@ const materialEvaluation = (board : number[] ) => {
     }, 0);
 }
 
-const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pieceIndexes?: number[], _pieces?: (GamePiece|null)[] ) => {
+const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pieceIndexes?: number[], _pieces?: (GamePiece|null)[], effects?: OngoingEffect[] ) => {
 
 
     let startTime = performance.now();
 
     if ( isCheck( board, history, 1, undefined, pieceIndexes  )){
-        let wMoves =  filterLegalMoves( Board.getLegalMoves( board, history, { colour: 1 }, pieceIndexes ), board, history, 1 );
+        let wMoves =  filterLegalMoves( Board.getLegalMoves( board, history, { colour: 1 } ), board, history, 1, effects || [] );
         //If white is checkmated, return negative infinity.
         if ( wMoves.length === 0 ) return Number.NEGATIVE_INFINITY
     }
     else if ( isCheck( board, history, -1, undefined, pieceIndexes )) {
-        let bMoves = filterLegalMoves( Board.getLegalMoves( board, history, { colour: -1 }, pieceIndexes ), board, history, -1 );
+        let bMoves = filterLegalMoves( Board.getLegalMoves( board, history, { colour: -1 }, pieceIndexes ), board, history, -1, effects || [] );
         //If black mated, return infinity
         if ( bMoves.length === 0 ) return Number.POSITIVE_INFINITY
     }

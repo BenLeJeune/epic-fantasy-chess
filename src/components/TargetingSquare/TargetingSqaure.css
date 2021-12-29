@@ -3,13 +3,13 @@ div.targetingSquare {
   opacity: 0.5;
 }
 div.targetingSquare.move {
-  background-color: limegreen;
+  background-color: #2dbc44;
 }
 div.targetingSquare.capture {
-  background-color: crimson;
+  background-color: #ff1b36;
 }
 div.targetingSquare:hover {
-  opacity: 1;
+  opacity: 0.8;
 }
 
 /*# sourceMappingURL=TargetingSqaure.css.map */

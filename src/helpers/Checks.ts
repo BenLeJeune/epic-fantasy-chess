@@ -7,6 +7,8 @@ import {legalMove, Move} from "../types";
 import ActualMove from "../Classes/Move";
 import Board from "../Classes/Board";
 import Game from "../Classes/Game";
+import OngoingEffect from "../Classes/OngoingEffect";
+import {sameColour} from "./DifferentColours";
 
 ///
 /// IS THIS COLOUR'S KING IN CHECK?
@@ -29,11 +31,43 @@ const isCheck : ( board:number[], history:ActualMove[], colour: number, legalMov
 
 }
 
-const filterLegalMoves : ( moves: legalMove[], board : number[], history:ActualMove[], colour : number ) => legalMove[] = ( moves, board, history, colour ) => {
+const filterLegalMoves : ( moves: legalMove[], board : number[], history:ActualMove[], colour : number, effects : OngoingEffect[] ) => legalMove[]
+    = ( moves, board, history, colour, effects ) => {
 
     let game = new Game( board , history );
+    effects.forEach( game.addOngoingEffect );
 
     let filtered = moves.filter( move => {
+
+        //ONGOING EFFECTS
+
+        // HALLOW SPELL
+        if ( effects.filter(e => e.getName() === "no-captures").filter( e => e.getSquare() === move.from && board[move.to] !== Piece.None ).length > 0 ) return false //trying to capture (cannot capture)
+        if ( effects.filter( e => e.getName() === "no-captures" ).filter( e => e.getSquare() === move.to && board[move.to] !== Piece.None ).length > 0 ) return false //is being captured (cannot be captured)
+
+        // REPENT SPELL
+        if ( effects.filter(e => e.getName() === "no-moves").filter( e => e.getSquare() === move.from ).length > 0 ) return false //trying to move (cannot move)
+
+        // OUST SPELL
+        let oustEffects = effects.filter(e => e.getName() === "must-move").filter( e => e.getSquare() !== move.from && sameColour( colour, board[e.getSquare()] ) )
+        if ( oustEffects.length > 0 ) {
+
+            //MAKE SURE THE PIECE CAN MAKE A LEGAL MOVE!
+            let piece = board[oustEffects[0].getSquare()];
+            let pieceObj = Piece.getPiece(piece);
+            if (pieceObj) {
+                let pieceMoves = pieceObj.getLegalMoves( oustEffects[0].getSquare(), board, "all", colour, history );
+                //WE WANT TO PREVENT A SCENARIO WHERE THE KING IS CHECKED USING THIS CARD
+                let pieceCanMove = pieceMoves.reduce(( validMoveExists, m ) => {
+                    if (validMoveExists) return true;
+                    game.Move( m.from, m.to, m.special );
+                    let stillInCheck = isCheck( game.getBoard(), game.getMoves().filter( mv => mv instanceof ActualMove ) as ActualMove[], colour );
+                    game.UnMove();
+                    return !stillInCheck || validMoveExists
+                }, false)
+                if (pieceCanMove) return false;
+            }
+        }
 
         //THERE ARE SOME SPECIAL RULES FOR SPECIAL MOVES
         if ( move.special === "CASTLE") {

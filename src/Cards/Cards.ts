@@ -16,6 +16,9 @@ import Deception_Card from "./CRUSADERS/Deception_Card";
 import Clergy_Card from "./CRUSADERS/Clergy_Card";
 import Convert_Card from "./CRUSADERS/Convert_Card";
 import Envoy_Card from "./CRUSADERS/Envoy_Card";
+import Hallow_Card from "./CRUSADERS/Hallow_Card";
+import Repent_Card from "./CRUSADERS/Repent_Card";
+import Oust_Card from "./CRUSADERS/Oust_Card";
 
 const ALL_CARDS : { [ cardId : string ] : Card } = {
     [Advance_Card.id]: new Advance_Card(),
@@ -30,6 +33,9 @@ const ALL_CARDS : { [ cardId : string ] : Card } = {
     [Promotion_Card.id]: new Promotion_Card(),
     [Adjust_Card.id]: new Adjust_Card(),
     [Inquisition_Card.id]: new Inquisition_Card(),
+    [Hallow_Card.id]: new Hallow_Card(),
+    [Repent_Card.id]: new Repent_Card(),
+    [Oust_Card.id]: new Oust_Card(),
     [Envoy_Card.id]: new Envoy_Card(),
     [Anoint_Card.id]: new Anoint_Card(),
     [Deception_Card.id]: new Deception_Card(),
@@ -41,10 +47,9 @@ export const TEST_HAND = [
     new Adjust_Card(),
     new Inquisition_Card(),
     new Envoy_Card(),
-    new Anoint_Card(),
-    new Deception_Card(),
-    new Clergy_Card(),
-    new Convert_Card()
+    new Hallow_Card(),
+    new Repent_Card(),
+    new Oust_Card()
 ]
 
 export default ALL_CARDS;

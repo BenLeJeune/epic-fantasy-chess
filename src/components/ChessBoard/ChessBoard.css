@@ -73,6 +73,10 @@ div#PieceInfoBubble div.pieceDescBlock.tags {
 div#PieceInfoBubble div.pieceDescBlock > .tag {
   font-style: italic;
 }
+div#PieceInfoBubble div.pieceDescBlock.effects {
+  color: #9148d6;
+  font-style: italic;
+}
 div#PieceInfoBubble div.exit {
   position: absolute;
   top: 1rem;

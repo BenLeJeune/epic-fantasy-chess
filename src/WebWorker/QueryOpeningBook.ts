@@ -52,7 +52,7 @@ const queryOpeningBook = ( g : Game, firstMove: boolean = false ) => {
             let moving = nextMove.length === 3 ? nextMove[0] : "P"
             let col = h.length % 2 === 0 ? 1 : -1;
             const pseudo = Board.getLegalMoves(b, h, { colour :  col })
-            const legal = filterLegalMoves(pseudo, b, h, col );
+            const legal = filterLegalMoves(pseudo, b, h, col, g.getCurrentOngoingEffects() );
 
             //If in the form Nbd2, we also want to be able to know which piece to move
             let movingFrom = nextMove.length === 4 ? nextMove[2] : null;
