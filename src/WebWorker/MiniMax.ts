@@ -2,7 +2,7 @@ import Game from "../Classes/Game";
 import {filterLegalMoves, isCheck} from "../helpers/Checks";
 import Board from "../Classes/Board";
 import {positionalEngineEvaluation} from "../helpers/Evaluation";
-import includePromotion, {PromotionMove} from "./IncludePromotions";
+import includePromotion, {promotionMove} from "./IncludePromotions";
 import Piece from "../Classes/Piece";
 import GamePiece from "../Pieces/GamePiece";
 import ActualMove from "../Classes/Move";
@@ -17,9 +17,10 @@ import OngoingEffect from "../Classes/OngoingEffect";
 // ALPHA represents the MIN score the MAXIMISING player is guaranteed
 // BETA represents the MAX score the MINIMISING player is guaranteed
 
-let ActualMoves = ( moves:any[] ) => moves.filter( m => m instanceof ActualMove )
+let actualMoves = ( moves:any[] ) => moves.filter( m => m instanceof ActualMove );
 
-const MiniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[], e:number, t:number, q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], effects?: OngoingEffect[] ) => {
+const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[], e:number, t:number, q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], effects?: OngoingEffect[] ) => {
+
 
     ///Another exit point
     ///Returned values are meaningless, won't read them
@@ -29,7 +30,7 @@ const MiniMax = (g : Game, depth : number, maximising : boolean, army: number[],
     let col = maximising ? 1 : -1 as 1 | -1;
 
     let g_board = g.getBoard(), g_moves = g.getMoves();
-    let g_moves_actual = ActualMoves(g_moves);
+    let g_moves_actual = actualMoves(g_moves);
 
     let partialLegalCaptures =  Board.getLegalMoves( g_board, g_moves_actual, { colour: col, mode: "captures" } )
     let partialLegalMoves =  Board.getLegalMoves( g_board, g_moves_actual, { colour: col, mode: "moves" } )
@@ -68,7 +69,7 @@ const MiniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         let ev = positionalEngineEvaluation( g_board, g_moves_actual, pieces );
         hashSet( g_board, ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
         counter()
-        return [ ev , { move: { from: -1, to: -1 } }, g.getMoves().length, quiescence_quiet || isCheckMate ] as [ number, PromotionMove, number, boolean ];
+        return [ ev , { move: { from: -1, to: -1 } }, g.getMoves().length, quiescence_quiet || isCheckMate ] as [ number, promotionMove, number, boolean ];
     }
     else {
         //The evaluation hasn't finished yet!
@@ -100,7 +101,7 @@ const MiniMax = (g : Game, depth : number, maximising : boolean, army: number[],
 
             g.Move( m.from, m.to, m.special, additional );
 
-            if (!isCheck(g.getBoard(), ActualMoves(g.getMoves()), col)) {
+            if (!isCheck(g.getBoard(), actualMoves(g.getMoves()), col)) {
 
                 let hashedEval = hashGet(g.getBoard());
                 let ev:number = 0;
@@ -116,7 +117,7 @@ const MiniMax = (g : Game, depth : number, maximising : boolean, army: number[],
                     temp_quiet = hashedEval[2]
                 }
                 else {
-                    let minmax = MiniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces, effects);
+                    let minmax = miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces, effects);
                     ev = minmax[0]
 
                     //Here we can do some special evaluations
@@ -156,10 +157,10 @@ const MiniMax = (g : Game, depth : number, maximising : boolean, army: number[],
             else g.UnMove()
         }
 
-        return [ value, move, move_depth, quiet ] as [ number, PromotionMove, number, boolean ];
+        return [ value, move, move_depth, quiet ] as [ number, promotionMove, number, boolean ];
 
     }
 
 }
 
-export default MiniMax;
+export default miniMax;

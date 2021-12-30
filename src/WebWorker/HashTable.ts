@@ -2,7 +2,7 @@ import Piece from "../Classes/Piece";
 import {arraysAreEqual} from "../helpers/Utils";
 
 const BOARD = 0, EVAL = 1, TURN = 2, QUIET = 3;
-export default class TranspositionTable {
+export default class transpositionTable {
 
 
     table : [ number[], number, number, boolean ][][];

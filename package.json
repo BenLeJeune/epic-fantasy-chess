@@ -108,6 +108,8 @@
     ]
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
     "worker-plugin": "^5.0.1"
   },
   "engines": {

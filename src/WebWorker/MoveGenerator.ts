@@ -5,9 +5,9 @@ import {legalMove, SpecialMove} from "../types";
 import {filterLegalMoves, isCheck} from "../helpers/Checks";
 import {positionalEngineEvaluation} from "../helpers/Evaluation";
 import Piece from "../Classes/Piece";
-import MiniMax from "./MiniMax";
+import miniMax from "./MiniMax";
 import queryOpeningBook from "./QueryOpeningBook";
-import TranspositionTable from "./HashTable";
+import transpositionTable from "./HashTable";
 import Queen from "../Pieces/FIDE/Queen";
 import {randomFromList} from "../helpers/Utils";
 import { getActualMoves } from "../helpers/MoveFilter";
@@ -30,7 +30,7 @@ type EvaluatedMove = {
     additional?: Partial<AdditionalOptions>
 }
 
-let table = new TranspositionTable();
+let table = new transpositionTable();
 
 ///
 /// THE MAIN MOVE GENERATOR
@@ -81,7 +81,7 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
     let counter = () => nodes++
 
     let pieces = Piece.PIECE_OBJECTS;
-    let move = MiniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter, undefined, undefined, undefined, pieces, g.getCurrentOngoingEffects() );
+    let move = miniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter, undefined, undefined, undefined, pieces, g.getCurrentOngoingEffects() );
 
     console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
     console.log(`Examined ${ nodes } nodes`)

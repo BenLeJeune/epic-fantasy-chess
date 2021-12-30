@@ -13,11 +13,8 @@ import {areIdenticalMoves} from "./helpers/CompareMoves";
 import Piece from "./Classes/Piece";
 
 //Opponent Web Worker
-import {Remote, wrap} from 'comlink';
-import {
-  beginBackgroundEvaluation,
-  beginBackgroundEvaluation as BeginBackgroundEvaluation
-} from "./WebWorker/MoveGenerator";
+import * as Comlink from 'comlink';
+
 import {useParams} from "react-router-dom";
 import {GAME_KEY} from "./KEYS";
 import {Army, FIDEARMY} from "./Presets/Armies";
@@ -76,8 +73,14 @@ function App() {
   /// THE OPPONENT
 
   const worker = useRef<any>()
+
   useLayoutEffect(() => {
-    worker.current = wrap<import("./WebWorker/worker").OpponentWebWorker>(new Worker("./WebWorker/worker", { name: "opponentWebWorker", type: "module" }));
+
+    const _worker = new Worker('./WebWorker', { name: 'opponent-webworker', type: 'module' });
+    const workerApi = Comlink.wrap<import('./WebWorker').opponentWebWorker>(_worker);
+
+    worker.current = workerApi;
+
     console.log("Creating worker!");
   }, [])
 
@@ -105,7 +108,7 @@ function App() {
   const beginBackgroundEvaluation = async () => {
 
     if (uuid === "fiesta") return;
-    const { BeginBackgroundEvaluation } = worker.current;
+    const { beginBackgroundEvaluation } = worker.current;
 
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
@@ -116,21 +119,21 @@ function App() {
             from, to, moving, captured, special, specify
           } })
 
-    BeginBackgroundEvaluation( [...gBoard], parsedMoves, opponentArmy.pieces, { colour: -1 } )
+    beginBackgroundEvaluation( [...gBoard], parsedMoves, opponentArmy.pieces, { colour: -1 } )
 
   }
 
   const endBackgroundEvaluation = async () => {
 
-    const { EndBackgroundEvaluation } = worker.current;
+    const { endBackgroundEvaluation } = worker.current;
 
-    EndBackgroundEvaluation()
+    endBackgroundEvaluation()
 
   }
 
   const generateRandomMove = async ( col:number = -playerColour ) => {
     // const { MoveGenerator } = wrap<import("./WebWorker/worker").OpponentWebWorker>(worker.current)
-    const { MoveGenerator } = worker.current;
+    const { moveGenerator } = worker.current;
 
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
@@ -150,7 +153,7 @@ function App() {
     let hand = playerColour > 0 ? game.current.getBlackHand() : game.current.getWhiteHand();
     let parsedHand = hand.map(card => card.id)
 
-    return await MoveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, col, parsedEffects, parsedHand, { colour: col })
+    return await moveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, col, parsedEffects, parsedHand, { colour: col })
   }
 
   ///

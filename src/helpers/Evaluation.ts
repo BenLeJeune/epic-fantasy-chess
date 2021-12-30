@@ -7,7 +7,6 @@ import GamePiece from "../Pieces/GamePiece";
 import {filterLegalMoves, isCheck} from "./Checks";
 import ActualMove from "../Classes/Move";
 import {legalMove} from "../types";
-import {PromotionMove} from "../WebWorker/IncludePromotions";
 import Board from "../Classes/Board";
 import {arraysAreEqual} from "./Utils";
 import OngoingEffect from "../Classes/OngoingEffect";

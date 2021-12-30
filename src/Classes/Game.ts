@@ -261,14 +261,12 @@ export default class Game {
         if (this.gameLength % 3 === 0 && this.currentTurn > 0) {
             this.DrawCard(1);
             this.DrawCard(-1);
-            console.log("DRAWING CARDS!");
         }
     }
     private checkForUndoCardDraw = () => {
         if ((this.gameLength+1) % 3 === 0 && this.currentTurn < 0) {
             this.whiteHand.pop();
             this.blackHand.pop();
-            console.log("removing drawn cards");
         }
     }
 

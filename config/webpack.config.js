@@ -1,6 +1,6 @@
 'use strict';
 
-const WebWorkerPlugin = require("worker-plugin");
+const WorkerPlugin = require("worker-plugin");
 
 const fs = require('fs');
 const path = require('path');
@@ -395,7 +395,8 @@ module.exports = function (webpackEnv) {
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: paths.appSrc,
+              include: /src/,
+              exclude: [ /src\/WebWorker\/MiniMax.ts/, /node_modules/ ],
               loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve(
@@ -438,7 +439,7 @@ module.exports = function (webpackEnv) {
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
             {
-              test: /\.(js|mjs)$/,
+              test: /\.([jt]s|mjs)$/,
               exclude: /@babel(?:\/|\\{1,2})runtime/,
               loader: require.resolve('babel-loader'),
               options: {
@@ -559,7 +560,7 @@ module.exports = function (webpackEnv) {
       ],
     },
     plugins: [
-      new WebWorkerPlugin(),
+      new WorkerPlugin(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(

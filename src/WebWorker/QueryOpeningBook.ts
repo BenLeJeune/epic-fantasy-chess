@@ -4,7 +4,7 @@ import {legalMove} from "../types";
 import Board from "../Classes/Board";
 import {filterLegalMoves} from "../helpers/Checks";
 import Piece from "../Classes/Piece";
-import {PromotionMove} from "./IncludePromotions";
+import {promotionMove} from "./IncludePromotions";
 import {randomFromList} from "../helpers/Utils";
 import { getActualMoves } from "../helpers/MoveFilter";
 
@@ -95,7 +95,7 @@ const queryOpeningBook = ( g : Game, firstMove: boolean = false ) => {
         }
 
     }
-    return moves[0] ? [{move: randomFromList(moves)}, openingName] as [PromotionMove, string] : [null, null]
+    return moves[0] ? [{move: randomFromList(moves)}, openingName] as [promotionMove, string] : [null, null]
 
 }
 

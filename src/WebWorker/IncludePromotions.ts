@@ -13,7 +13,7 @@ const filterPromotionPieces = ( army : number[], colour : 1 | -1 ) => {
     return filtered.filter( piece => Math.abs(piece) !== Piece.King ).sort( (a, b) => a - b ).map( piece => colour > 0 ? piece : -piece )
 }
 
-export type PromotionMove = {
+export type promotionMove = {
     move: legalMove,
     additional?: Partial<AdditionalOptions>
 }
@@ -22,7 +22,7 @@ const includePromotion = ( board:number[], legalMoves : legalMove[], army: numbe
     let validPromotionPieces = filterPromotionPieces(army, colour);
     if ( board[ move.from ] === ( -1 ) * Piece.Pawn && ( move.to < 8 || move.to > 55 ) ) {
         //Promotions
-        let promotions = [] as PromotionMove[]
+        let promotions = [] as promotionMove[]
         for ( let promotionTo of validPromotionPieces ) {
             promotions.push( { move: Object.assign( { special: "PROMOTION" }, move ), additional: { promotionTo } } )
         }
@@ -30,13 +30,13 @@ const includePromotion = ( board:number[], legalMoves : legalMove[], army: numbe
     }
     else {
         //Everything else
-        return { move } as PromotionMove
+        return { move } as promotionMove
     }
-} ).reduce<PromotionMove[]>(
+} ).reduce<promotionMove[]>(
     ( acc, next ,) => {
         if ( Array.isArray(next) ) return [ ...acc, ...next ]
         else return [ ...acc, next ]
-    }, [] as PromotionMove[]
+    }, [] as promotionMove[]
 )
 
 export default includePromotion
