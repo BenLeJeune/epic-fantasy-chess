@@ -6,6 +6,7 @@ import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import Bishop from "../../Pieces/FIDE/Bishop";
 import Knight from "../../Pieces/FIDE/Knight";
 import {adjacentSquares} from "../../helpers/Adjacency";
+import {FIDE_EXPANSION} from "../Expansions";
 
 export default class Flee_Card extends Card {
 
@@ -19,6 +20,7 @@ export default class Flee_Card extends Card {
     public readonly shortName = "_Flee";
     public static readonly id = "flee";
     public readonly id = Flee_Card.id;
+    public readonly expac = FIDE_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

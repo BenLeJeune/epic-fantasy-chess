@@ -2,9 +2,13 @@ import React from "react";
 import NiceButton from "../NiceButton/NiceButton";
 import "./NavBar.css";
 
-export default function NavBar() {
+interface props {
+    fixed?: boolean
+}
 
-    return <div id="NavBar">
+export default function NavBar({fixed = true}: props) {
+
+    return <div id="NavBar" style={ fixed ? {} : { position: "absolute" } }>
         <h3 className="navBarHeader">Epic Fantasy Chess</h3>
         <NiceButton onClick="/" text="HOME" buttonStyle="small"/>
         <NiceButton onClick="/play" text="PLAY" buttonStyle="small"/>

@@ -4,6 +4,7 @@ import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import {adjacentSquares} from "../../helpers/Adjacency";
+import {FIDE_EXPANSION} from "../Expansions";
 
 export default class Expendable_Card extends Card {
 
@@ -17,6 +18,7 @@ export default class Expendable_Card extends Card {
     public readonly shortName = "_Expd";
     public static readonly id = "expendable";
     public readonly id = Expendable_Card.id;
+    public readonly expac = FIDE_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

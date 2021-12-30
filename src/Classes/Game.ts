@@ -21,8 +21,6 @@ export default class Game {
     private moves : ( ActualMove | CardMove )[]
     private gameLength : number;
 
-    private pieceIndexes : number[]; //Indexes where there are pieces
-
     ///
     /// PLAYER DECKS & HANDS
     ///
@@ -30,8 +28,8 @@ export default class Game {
     private blackHand : Card[];
     private readonly whiteDeck : Deck;
     private readonly blackDeck : Deck;
-    private readonly whiteCurrentDeck : Card[];
-    private readonly blackCurrentDeck : Card[];
+    private whiteCurrentDeck : Card[];
+    private blackCurrentDeck : Card[];
 
     ///
     /// ONGOING EFFECTS
@@ -57,11 +55,9 @@ export default class Game {
             if ( move.special !== "EP" ) {
                 this.board[move.to] = move.captured;
                 //Update piece indexes
-                if ( move.captured !== Piece.None ) this.pieceIndexes.push( move.to )
             }
             this.board[ move.from ] = move.moving;
             //Update piece indexes
-            this.pieceIndexes[ this.pieceIndexes.indexOf( move.to ) ] = move.from;
 
             //Any effects affecting the piece move with it
             this.getCurrentOngoingEffects()
@@ -72,7 +68,6 @@ export default class Game {
                 case "EP":
                     this.board[ move.to ] = Piece.None;
                     this.board[ move.to - 8 * colour ] = move.captured;
-                    this.pieceIndexes.push( move.to - 8 * colour )
                     break;
                 case "PROMOTION":
                     //We should be able to attach the piece we want to promote to
@@ -95,14 +90,12 @@ export default class Game {
                         this.board[rookSquare] = this.board[ move.to + 1 ];
                         this.board[ move.to + 1 ] = Piece.None;
                         //Update pieceIndexes
-                        this.pieceIndexes[ this.pieceIndexes.indexOf( move.to + 1 ) ] = rookSquare;
                     }
                     //If we were castling Kingside
                     if ( move.from < move.to ) {
                         let rookSquare = move.to + 1;
                         this.board[rookSquare] = this.board[ move.to - 1 ];
                         this.board[ move.to - 1 ] = Piece.None;
-                        this.pieceIndexes[ this.pieceIndexes.indexOf( move.to - 1 ) ] = rookSquare;
                     }
 
                     break;
@@ -135,8 +128,25 @@ export default class Game {
                 // If the piece didn't change, don't update it
             })
 
+            //WE WANT TO RETURN THE CARD TO THE PLAYER'S HAND
+            if ( this.currentTurn < 0 ) {
+                //Undoing a white card move (opposite because currentTurn not yet changed
+                this.whiteHand.push( ALL_CARDS[move.cardName] )
+            }
+            else {
+                this.blackHand.push(ALL_CARDS[move.cardName])
+            }
+
             //If the card we just un-did wasn't fast, then we change back the turn.
             let card = ALL_CARDS[ move.cardName ];
+
+            //REMOVE ANY EFFECTS THAT HAVE JUST BEEN ADDED
+            let effectIndexesToRemove = [] as number[];
+            this.ongoingEffects.forEach((e, i) => {
+                if (e.getDurationRemaining() === e.getInitialDuration()) effectIndexesToRemove.push(i)
+            } )
+            this.ongoingEffects = this.ongoingEffects.filter((e, i) => effectIndexesToRemove.indexOf(i) === -1);
+
             if ( card && !card.fast ) {
                 this.undoEndOfTurnCheck();
             }
@@ -161,17 +171,12 @@ export default class Game {
             specify = ActualMove.FILE
         }
 
-        if (captured !== Piece.None) {
-            this.pieceIndexes.splice(this.pieceIndexes.indexOf(to), 1)
-        }
-
         //WE ALSO WANT TO HANDLE SPECIAL MOVES
         switch ( special ) {
             case "EP":
                 captured = this.board[ to - 8 * colour ];
                 this.board[ to - 8 * colour ] = Piece.None;
                 //Remove from piece indexes
-                this.pieceIndexes.splice( this.pieceIndexes.indexOf( to - 8 * colour ), 1);
                 break;
             case "PROMOTION":
                 //We should have the piece attached
@@ -198,7 +203,6 @@ export default class Game {
                     this.board[ to + 1 ] = this.board[rookSquare];
                     this.board[rookSquare] = Piece.None;
                     //Update piece indexes
-                    this.pieceIndexes[ this.pieceIndexes.indexOf( rookSquare ) ] = to + 1
                 }
                 //If we're castling Kingside
                 if ( from < to ) {
@@ -206,7 +210,6 @@ export default class Game {
                     this.board[ to - 1 ] = this.board[rookSquare];
                     this.board[rookSquare] = Piece.None;
                     //Update piece indexes
-                    this.pieceIndexes[ this.pieceIndexes.indexOf( rookSquare ) ] = to - 1
                 }
 
                 break;
@@ -222,10 +225,10 @@ export default class Game {
         if (to !== from) this.board[from] = Piece.None;
 
         //Any effects affecting the piece move with it
-        this.getCurrentOngoingEffects().filter(effect => effect.getSquare() === from && effect.getTarget() === "piece").forEach(effect => effect.updateSquare(to))
-
-        //Updater piece indexes
-        this.pieceIndexes[ this.pieceIndexes.indexOf( from ) ] = to
+        this.getCurrentOngoingEffects().filter(effect => effect.getSquare() === from && effect.getTarget() === "piece")
+            .forEach(effect => {
+                effect.updateSquare(to);
+            })
 
         if ( !additional.isCardMove ) {
             this.endOfTurnCheck();
@@ -247,15 +250,25 @@ export default class Game {
             this.gameLength--; //If un-making a white move, reduce the game length counter
         }
         this.currentTurn = -this.currentTurn;
-        this.ongoingEffects.forEach( e => e.unTickDuration() )
+        this.checkForUndoCardDraw()
+        this.ongoingEffects.forEach((e, i) => {
+            e.unTickDuration();
+        } )
 
     }
 
     private checkForCardDraw = () => {
         if (this.gameLength % 3 === 0 && this.currentTurn > 0) {
-            this.DrawCard(1, 1);
-            this.DrawCard(-1, 1);
+            this.DrawCard(1);
+            this.DrawCard(-1);
             console.log("DRAWING CARDS!");
+        }
+    }
+    private checkForUndoCardDraw = () => {
+        if ((this.gameLength+1) % 3 === 0 && this.currentTurn < 0) {
+            this.whiteHand.pop();
+            this.blackHand.pop();
+            console.log("removing drawn cards");
         }
     }
 
@@ -317,7 +330,7 @@ export default class Game {
             for (let i = 0; i < quantity; i++) {
                 let drawn = Number.parseInt(randomFromList( Object.keys(this.whiteCurrentDeck) ));
                 this.whiteHand.push( this.whiteCurrentDeck[drawn] );
-                this.whiteCurrentDeck.filter((c, i) => i !== drawn);
+                this.whiteCurrentDeck = this.whiteCurrentDeck.filter((c, i) => i !== drawn);
             }
         }
         else {
@@ -325,7 +338,7 @@ export default class Game {
             for (let i = 0; i < quantity; i++) {
                 let drawn = Number.parseInt(randomFromList( Object.keys(this.blackCurrentDeck) ));
                 this.blackHand.push( this.blackCurrentDeck[drawn] );
-                this.blackCurrentDeck.filter((c, i) => i !== drawn);
+                this.blackCurrentDeck = this.blackCurrentDeck.filter((c, i) => i !== drawn);
             }
         }
     }
@@ -337,11 +350,6 @@ export default class Game {
         this.currentTurn = 1;
         this.gameLength = 1;
 
-        let _pieceIndexes = [] as number[];
-        [ ..._board ].forEach((piece, i) => {
-            if (piece !== Piece.None) _pieceIndexes.push(i);
-        })
-        this.pieceIndexes = _pieceIndexes;
 
         this.whiteHand = [];
         this.blackHand = [];
@@ -362,8 +370,8 @@ export default class Game {
         this.DrawCard(1, 2); //Draw 2 cards for white
         this.DrawCard(-1, 3); //Draw 3 cards for black
 
-        this.whiteHand = TEST_HAND;
-        this.blackHand = TEST_HAND;
+        // this.whiteHand = TEST_HAND;
+        // this.blackHand = TEST_HAND;
 
         //ONGOING EFFECTS
         this.ongoingEffects = [];
@@ -385,11 +393,17 @@ export default class Game {
     public getBoard = () => this.board;
     public getMoves = () => this.moves;
     public getCurrentTurn = () => this.currentTurn;
-    public getPieceIndexes = () => this.pieceIndexes;
 
     public getWhiteHand = () => this.whiteHand;
     public getBlackHand = () => this.blackHand;
     public getCurrentPlayerHand = () => this.currentTurn > 0 ? this.whiteHand : this.blackHand;
+
+    public getWhiteCurrentDeck = () => this.whiteCurrentDeck;
+    public getBlackCurrentDeck = () => this.blackCurrentDeck;
+    public getWhiteDeck = () => this.whiteDeck;
+    public getBlackDeck = () => this.blackDeck;
+    public getCurrentPlayerCurrentDeck = () => this.currentTurn > 0 ? this.whiteCurrentDeck : this.blackCurrentDeck;
+    public getNonCurrentPlayerCurrentDeck = () => this.currentTurn > 0 ? this.blackCurrentDeck : this.whiteCurrentDeck;
 
     public getOngoingEffects = () => this.ongoingEffects;
     public getCurrentOngoingEffects = () => this.ongoingEffects.filter(e => e.getDurationRemaining() >= 0);

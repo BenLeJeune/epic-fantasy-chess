@@ -83,6 +83,7 @@ export default function ArmiesPage() {
             Your Armies
         </h1>
         <p className="pageSubtitle">Where you can view, edit, create and delete armies.</p>
+        <p className="pageSubtitle">Click on an army to edit it, hover over an army to delete it.</p>
 
         <div className="armiesButtonRow">
             <NiceButton onClick={ () => createNewArmy() } text="NEW ARMY" buttonStyle="small"/>

@@ -5,6 +5,7 @@ import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import Bishop from "../../Pieces/FIDE/Bishop";
 import Knight from "../../Pieces/FIDE/Knight";
+import {FIDE_EXPANSION} from "../Expansions";
 
 export default class Maneuver_Card extends Card {
 
@@ -18,6 +19,7 @@ export default class Maneuver_Card extends Card {
     public readonly shortName = "_Mnvr";
     public static readonly id = "maneuver";
     public readonly id = Maneuver_Card.id;
+    public readonly expac = FIDE_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

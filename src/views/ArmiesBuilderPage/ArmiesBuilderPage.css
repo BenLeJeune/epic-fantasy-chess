@@ -118,10 +118,17 @@ div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.pointBuyCounter {
   font-size: 2em;
   color: #464B66;
 }
+div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.pointBuyCounter p {
+  margin-bottom: 0;
+}
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.pointBuyCounter .invalid {
   color: #ff1b36;
   display: inline-block;
   animation: invalid-pulse 0.5s forwards;
+}
+div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.pointBuyCounter .subtitle {
+  font-size: 0.5em;
+  margin-top: 0.25em;
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding {
   height: 100%;
@@ -150,7 +157,7 @@ div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div
   height: 100%;
   width: 100%;
   top: 0;
-  pointer-events: none;
+  cursor: pointer;
 }
 div#ArmiesBuilderPage div.armiesManager div.lowerBoard div.chessBoardPadding div.chessBoard div.lowerBoardSquare {
   position: absolute;

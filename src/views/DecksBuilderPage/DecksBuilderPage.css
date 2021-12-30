@@ -112,6 +112,8 @@ div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryC
   padding: 0.5rem;
   transition: transform 0.25s ease-out, background-color 0.5s ease;
   position: relative;
+  color: #F8DC97;
+  position: relative;
 }
 div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryCard:hover {
   background-color: #464B66;
@@ -123,6 +125,26 @@ div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryC
 div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryCard.disabled:hover {
   background-color: #2C2F40;
   transform: none;
+}
+div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryCard div.cardTitle {
+  text-align: center;
+  font-size: 1.2rem;
+  padding-bottom: 0.5rem;
+}
+div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryCard div.cardChaosScore {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+}
+div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryCard div.cardChaosScore div.speed {
+  margin-left: auto;
+}
+div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryCard div.cardExpac {
+  position: absolute;
+  bottom: 0.25rem;
+  text-align: center;
+  width: 100%;
+  color: #161823;
 }
 div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryCard div.limitReached {
   position: absolute;
@@ -141,6 +163,7 @@ div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryC
 div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.libraryCard div.limitReached.limitText {
   text-align: center;
   user-select: none;
+  color: black;
 }
 div#DecksBuilderPage div.decksManager div.cardsList div.cardLibrary div.listDragReceiver {
   background-color: #262836;

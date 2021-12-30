@@ -52,13 +52,17 @@ export default function PlayableCard(props: props) {
                 className={`playableCardContainer ${props.draggable ? "drag" : "noDrag"}`}>
         <div ref={cardRef} className="playableCard">
             <div className="cardChaosScore">
-                { props.card.cost }
+                <div className="score">{ props.card.cost }</div>
+                <div className="speed">{ props.card.fast ? "Fast" : "" }</div>
             </div>
             <div className="cardTitle">
                 { props.card.cardName }
             </div>
             <div className="cardDescription">
                 { props.card.description }
+            </div>
+            <div className="cardExpac">
+                {props.card.expac}
             </div>
         </div>
     </div>

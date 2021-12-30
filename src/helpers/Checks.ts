@@ -12,7 +12,7 @@ import {sameColour} from "./DifferentColours";
 
 ///
 /// IS THIS COLOUR'S KING IN CHECK?
-const isCheck : ( board:number[], history:ActualMove[], colour: number, legalMoves?: legalMove[], pieceIndexes?:number[] ) => boolean = ( board, history, colour, legalMoves, pieceIndexes ) => {
+const isCheck : ( board:number[], history:ActualMove[], colour: number, legalMoves?: legalMove[] ) => boolean = ( board, history, colour, legalMoves ) => {
 
     //Determine the king's square
 
@@ -24,7 +24,7 @@ const isCheck : ( board:number[], history:ActualMove[], colour: number, legalMov
     let pos = colour > 0 ? wKing : bKing;
 
     if (!legalMoves) legalMoves = Board.getLegalMoves(
-        board, history, { mode: "captures", colour: -colour }, pieceIndexes )
+        board, history, { mode: "captures", colour: -colour } )
 
     //Are there any attacks on the king?
     return legalMoves.filter( move => move.to === pos ).length > 0;
@@ -35,7 +35,7 @@ const filterLegalMoves : ( moves: legalMove[], board : number[], history:ActualM
     = ( moves, board, history, colour, effects ) => {
 
     let game = new Game( board , history );
-    effects.forEach( game.addOngoingEffect );
+    effects.forEach( effect => game.addOngoingEffect( new OngoingEffect( effect.getSquare(), effect.getName(), effect.getDurationRemaining(), effect.getToolTip(), effect.getTarget() ) ) );
 
     let filtered = moves.filter( move => {
 

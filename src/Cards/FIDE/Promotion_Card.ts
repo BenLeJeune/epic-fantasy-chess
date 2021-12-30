@@ -4,6 +4,7 @@ import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import {getLegalRiderMoves} from "../../helpers/RiderMoves";
+import {FIDE_EXPANSION} from "../Expansions";
 
 export default class Promotion_Card extends Card {
 
@@ -17,6 +18,7 @@ export default class Promotion_Card extends Card {
     public readonly shortName = "_Prmo";
     public static readonly id = "promotion";
     public readonly id = Promotion_Card.id;
+    public readonly expac = FIDE_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

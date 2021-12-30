@@ -4,6 +4,7 @@ import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import {adjacentSquares} from "../../helpers/Adjacency";
+import {CRUSADER_EXPANSION} from "../Expansions";
 
 export default class Envoy_Card extends Card {
 
@@ -12,11 +13,12 @@ export default class Envoy_Card extends Card {
 
     public readonly targets = 1; //Simply choose a square
     public readonly fast = true;
-    public readonly cost = 0;
+    public readonly cost = 5;
 
     public readonly shortName = "_Envy";
     public static readonly id = "envoy";
     public readonly id = Envoy_Card.id;
+    public readonly expac = CRUSADER_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

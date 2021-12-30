@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React, {useLayoutEffect} from 'react';
+import {BrowserRouter as Router, Switch, Route, useRouteMatch, useLocation} from 'react-router-dom';
 import PlayRouter from "./Routers/PlayRouter";
 import ArmiesRouter from "./Routers/ArmiesRouter";
 import Homepage from "./views/Homepage/Homepage";
@@ -7,8 +7,18 @@ import DecksRouter from "./Routers/DecksRouter";
 
 export default function MainRouter() {
 
-    return <Router>
-        <Switch>
+    let location = useLocation()
+
+    useLayoutEffect(() => {
+        if ( location.pathname.startsWith("/play/game/") && location.pathname.length > 11 ) {
+            document.body.style.overflow = "hidden";
+        }
+        else {
+            document.body.style.overflow = "auto";
+        }
+    }, [location])
+
+    return <Switch>
             <Route path="/" exact>
                 {/*  The Homepage  */}
                 <Homepage/>
@@ -26,6 +36,5 @@ export default function MainRouter() {
                 <DecksRouter/>
             </Route>
         </Switch>
-    </Router>
 
 }

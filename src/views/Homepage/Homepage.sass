@@ -21,3 +21,97 @@ div.buttonsRow
     flex-flow: column nowrap
     > a
       padding: .5em
+
+
+div.infoRow
+  width: 100%
+  display: flex
+  align-items: center
+  justify-content: center
+  margin-top: 1rem
+  p
+    color: colours.$offLightBlue
+    cursor: pointer
+    transition: color 0.25s ease
+    &:hover
+      text-decoration: underline
+      color: colours.$lightSquareBrighter
+
+
+div#HowToPlayPopup
+  position: fixed
+  height: 100%
+  width: 100%
+  top: 0
+  left: 0
+  transition: opacity 0.25s ease-in-out
+  &.shown
+    opacity: 1
+    pointer-events: all
+  &.hidden
+    opacity: 0
+    pointer-events: none
+    div#HowToPlayPopupBubble
+      transform: translateY(10%)
+      transition: transform 0.25s ease-in
+  div#PopupBackground
+    background-color: colours.$darkBlue
+    opacity: 0.5
+    height: 100%
+    width: 100%
+    top: 0
+    left: 0
+    position: absolute
+  div#HowToPlayPopupBubble
+    background-color: colours.$mediumBlue
+    position: absolute
+    top: 5rem
+    left: 5rem
+    height: calc(100% - 10rem)
+    width: calc(100% - 10rem)
+    border-radius: .25rem
+    display: flex
+    flex-flow: column nowrap
+    align-items: center
+    transform: translateY(0)
+    transition: transform 0.25s ease-out
+    div.section
+      margin: 1rem 0
+      position: relative
+      width: 90%
+      &.left
+        text-align: left
+      &.right
+        text-align: right
+      &.thin
+        width: fit-content
+        margin-top: 2rem
+
+    h2
+      color: colours.$offwhite
+      margin: 1rem 0 .5rem
+    p
+      color: colours.$offwhite
+      margin: .5rem
+  h1
+    color: colours.$offwhite
+    padding-top: 1rem
+
+div#ScatteredPieces
+  position: absolute
+  left: 40rem
+  height: 8rem
+  top: 50%
+  transform: translateY(-50%)
+  img
+    height: 100%
+
+
+div#ScatteredCards
+  position: absolute
+  right: 60rem
+  height: 13rem
+  top: 50%
+  transform: translateY(-50%)
+  img
+    height: 100%

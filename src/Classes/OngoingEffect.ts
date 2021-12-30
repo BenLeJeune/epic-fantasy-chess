@@ -4,6 +4,7 @@ export default class OngoingEffect {
 
     private affecting : number
     private name: string
+    private initialDuration: number
     private durationRemaining: number
     private toolTip: string
     private target: "square" | "piece"
@@ -11,6 +12,7 @@ export default class OngoingEffect {
     public constructor(_affecting: number, _name: string, _duration: number, _toolTip: string, _target: "square" | "piece" = "piece") {
         this.affecting = _affecting;
         this.name = _name;
+        this.initialDuration = _duration;
         this.durationRemaining = _duration;
         this.toolTip = _toolTip;
         this.target = _target;
@@ -18,6 +20,7 @@ export default class OngoingEffect {
 
     public getSquare = () => this.affecting;
     public getName = () => this.name;
+    public getInitialDuration = () => this.initialDuration;
     public getDurationRemaining = () => this.durationRemaining;
     public getToolTip = () => this.toolTip;
     public getTarget = () => this.target;

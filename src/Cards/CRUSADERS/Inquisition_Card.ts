@@ -4,6 +4,7 @@ import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import {adjacentSquares} from "../../helpers/Adjacency";
+import {CRUSADER_EXPANSION} from "../Expansions";
 
 export default class Inquisition_Card extends Card {
 
@@ -17,6 +18,7 @@ export default class Inquisition_Card extends Card {
     public readonly shortName = "_Inqu";
     public static readonly id = "inquisition";
     public readonly id = Inquisition_Card.id;
+    public readonly expac = CRUSADER_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

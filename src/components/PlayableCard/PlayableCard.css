@@ -4,29 +4,42 @@ div#PlayerHand {
   align-items: flex-end;
   justify-content: center;
   position: absolute;
+  width: 100%;
   bottom: 0;
+  height: 14em;
+  pointer-events: none;
+  transition: transform 0.2s ease-out;
+}
+div#PlayerHand.forceLower {
+  transform: translateY(60%);
+}
+div#PlayerHand div#PlayerHandInner {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  justify-content: center;
+  position: absolute;
+  top: 0;
   transition: transform 0.2s ease-out;
   transform: translateY(50%) translateX(-50%);
   left: 50%;
   padding: 0 2.5rem;
+  pointer-events: all;
 }
-div#PlayerHand:hover {
+div#PlayerHand div#PlayerHandInner:hover {
   transform: translateY(0) translateX(-50%);
 }
-div#PlayerHand:hover.forceLower {
-  transform: translateY(35%) translateX(-50%);
-}
-div#PlayerHand div.playableCardContainer {
+div#PlayerHand div#PlayerHandInner div.playableCardContainer {
   z-index: 5;
 }
-div#PlayerHand div.playableCardContainer.noDrag div.playableCard {
+div#PlayerHand div#PlayerHandInner div.playableCardContainer.noDrag div.playableCard {
   cursor: not-allowed;
   opacity: 0.9;
 }
-div#PlayerHand div.playableCardContainer:hover {
+div#PlayerHand div#PlayerHandInner div.playableCardContainer:hover {
   z-index: 20;
 }
-div#PlayerHand div.playableCard {
+div#PlayerHand div#PlayerHandInner div.playableCard {
   width: 10em;
   height: 14em;
   background-color: #2C2F40;
@@ -35,8 +48,30 @@ div#PlayerHand div.playableCard {
   cursor: pointer;
   border-radius: 0.25rem;
   padding: 0.5rem;
+  color: #F8DC97;
+  position: relative;
 }
-div#PlayerHand div.playableCard:hover {
+div#PlayerHand div#PlayerHandInner div.playableCard div.cardTitle {
+  text-align: center;
+  font-size: 1.2rem;
+  padding-bottom: 0.5rem;
+}
+div#PlayerHand div#PlayerHandInner div.playableCard div.cardChaosScore {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+}
+div#PlayerHand div#PlayerHandInner div.playableCard div.cardChaosScore div.speed {
+  margin-left: auto;
+}
+div#PlayerHand div#PlayerHandInner div.playableCard div.cardExpac {
+  position: absolute;
+  bottom: 0.25rem;
+  text-align: center;
+  width: 100%;
+  color: #161823;
+}
+div#PlayerHand div#PlayerHandInner div.playableCard:hover {
   transform: scale(1.2);
 }
 

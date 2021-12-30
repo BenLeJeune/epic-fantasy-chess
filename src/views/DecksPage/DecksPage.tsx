@@ -83,6 +83,7 @@ export default function DecksPage() {
             Your Decks
         </h1>
         <p className="pageSubtitle">Where you can view, edit, create and delete decks.</p>
+        <p className="pageSubtitle">Click on a deck to edit it, hover over a deck to delete it.</p>
 
         <div className="decksButtonRow">
             <NiceButton onClick={ () => createNewDeck() } text="NEW DECK" buttonStyle="small"/>

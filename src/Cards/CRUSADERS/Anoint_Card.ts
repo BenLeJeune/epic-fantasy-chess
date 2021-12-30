@@ -3,6 +3,7 @@ import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
+import {CRUSADER_EXPANSION} from "../Expansions";
 
 export default class Anoint_Card extends Card {
 
@@ -11,11 +12,12 @@ export default class Anoint_Card extends Card {
 
     public readonly targets = 1; //Simply choose a square
     public readonly fast = false;
-    public readonly cost = 0;
+    public readonly cost = 11;
 
     public readonly shortName = "_Anoi";
     public static readonly id = "anonit";
     public readonly id = Anoint_Card.id;
+    public readonly expac = CRUSADER_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

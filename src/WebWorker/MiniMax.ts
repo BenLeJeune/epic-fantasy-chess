@@ -1,15 +1,11 @@
-import Game, {AdditionalOptions} from "../Classes/Game";
+import Game from "../Classes/Game";
 import {filterLegalMoves, isCheck} from "../helpers/Checks";
 import Board from "../Classes/Board";
 import {positionalEngineEvaluation} from "../helpers/Evaluation";
 import includePromotion, {PromotionMove} from "./IncludePromotions";
-import {legalMove} from "../types";
-import TranspositionTable from "./HashTable";
-import {arraysAreEqual} from "../helpers/Utils";
 import Piece from "../Classes/Piece";
 import GamePiece from "../Pieces/GamePiece";
 import ActualMove from "../Classes/Move";
-import { ActualMoves } from "../helpers/MoveFilter";
 import OngoingEffect from "../Classes/OngoingEffect";
 
 ///
@@ -21,7 +17,9 @@ import OngoingEffect from "../Classes/OngoingEffect";
 // ALPHA represents the MIN score the MAXIMISING player is guaranteed
 // BETA represents the MAX score the MINIMISING player is guaranteed
 
-const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[],e:number,t:number,q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], effects?: OngoingEffect[] ) => {
+let ActualMoves = ( moves:any[] ) => moves.filter( m => m instanceof ActualMove )
+
+const MiniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[], e:number, t:number, q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], effects?: OngoingEffect[] ) => {
 
     ///Another exit point
     ///Returned values are meaningless, won't read them
@@ -61,13 +59,13 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         ...remainingMoves /// THEN THE REST
     ];
 
-    let isCheckMate = isCheck( g_board, g_moves_actual, col, undefined, g.getPieceIndexes()) && legalMoves.length === 0; //am I in check?
+    let isCheckMate = isCheck( g_board, g_moves_actual, col, undefined) && legalMoves.length === 0; //am I in check?
     let oppoonentLegalCaptures =  Board.getLegalMoves( g_board, g_moves_actual, { colour: -col, mode: "captures" } )
 
     if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col, effects || []).length === 0 )) {
         //We've reached the end! Return the final evaluation
         let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col, effects || []).length === 0
-        let ev = positionalEngineEvaluation( g_board, g_moves_actual, g.getPieceIndexes(), pieces );
+        let ev = positionalEngineEvaluation( g_board, g_moves_actual, pieces );
         hashSet( g_board, ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
         counter()
         return [ ev , { move: { from: -1, to: -1 } }, g.getMoves().length, quiescence_quiet || isCheckMate ] as [ number, PromotionMove, number, boolean ];
@@ -118,7 +116,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
                     temp_quiet = hashedEval[2]
                 }
                 else {
-                    let minmax = miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces, effects);
+                    let minmax = MiniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces, effects);
                     ev = minmax[0]
 
                     //Here we can do some special evaluations
@@ -164,4 +162,4 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
 
 }
 
-export default miniMax;
+export default MiniMax;

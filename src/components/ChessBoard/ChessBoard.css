@@ -114,12 +114,116 @@ div#ChaosValue .val {
   font-weight: bold;
 }
 
+div.deck {
+  position: absolute;
+  left: 100%;
+  margin-left: 1rem;
+  height: 7em;
+  width: 5em;
+  background-color: #262836;
+  border: 1px solid #161823;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+div.deck:hover {
+  background-color: #2C2F40;
+}
+div.deck#WhiteDeck {
+  bottom: 1rem;
+}
+div.deck#BlackDeck {
+  bottom: calc(1rem + 8em);
+}
+div.deck p {
+  color: #464B66;
+  text-align: center;
+  width: 100%;
+  margin: 0.75rem 0 0;
+}
+
+div#DeckOverlay {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: calc(100% - 2rem);
+  border-radius: 1rem;
+  background-color: #262836;
+  transition: opacity 0.25s ease, transform 0.25s ease-out;
+  padding: 0.5rem 0.5rem 1rem;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  justify-items: flex-start;
+}
+div#DeckOverlay div.close {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  color: #464B66;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+div#DeckOverlay div.close:hover {
+  color: #E2E2E2;
+}
+div#DeckOverlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+div#DeckOverlay.shown {
+  opacity: 1;
+}
+div#DeckOverlay div.deckOverlayCard {
+  margin: 0.5rem;
+  background-color: #2C2F40;
+  border-radius: 0.25rem;
+  height: 10.5em;
+  width: 7.5em;
+  border: 1px solid #161823;
+  padding: 0 0.5em;
+  position: relative;
+}
+div#DeckOverlay div.deckOverlayCard p {
+  color: #F8DC97;
+  font-size: 0.75em;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+}
+div#DeckOverlay div.deckOverlayCard p.title {
+  font-size: 1em;
+  text-align: center;
+}
+div#DeckOverlay div.deckOverlayCard p.expac {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: #161823;
+}
+div#DeckOverlay div.deckOverlayCard p.quantity {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.25em;
+  color: #464B66;
+}
+div#DeckOverlay div.deckOverlayCard div.topRow {
+  display: flex;
+  flex-flow: row nowrap;
+  margin-top: 0.25em;
+}
+div#DeckOverlay div.deckOverlayCard div.topRow p.speed {
+  margin-left: auto;
+}
+
 div.allowRotationCheckbox {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 2rem;
+  position: fixed;
+  top: 100px;
   left: 2rem;
   background-color: #262836;
   border-radius: 0.25rem;

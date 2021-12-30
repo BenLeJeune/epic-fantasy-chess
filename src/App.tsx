@@ -24,9 +24,10 @@ import {Army, FIDEARMY} from "./Presets/Armies";
 import PlayableCard from "./components/PlayableCard/PlayableCard";
 import Expendable_Card from "./Cards/FIDE/Expendable_Card";
 import CardMove from './Classes/CardMove';
-import { ActualMoves } from './helpers/MoveFilter';
+import { getActualMoves } from './helpers/MoveFilter';
 import Card from "./Cards/Card";
 import {Deck, FIDEDECK} from "./Presets/Decks";
+import NavBar from "./components/NavBar/NavBar";
 
 
 const CHECKMATE = "via Checkmate",
@@ -109,7 +110,7 @@ function App() {
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
 
-    let parsedMoves = ActualMoves(gMoves).map(
+    let parsedMoves = getActualMoves(gMoves).map(
         ({ from, to, moving, captured, special, specify }) => {
           return {
             from, to, moving, captured, special, specify
@@ -134,13 +135,22 @@ function App() {
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
 
-    let parsedMoves = ActualMoves(gMoves).map(
+    let parsedMoves = getActualMoves(gMoves).map(
         ({ from, to, moving, captured, special, specify }) => {
           return {
               from, to, moving, captured, special, specify
-        } })
+        } });
 
-    return await MoveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, col, { colour: col })
+    let parsedEffects = game.current.getCurrentOngoingEffects().map(effect => {
+      return {
+        square: effect.getSquare(), name: effect.getName(), target: effect.getTarget(), duration: effect.getDurationRemaining()
+      }
+    })
+
+    let hand = playerColour > 0 ? game.current.getBlackHand() : game.current.getWhiteHand();
+    let parsedHand = hand.map(card => card.id)
+
+    return await MoveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, col, parsedEffects, parsedHand, { colour: col })
   }
 
   ///
@@ -179,8 +189,8 @@ function App() {
     /// CHECK FOR FIFTY-MOVE RULE
     if ( gMoves.length >= 100 ) {
       let recentMoves = gMoves.slice( gMoves.length - 100, gMoves.length );
-      let pawnMoves = ActualMoves(recentMoves).filter( m => Math.abs( m.moving ) === Piece.Pawn );
-      let captures = ActualMoves(recentMoves).filter( m => m.captured !== 0 );
+      let pawnMoves = getActualMoves(recentMoves).filter(m => Math.abs( m.moving ) === Piece.Pawn );
+      let captures = getActualMoves(recentMoves).filter(m => m.captured !== 0 );
       if ( pawnMoves.length === 0 && captures.length === 0 ) {
         setGameOver(true);
         setWinner(0);
@@ -188,13 +198,13 @@ function App() {
       }
     }
 
-    let moves = Board.getLegalMoves( gBoard, ActualMoves(gMoves), { colour: -col } );
-    let legalMoves = filterLegalMoves( moves, gBoard, ActualMoves(gMoves), -col, gEffects )
+    let moves = Board.getLegalMoves( gBoard, getActualMoves(gMoves), { colour: -col } );
+    let legalMoves = filterLegalMoves( moves, gBoard, getActualMoves(gMoves), -col, gEffects )
     if ( legalMoves.length === 0 ) {
       ///THERE ARE NO LEGAL MOVES!
       //The game is now over
       setGameOver(true);
-      if ( isCheck( gBoard, ActualMoves(gMoves), -col ) ) {
+      if ( isCheck( gBoard, getActualMoves(gMoves), -col ) ) {
         //Is in check - checkmate! Set a winner!
         setWinner( col > 0 ? 1 : -1 )
         setGameOverMsg( CHECKMATE );
@@ -415,7 +425,7 @@ function App() {
   const getHandCards = () => {
     const handSize = currentTurn > 0 ? game.current.getWhiteHand().length : game.current.getBlackHand().length;
     const cardMapping = ( card : Card, i : number ) =>
-        <PlayableCard draggable={!moveLockout && getChaosValue() >= card.cost} card={card}
+        <PlayableCard draggable={!moveLockout && getChaosValue() >= card.cost && !isCheck( board, getActualMoves(moves), currentTurn )} card={card}
                       dragStartCallback={() => dragStartCallback(i)}
                       dragEndCallback={onDragEnd} handPosition={i + 1} handSize={handSize}/>
     return currentTurn > 0 ? game.current.getWhiteHand().map(cardMapping) : game.current.getBlackHand().map(cardMapping)
@@ -423,7 +433,9 @@ function App() {
 
 
 
-  return <div className="app">
+  return <div className="app paddedTop">
+
+
     <div className="boardLeftColumn">
     </div>
     <div className={`chessBoardColumn ${ gameOver ? "gameOver" : "playing" }`}>
@@ -431,7 +443,7 @@ function App() {
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
                   whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces }
                   playerColour={ playerColour } cardTargetingIndex={cardTargetingIndex} game={game.current}
-                  opponentActive={ opponent === "COMP"} gameUUID={ uuid } pieceIndexes={ game.current.getPieceIndexes() }
+                  opponentActive={ opponent === "COMP"} gameUUID={ uuid }
                   allowRotation={allowRotation} setAllowRotation={ v => setAllowRotation(v) } moveLockout={moveLockout}
                   playCard={appendCardTarget} cardTargetsRemaining={cardTargetsRemaining} currentTargets={cardTargets}
       />
@@ -441,10 +453,15 @@ function App() {
       <MovesDisplay moves={ moves } unMove={ unMove } canUndo={ opponent === "LOCAL" }/>
     </div>
     <div id="PlayerHand">
-      {
-        getHandCards()
-      }
+      <div id="PlayerHandInner">
+        {
+          getHandCards()
+        }
+      </div>
     </div>
+
+
+    <NavBar/>
 
 
     { gameOver ?  <GameOverUI message={gameOverMsg} winner={winner}/> : null}

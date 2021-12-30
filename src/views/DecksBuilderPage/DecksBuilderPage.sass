@@ -108,6 +108,24 @@ div#DecksBuilderPage
                         &:hover
                             background-color: colours.$lightBlue
                             transform: none
+                    color: colours.$lightsquare
+                    position: relative
+                    div.cardTitle
+                        text-align: center
+                        font-size: 1.2rem
+                        padding-bottom: 0.5rem
+                    div.cardChaosScore
+                        display: flex
+                        flex-flow: row nowrap
+                        width: 100%
+                        div.speed
+                            margin-left: auto
+                    div.cardExpac
+                        position: absolute
+                        bottom: .25rem
+                        text-align: center
+                        width: 100%
+                        color: colours.$darkBlue
                     div.limitReached
                         position: absolute
                         top: 0
@@ -123,6 +141,7 @@ div#DecksBuilderPage
                         &.limitText
                             text-align: center
                             user-select: none
+                            color: black
                 div.listDragReceiver
                     background-color: colours.$mediumBlue
                     position: absolute

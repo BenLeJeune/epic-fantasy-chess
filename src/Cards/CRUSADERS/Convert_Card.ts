@@ -6,6 +6,7 @@ import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import {filterLegalMoves} from "../../helpers/Checks";
 import GamePiece from "../../Pieces/GamePiece";
 import OngoingEffect from "../../Classes/OngoingEffect";
+import {CRUSADER_EXPANSION} from "../Expansions";
 
 export default class Convert_Card extends Card {
 
@@ -14,11 +15,12 @@ export default class Convert_Card extends Card {
 
     public readonly targets = 1; //Simply choose a square
     public readonly fast = false;
-    public readonly cost = 0;
+    public readonly cost = 18;
 
     public readonly shortName = "_Convt";
     public static readonly id = "convert";
     public readonly id = Convert_Card.id;
+    public readonly expac = CRUSADER_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

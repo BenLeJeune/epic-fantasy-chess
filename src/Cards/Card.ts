@@ -18,6 +18,8 @@ export default abstract class Card {
     public static readonly id: string;
     public abstract readonly id: string;
 
+    public abstract readonly expac: string
+
     ///
     /// TARGETING & RESOLVING
     ///

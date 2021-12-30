@@ -54,31 +54,77 @@ export default function ArmiesBuilderPage() {
                      e.dataTransfer.dropEffect = "move";
                  } }
         >
-            <img src={ Piece.getImage(piece) } />
+            {piece === Piece.None ? null : <img src={Piece.getImage(piece)}
+                  draggable
+                  onDragStart={e => pieceDragStart(e, piece, i)}
+                  onDragEnd={e => pieceDragEnd(e, i)}
+            />}
         </div>
     )
 
-    const pieceDragStart = ( e : React.DragEvent, piece : number ) => {
+    const pieceDragStart = ( e : React.DragEvent, piece : number, fromIndex?:number ) => {
         if ( e.dataTransfer ) {
-            e.dataTransfer.setData("text", `${piece}`);
+            let text = `${piece}`;
+            if (fromIndex !== undefined) text += `-${fromIndex}`
+            e.dataTransfer.setData("text", text);
             e.dataTransfer.effectAllowed = "move";
         }
     }
 
-    const pieceDragEnd = ( piece : number ) => {
+    const pieceDragEnd = ( e : React.DragEvent, i : number ) => {
 
+        //IF WE DRAGGED IT TO OUTSIDE THE CHESSBOARD
+        let board  = document.getElementById("ArmyChessBoard");
+        if (board && Math.abs(armyPieces[i]) !== Piece.King) {
+            let { top, height, left, width } = board.getBoundingClientRect();
+            let { clientX, clientY } = e;
+            if ( clientY < top || clientY > top + height || clientX < left || clientX > left + width ) {
+                //REMOVE THE PIECE
+
+                let newPieces = [...armyPieces].map((p, index) => index === i ? Piece.None : p);
+
+                setArmyPieces( newPieces )
+                setChangesMade(true);
+
+                if (pointBuyRef.current) {
+                    pointBuyRef.current.className = "";
+                    if (newPieces.filter( p => p !== 6 ).reduce((prev, next) => (Piece.getPiece(next)?.materialValue || 0) + prev, 0 ) > 31) {
+                        setTimeout(() => {
+                            if (pointBuyRef.current) pointBuyRef.current.className = "invalid";
+
+                        }, 0)
+                    }
+                }
+            }
+        }
     }
 
     let pointBuyRef = useRef<HTMLElement>(null);
     const getPointBuyTotal = () => armyPieces.filter( p => p !== 6 ).reduce((prev, next) => (Piece.getPiece(next)?.materialValue || 0) + prev, 0 );
 
     const onDrop = ( e : React.DragEvent, i : number ) => {
-        let piece : number = Number(e.dataTransfer.getData("text"));
+        let droppedInfo = e.dataTransfer.getData("text").split("-");
+        console.log(droppedInfo);
+        let piece : number = Number(droppedInfo[0]);
+        let indexFrom = Number(droppedInfo[1] || -1)
         //We dragged this piece to the target location
-        if ( i !== 4 ) { //We can't replace the king!
-            let newPieces = [
-            ...armyPieces.slice(0, i), piece, ...armyPieces.slice(i+1)
-            ]
+        if ( i !== 4 && Math.abs(piece) !== Piece.King && Piece.getPiece(piece) ) { //We can't replace the king!
+
+            //piece is the piece we are dragging
+            //If the dropped index !== -1, then we want to swap the pieces.
+            let replacementPiece = armyPieces[i] || Piece.None;
+            console.log(replacementPiece)
+
+            let newPieces = [...armyPieces].map((p, index) => {
+                if (index === i) {
+                    //REPLACING PIECE
+                    return piece;
+                }
+                else if (index === indexFrom) {
+                    return replacementPiece;
+                }
+                else return p;
+            })
             setArmyPieces( newPieces )
             setChangesMade(true);
 
@@ -98,8 +144,7 @@ export default function ArmiesBuilderPage() {
         ( piece, i ) => <div className="libraryPiece" onMouseOver={ () => setPiecePreview(piece) }>
             <img src={ Piece.getImage(piece) }
              draggable={ piece !== Piece.King }
-             onDragStart={ e => pieceDragStart( e, piece ) }
-             onDragEnd={ () => pieceDragEnd( piece ) } />
+             onDragStart={ e => pieceDragStart( e, piece ) }/>
         </div>
     )
 
@@ -136,7 +181,12 @@ export default function ArmiesBuilderPage() {
 
                 <div className={`pieceInfoPreviewBox ${ piecePreview === 0 ? "noPreview" : "preview" }`}>
                     {
-                        piecePreview === 0 ? <p className="faded">Hover over a piece to look at it.</p> : <>
+                        piecePreview === 0 ? <>
+                            <p className="faded">Hover over a piece to look at it.</p>
+                            <p className="faded">Drag pieces to change your army.</p>
+                        </>
+
+                        : <>
                             <h1 className="PieceInfo">{ Piece.getPiece(piecePreview)?.longName }</h1>
                             <div className="imgContainer">
                                 <img src={ Piece.getImage(piecePreview) } />
@@ -186,7 +236,7 @@ export default function ArmiesBuilderPage() {
                         <p>Point Buy: <strong ref={pointBuyRef}>{ getPointBuyTotal() }/31 </strong> </p>
                     </div>
 
-                    <div className="chessBoard" style={{width: "100%"}}>
+                    <div className="chessBoard" id="ArmyChessBoard" style={{width: "100%"}}>
 
                         { getChessBoard() }
                         { getChessPieces() }

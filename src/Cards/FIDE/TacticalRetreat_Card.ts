@@ -3,6 +3,7 @@ import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
+import {FIDE_EXPANSION} from "../Expansions";
 
 export default class TacticalRetreat_Card extends Card {
 
@@ -16,6 +17,7 @@ export default class TacticalRetreat_Card extends Card {
     public readonly shortName = "_Tcrt ";
     public static readonly id = "tactical-retreat";
     public readonly id = TacticalRetreat_Card.id;
+    public readonly expac = FIDE_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

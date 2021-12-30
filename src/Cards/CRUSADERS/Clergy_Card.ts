@@ -4,6 +4,7 @@ import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import {adjacentSquares} from "../../helpers/Adjacency";
+import {CRUSADER_EXPANSION} from "../Expansions";
 
 export default class Clergy_Card extends Card {
 
@@ -12,11 +13,12 @@ export default class Clergy_Card extends Card {
 
     public readonly targets = 2; //Simply choose a square
     public readonly fast = false;
-    public readonly cost = 0;
+    public readonly cost = 15;
 
     public readonly shortName = "_Clrg";
     public static readonly id = "clergy";
     public readonly id = Clergy_Card.id;
+    public readonly expac = CRUSADER_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

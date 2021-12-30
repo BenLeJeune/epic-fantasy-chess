@@ -15,10 +15,11 @@ import PiecePromotionUI from "../PiecePromotionUI/PiecePromotionUI";
 import { generateEmptyBoard } from '../../helpers/BoardGenerators';
 import Expendable_Card from "../../Cards/FIDE/Expendable_Card";
 import CardMove from '../../Classes/CardMove';
-import {ActualMoves} from "../../helpers/MoveFilter";
+import {getActualMoves} from "../../helpers/MoveFilter";
 import Card from "../../Cards/Card";
 import ALL_CARDS from "../../Cards/Cards";
 import InformationBubble from "../InformationBubble/InformationBubble";
+import {Deck} from "../../Presets/Decks";
 
 interface Props {
     board : number[], //The game board
@@ -35,7 +36,6 @@ interface Props {
     playerColour : number, //"Player 1"'s player colour
     opponentActive : boolean, //true for computer opponent, false for local opponent
     gameUUID: string, //game UUID
-    pieceIndexes: number[], //Indexes of the pieces currently on the board
     moveLockout: boolean, //Whether or not moves are currently locked out - for ensuring smooth transitions between turns
     allowRotation: boolean,
     setAllowRotation: ( allowRotation: boolean ) => void, //Call this whenever rotation is changed here, so app.tsx can know about it
@@ -46,7 +46,7 @@ interface Props {
 }
 
 export default function ChessBoard({ board, currentTurn, game, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece,
-       whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, pieceIndexes, moveLockout, allowRotation, setAllowRotation,
+       whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, moveLockout, allowRotation, setAllowRotation,
        cardTargetingIndex, playCard, cardTargetsRemaining, currentTargets } : Props) {
 
     ///
@@ -197,7 +197,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
             let index = cardTargetsRemaining === 0 ? 0 : currentCard.targets - cardTargetsRemaining;
             let currentFunction = currentCard.getValidTargets[ index ];
             currentFunction = currentFunction as typeof currentFunction || currentCard.getValidTargets[0];
-            return currentFunction as unknown ? currentFunction( board, currentTurn, ActualMoves(moves), currentTargets, game.getCurrentOngoingEffects() )
+            return currentFunction as unknown ? currentFunction( board, currentTurn, getActualMoves(moves), currentTargets, game.getCurrentOngoingEffects() )
                     .map( target =>
                         <TargetingSquare
                             position={target}
@@ -384,6 +384,36 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     const getChaosValue = () => blackCaptured.reduce((prev, current) => prev + (Piece.getPiece(current)?.materialValue || 0), 0) +
         whiteCaptured.reduce((prev, current) => prev + (Piece.getPiece(current)?.materialValue || 0), 0)
 
+
+    ///
+    /// DECKS
+    ///
+    const [ deckShown, setDeckShown ] = useState<"white"|"black">("white");
+    const [ showDeckOverlay, setShowDeckOverlay ] = useState<boolean>(false);
+
+    const getDeckQuantity = ( deck: Deck, cardId: string ) => deck.cards.filter(c => c === cardId).length
+
+    const getDeckOverlay = () => {
+        let deck = deckShown === "white" ? game.getWhiteDeck() : game.getBlackDeck();
+        return <div id="DeckOverlay" className={showDeckOverlay ? "shown" : "hidden"}>
+            <div className="close" onClick={() => setShowDeckOverlay(false)}>x</div>
+            {
+                [...deck.cards].filter((c, i, a) => a.indexOf(c) === i).map( card => ALL_CARDS[card] )
+                    .map(card => <div className="deckOverlayCard">
+                    <div className="topRow">
+                        <p className="chaosCost">{ card.cost }</p>
+                        <p className="speed">{ card.fast ? "fast" : "" }</p>
+                    </div>
+                    <p className="title">{card.cardName}</p>
+                    <p className="desc">{card.description}</p>
+                    <p className="expac">{card.expac}</p>
+                    <p className="quantity">x{ getDeckQuantity( deck, card.id ) }</p>
+                </div>
+            )
+            }
+        </div>
+    }
+
     return <>
         <InfoBar captures={ rotated? whiteCaptured : blackCaptured } evaluation={ -materialEvaluation( board ) * (rotated ? -1 : 1) }/>
         <div id="ChessBoardWrapper">
@@ -428,6 +458,25 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                     CHAOS VALUE
                 </div>
             </div>
+
+            <div id="BlackDeck" title="Click to see cards" className="deck" onClick={() => {
+                setDeckShown(!rotated ? "black" : "white");
+                setShowDeckOverlay(true);
+            }}>
+                <p>{ !rotated ? "Black" : "White" } Deck</p>
+                <p>{ (!rotated ? game.getBlackCurrentDeck() : game.getWhiteCurrentDeck()).length } cards remaining</p>
+            </div>
+            <div id="WhiteDeck" title="Click to see cards" className="deck" onClick={() => {
+                setDeckShown(!rotated ? "white" : "black");
+                setShowDeckOverlay(true);
+            }}>
+                <p>{ !rotated ? "White" : "Black" } Deck</p>
+                <p>{ (!rotated ? game.getWhiteCurrentDeck() : game.getBlackCurrentDeck()).length} cards remaining </p>
+            </div>
+
+            {
+                getDeckOverlay()
+            }
 
         </div>
         <InfoBar captures={ rotated? blackCaptured : whiteCaptured } evaluation={ materialEvaluation( board ) * (rotated ? -1 : 1) }/>

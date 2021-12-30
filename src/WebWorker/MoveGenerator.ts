@@ -5,12 +5,12 @@ import {legalMove, SpecialMove} from "../types";
 import {filterLegalMoves, isCheck} from "../helpers/Checks";
 import {positionalEngineEvaluation} from "../helpers/Evaluation";
 import Piece from "../Classes/Piece";
-import miniMax from "./MiniMax";
+import MiniMax from "./MiniMax";
 import queryOpeningBook from "./QueryOpeningBook";
 import TranspositionTable from "./HashTable";
 import Queen from "../Pieces/FIDE/Queen";
 import {randomFromList} from "../helpers/Utils";
-import { ActualMoves } from "../helpers/MoveFilter";
+import { getActualMoves } from "../helpers/MoveFilter";
 
 /// FIRST STAGE - COMPLETELY RANDOM
 
@@ -18,6 +18,10 @@ import { ActualMoves } from "../helpers/MoveFilter";
 
 export type moveProxy = {
     from: number, to: number, moving: number, captured: number, specify: number, special: SpecialMove | undefined
+}
+
+export type effectProxy = {
+    square: number, name: string, target: string, duration: string
 }
 
 type EvaluatedMove = {
@@ -31,7 +35,7 @@ let table = new TranspositionTable();
 ///
 /// THE MAIN MOVE GENERATOR
 ///
-const moveGenerator = ( board: number[], history: moveProxy[], army: number[], colour: number, options: {} = {}  ) => {
+const moveGenerator = ( board: number[], history: moveProxy[], army: number[], colour: number, effects : effectProxy[], options: {} = {}  ) => {
 
     console.log(colour)
 
@@ -42,7 +46,7 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
     )
 
 
-    let g_moves_actual = ActualMoves(g.getMoves());
+    let g_moves_actual = getActualMoves(g.getMoves());
 
     let randomMoves =  Board.getLegalMoves( g.getBoard(), g_moves_actual, options );
 
@@ -77,7 +81,7 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
     let counter = () => nodes++
 
     let pieces = Piece.PIECE_OBJECTS;
-    let move = miniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter, undefined, undefined, undefined, pieces, g.getCurrentOngoingEffects() );
+    let move = MiniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter, undefined, undefined, undefined, pieces, g.getCurrentOngoingEffects() );
 
     console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
     console.log(`Examined ${ nodes } nodes`)

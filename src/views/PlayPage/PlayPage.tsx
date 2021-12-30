@@ -10,7 +10,7 @@ import {randomFromList} from "../../helpers/Utils";
 import {ARMY_KEY, DECK_KEY, GAME_KEY} from "../../KEYS";
 import Piece from "../../Classes/Piece";
 import { Link } from "react-router-dom";
-import {Deck, FIDEDECK} from "../../Presets/Decks";
+import {CRUSADERSDECK, Deck, FIDEDECK} from "../../Presets/Decks";
 
 export default function PlayPage() {
 
@@ -40,7 +40,7 @@ export default function PlayPage() {
         //Loading the army from local storage
         let decksJSON = localStorage.getItem( DECK_KEY );
         let decks = [] as Deck[];
-        decks.push( FIDEDECK );
+        decks.push( FIDEDECK, CRUSADERSDECK );
         if (decksJSON) {
             let parsedDecks = JSON.parse(decksJSON) as unknown as { [key:string]: Deck };
             //Pushing the armies to an array, if any are found!

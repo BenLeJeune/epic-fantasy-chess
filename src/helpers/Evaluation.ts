@@ -21,86 +21,39 @@ const materialEvaluation = (board : number[] ) => {
     }, 0);
 }
 
-const positionalEngineEvaluation = ( board : number[], history: ActualMove[], pieceIndexes?: number[], _pieces?: (GamePiece|null)[], effects?: OngoingEffect[] ) => {
+const positionalEngineEvaluation = ( board : number[], history: ActualMove[], _pieces?: (GamePiece|null)[], effects?: OngoingEffect[] ) => {
 
 
     let startTime = performance.now();
 
-    if ( isCheck( board, history, 1, undefined, pieceIndexes  )){
+    if ( isCheck( board, history, 1, undefined  )){
         let wMoves =  filterLegalMoves( Board.getLegalMoves( board, history, { colour: 1 } ), board, history, 1, effects || [] );
         //If white is checkmated, return negative infinity.
         if ( wMoves.length === 0 ) return Number.NEGATIVE_INFINITY
     }
-    else if ( isCheck( board, history, -1, undefined, pieceIndexes )) {
-        let bMoves = filterLegalMoves( Board.getLegalMoves( board, history, { colour: -1 }, pieceIndexes ), board, history, -1, effects || [] );
+    else if ( isCheck( board, history, -1, undefined )) {
+        let bMoves = filterLegalMoves( Board.getLegalMoves( board, history, { colour: -1 } ), board, history, -1, effects || [] );
         //If black mated, return infinity
         if ( bMoves.length === 0 ) return Number.POSITIVE_INFINITY
     }
 
     let val = 0;
 
-    if (pieceIndexes) {
-        /*val = pieceIndexes.reduce(( t, pos ) => {
-            const p = Piece.getPiece(board[pos]) as GamePiece;
-            if ( !p ) return t;
-            else {
-                let value = p.engineValue;
-                if ( board[pos] > 0 ) {  //A White Piece
-                    value += p.valueGrid[ 63 - pos ];
-                    return t + value;
-                }
-                else {  //A black piece
-                    value += p.valueGrid[pos];
-                    return t - value;
-                }
+    let i = 0, len = board.length;
+    let pieces = _pieces || Piece.PIECE_OBJECTS;
+    while ( i < len ) {
+        let index = i;
+        const p = pieces[ Math.abs(board[index]) ];
+        if (p) {
+            let value = p.engineValue
+            if ( board[index] > 0 ) {
+                val += value + p.valueGrid[63 - index]
             }
-        }, 0)*/
-        let i = 0, len = pieceIndexes.length;
-        let pieces = _pieces || Piece.PIECE_OBJECTS;
-        while ( i < len ) {
-            let index = pieceIndexes[i];
-            const p = pieces[ Math.abs(board[index]) ];
-            if (p) {
-                let value = p.engineValue
-                if ( board[index] > 0 ) {
-                    val += value + p.valueGrid[63 - index]
-                }
-                else val -= ( value + p.valueGrid[index] )       ;
-            }
-            i++
+            else val -= ( value + p.valueGrid[index] )       ;
         }
+        i++
     }
-    else {
-        /*val = board.filter( p => p !== Piece.None ).reduce(( t, piece, pos ) => {
-            const p = Piece.getPiece(piece) as GamePiece;
-            if ( !p ) return t;
-            else {
-                let value = p.engineValue;
-                if ( piece > 0 ) {  //A White Piece
-                    value += p.valueGrid[ 63 - pos ];
-                    return t + value;
-                }
-                else {  //A black piece
-                    value += p.valueGrid[pos];
-                    return t - value;
-                }
-            }
-        }, 0);*/
-        let i = 0, len = board.length;
-        let pieces = _pieces || Piece.PIECE_OBJECTS;
-        while ( i < len ) {
-            let index = i;
-            const p = pieces[ Math.abs(board[index]) ];
-            if (p) {
-                let value = p.engineValue
-                if ( board[index] > 0 ) {
-                    val += value + p.valueGrid[63 - index]
-                }
-                else val -= ( value + p.valueGrid[index] )       ;
-            }
-            i++
-        }
-    }
+
 
     let endTime = performance.now();
 

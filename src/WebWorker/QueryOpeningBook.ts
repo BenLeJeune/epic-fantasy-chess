@@ -6,7 +6,7 @@ import {filterLegalMoves} from "../helpers/Checks";
 import Piece from "../Classes/Piece";
 import {PromotionMove} from "./IncludePromotions";
 import {randomFromList} from "../helpers/Utils";
-import { ActualMoves } from "../helpers/MoveFilter";
+import { getActualMoves } from "../helpers/MoveFilter";
 
 ///
 /// QUERYING THE OPENING BOOK
@@ -16,7 +16,7 @@ const queryOpeningBook = ( g : Game, firstMove: boolean = false ) => {
 
     //We want to see if there are any openings left
     let b = g.getBoard();
-    let h = ActualMoves(g.getMoves());
+    let h = getActualMoves(g.getMoves());
 
     let moves = [] as legalMove[];
     let openingName = "";

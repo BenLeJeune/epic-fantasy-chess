@@ -24,4 +24,114 @@ div.buttonsRow {
   }
 }
 
+div.infoRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+div.infoRow p {
+  color: #464B66;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+div.infoRow p:hover {
+  text-decoration: underline;
+  color: #5F6EC3;
+}
+
+div#HowToPlayPopup {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+div#HowToPlayPopup.shown {
+  opacity: 1;
+  pointer-events: all;
+}
+div#HowToPlayPopup.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+div#HowToPlayPopup.hidden div#HowToPlayPopupBubble {
+  transform: translateY(10%);
+  transition: transform 0.25s ease-in;
+}
+div#HowToPlayPopup div#PopupBackground {
+  background-color: #161823;
+  opacity: 0.5;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+div#HowToPlayPopup div#HowToPlayPopupBubble {
+  background-color: #262836;
+  position: absolute;
+  top: 5rem;
+  left: 5rem;
+  height: calc(100% - 10rem);
+  width: calc(100% - 10rem);
+  border-radius: 0.25rem;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  transform: translateY(0);
+  transition: transform 0.25s ease-out;
+}
+div#HowToPlayPopup div#HowToPlayPopupBubble div.section {
+  margin: 1rem 0;
+  position: relative;
+  width: 90%;
+}
+div#HowToPlayPopup div#HowToPlayPopupBubble div.section.left {
+  text-align: left;
+}
+div#HowToPlayPopup div#HowToPlayPopupBubble div.section.right {
+  text-align: right;
+}
+div#HowToPlayPopup div#HowToPlayPopupBubble div.section.thin {
+  width: fit-content;
+  margin-top: 2rem;
+}
+div#HowToPlayPopup div#HowToPlayPopupBubble h2 {
+  color: #E2E2E2;
+  margin: 1rem 0 0.5rem;
+}
+div#HowToPlayPopup div#HowToPlayPopupBubble p {
+  color: #E2E2E2;
+  margin: 0.5rem;
+}
+div#HowToPlayPopup h1 {
+  color: #E2E2E2;
+  padding-top: 1rem;
+}
+
+div#ScatteredPieces {
+  position: absolute;
+  left: 40rem;
+  height: 8rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+div#ScatteredPieces img {
+  height: 100%;
+}
+
+div#ScatteredCards {
+  position: absolute;
+  right: 60rem;
+  height: 13rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+div#ScatteredCards img {
+  height: 100%;
+}
+
 /*# sourceMappingURL=Homepage.css.map */

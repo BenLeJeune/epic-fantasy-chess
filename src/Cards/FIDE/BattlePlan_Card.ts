@@ -4,6 +4,7 @@ import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
 import {differentColours, sameColour} from "../../helpers/DifferentColours";
 import {adjacentSquares} from "../../helpers/Adjacency";
+import {FIDE_EXPANSION} from "../Expansions";
 
 export default class BattlePlan_Card extends Card {
 
@@ -17,6 +18,7 @@ export default class BattlePlan_Card extends Card {
     public readonly shortName = "_BPln";
     public static readonly id = "battleplan";
     public readonly id = BattlePlan_Card.id;
+    public readonly expac = FIDE_EXPANSION;
 
     public readonly unMoveType = "boardState" as "boardState";
 

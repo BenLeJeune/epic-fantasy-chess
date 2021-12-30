@@ -101,12 +101,101 @@ div#ChaosValue
     font-size: 2rem
     font-weight: bold
 
+div.deck
+  position: absolute
+  left: 100%
+  margin-left: 1rem
+  height: 7em
+  width: 5em
+  background-color: colours.$mediumBlue
+  border: 1px solid colours.$darkBlue
+  border-radius: .25rem
+  cursor: pointer
+  transition: background-color 0.25s ease
+  &:hover
+    background-color: colours.$lightBlue
+  &#WhiteDeck
+    bottom: 1rem
+  &#BlackDeck
+    bottom: calc(1rem + 8em)
+  p
+    color: colours.$offLightBlue
+    text-align: center
+    width: 100%
+    margin: .75rem 0 0
+
+div#DeckOverlay
+  position: absolute
+  bottom: 1rem
+  right: 1rem
+  width: calc(100% - 2rem)
+  border-radius: 1rem
+  background-color: colours.$mediumBlue
+  transition: opacity 0.25s ease, transform 0.25s ease-out
+  padding: .5rem .5rem 1rem
+  div.close
+    position: absolute
+    right: 1rem
+    top: 1rem
+    color: colours.$offLightBlue
+    cursor: pointer
+    transition: color 0.25s ease
+    &:hover
+      color: colours.$offwhite
+  &.hidden
+    opacity: 0
+    pointer-events: none
+  &.shown
+    opacity: 1
+
+  display: flex
+  flex-flow: row wrap
+  align-content: flex-start
+  justify-items: flex-start
+
+  div.deckOverlayCard
+    margin: .5rem
+    background-color: colours.$lightBlue
+    border-radius: .25rem
+    height: 10.5em
+    width: 7.5em
+    border: 1px solid colours.$darkBlue
+    padding: 0 .5em
+    position: relative
+    p
+      color: colours.$lightsquare
+      font-size: .75em
+      padding: 0
+      margin: 0 0 .5rem 0
+      &.title
+        font-size: 1em
+        text-align: center
+      &.expac
+        position: absolute
+        bottom: 0
+        width: 100%
+        text-align: center
+        color: colours.$darkBlue
+      &.quantity
+        position: absolute
+        top: 100%
+        width: 100%
+        text-align: center
+        margin-top: .25em
+        color: colours.$offLightBlue
+    div.topRow
+      display: flex
+      flex-flow: row nowrap
+      margin-top: 0.25em
+      p.speed
+        margin-left: auto
+
 div.allowRotationCheckbox
   display: flex
   align-items: center
   justify-content: center
-  position: absolute
-  top: 2rem
+  position: fixed
+  top: 100px
   left: 2rem
   background-color: colours.$mediumBlue
   border-radius: .25rem

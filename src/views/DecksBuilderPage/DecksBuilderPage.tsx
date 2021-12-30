@@ -79,8 +79,19 @@ export default function DecksBuilderPage() {
     const getCardLibrary = () => Object.values(ALL_CARDS).map(
         ( card, i ) => <div className={`libraryCard ${getDeckQuantity(card.id) >= 2 ? "disabled" : ""}`} draggable={getDeckQuantity(card.id) < 2} onDragStart={e => onDragStart(e, card.id, "lib")} onDragEnd={onDragEnd}>
             <div>
-                <p>({ card.cost }) { card.cardName }</p>
-                <p>{ card.description }</p>
+                <div className="cardChaosScore">
+                    <div className="score">{ card.cost }</div>
+                    <div className="speed">{ card.fast ? "Fast" : "" }</div>
+                </div>
+                <div className="cardTitle">
+                    { card.cardName }
+                </div>
+                <div className="cardDescription">
+                    { card.description }
+                </div>
+                <div className="cardExpac">
+                    {card.expac}
+                </div>
             </div>
             {
                 getDeckQuantity(card.id) >= 2 ? <>

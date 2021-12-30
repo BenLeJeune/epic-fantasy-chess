@@ -104,10 +104,15 @@ div#ArmiesBuilderPage
                 left: 0
                 font-size: 2em
                 color: colours.$offLightBlue
+                p
+                    margin-bottom: 0
                 .invalid
                     color: colours.$red
                     display: inline-block
                     animation: invalid-pulse 0.5s forwards
+                .subtitle
+                    font-size: .5em
+                    margin-top: .25em
 
             div.chessBoardPadding
                 height: 100%
@@ -133,7 +138,7 @@ div#ArmiesBuilderPage
                             height: 100%
                             width: 100%
                             top: 0
-                            pointer-events: none
+                            cursor: pointer
 
                     div.lowerBoardSquare
                         position: absolute

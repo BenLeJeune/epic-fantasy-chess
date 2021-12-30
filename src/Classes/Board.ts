@@ -4,7 +4,7 @@ import ActualMove from "./Move";
 
 export default class Board {
 
-    static getLegalMoves : ( board : number[], history : ActualMove[], options : Partial<LegalMoveOptions>, pieceIndexes?: number[] ) => legalMove[] = ( board, history, options = {}, pieceIndexes ) => {
+    static getLegalMoves : ( board : number[], history : ActualMove[], options : Partial<LegalMoveOptions> ) => legalMove[] = ( board, history, options = {} ) => {
 
         let fullOptions = Object.assign({
             mode: "all", colour: 0, ignore: []
@@ -12,16 +12,6 @@ export default class Board {
 
         let moves = [] as legalMove[]
 
-
-        if (pieceIndexes) {
-            pieceIndexes.filter(pos => (board[pos] > 0 && fullOptions.colour > 0) || (board[pos] < 0 && fullOptions.colour < 0))
-                .filter(pos => fullOptions.ignore.indexOf(pos) === -1)
-                .forEach(pos => {
-                    let p = Piece.getPiece(board[pos])
-                    if (p) moves.push(...p.getLegalMoves(pos, board, fullOptions.mode, fullOptions.colour, history))
-                })
-        }
-        else {
         board.map( (piece, position) => [ piece, position ] )
             .filter( piece => ( piece[0] > 0 && fullOptions.colour > 0 ) || ( piece[0] < 0 && fullOptions.colour < 0 ) )
             .filter( ([ piece, position ]) => fullOptions.ignore.indexOf( position ) === -1 )
@@ -31,13 +21,9 @@ export default class Board {
                 if ( pieceObject === null ) return;
                 let pieceMoves = pieceObject.getLegalMoves( position, board, fullOptions.mode, fullOptions.colour, history );
                 moves.push( ...pieceMoves );
-            });
-        }
-
+        });
 
         //Pushes each of the moves
-
-
         return moves;
 
     }
