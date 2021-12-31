@@ -23,39 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
-      <change afterPath="$PROJECT_DIR$/src/KEYS.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/Assets/Pieces/cardinal_black.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/Assets/Pieces/cardinal_black.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/Game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Game.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presets/Armies.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presets/Armies.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Routers/PlayRouter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Routers/PlayRouter.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WebWorker/QueryOpeningBook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/QueryOpeningBook.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/Pieces/cardinal_black.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/Pieces/cardinal_black.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GameOverUI/GameOverUI.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameOverUI/GameOverUI.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/NavBar/NavBar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar/NavBar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/NiceButton/NiceButton.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NiceButton/NiceButton.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PiecePromotionUI/PiecePromotionUI.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PiecePromotionUI/PiecePromotionUI.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Homepage/Homepage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Homepage/Homepage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
