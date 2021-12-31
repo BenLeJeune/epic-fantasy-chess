@@ -7,7 +7,6 @@ import Piece from "../Classes/Piece";
 import GamePiece from "../Pieces/GamePiece";
 import ActualMove from "../Classes/Move";
 import Card from "../Cards/Card";
-import ALL_CARDS from "../Cards/Cards";
 
 ///
 /// MINIMAX ALGORITHM FOR FINDING MOVES
@@ -18,7 +17,7 @@ import ALL_CARDS from "../Cards/Cards";
 // ALPHA represents the MIN score the MAXIMISING player is guaranteed
 // BETA represents the MAX score the MINIMISING player is guaranteed
 
-let actualMoves = ( moves:any[] ) => moves.filter( m => m instanceof ActualMove );
+let actualMoves = ( moves :any[] ) => moves.filter( m => m instanceof ActualMove );
 
 const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[], e:number, t:number, q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], hand: Card[], handColour: number ) => {
 
