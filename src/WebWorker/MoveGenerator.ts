@@ -1,16 +1,15 @@
-import Board from "../Classes/Board";
 import ActualMove from "../Classes/Move";
-import Game, {AdditionalOptions} from "../Classes/Game";
-import {legalMove, SpecialMove} from "../types";
-import {filterLegalMoves, isCheck} from "../helpers/Checks";
+import Game from "../Classes/Game";
+import {SpecialMove} from "../types";
 import {positionalEngineEvaluation} from "../helpers/Evaluation";
 import Piece from "../Classes/Piece";
-import miniMax from "./MiniMax";
+import miniMax, { cardMove } from "./MiniMax";
 import queryOpeningBook from "./QueryOpeningBook";
 import transpositionTable from "./HashTable";
-import Queen from "../Pieces/FIDE/Queen";
-import {randomFromList} from "../helpers/Utils";
 import { getActualMoves } from "../helpers/MoveFilter";
+import OngoingEffect from "../Classes/OngoingEffect";
+import ALL_CARDS from "../Cards/Cards";
+import {promotionMove} from "./IncludePromotions";
 
 /// FIRST STAGE - COMPLETELY RANDOM
 
@@ -21,21 +20,21 @@ export type moveProxy = {
 }
 
 export type effectProxy = {
-    square: number, name: string, target: string, duration: string
+    square: number, name: string, target: "piece" | "square", duration: number
 }
 
-type EvaluatedMove = {
-    move: legalMove,
-    ev: number,
-    additional?: Partial<AdditionalOptions>
-}
+// type EvaluatedMove = {
+//     move: legalMove,
+//     ev: number,
+//     additional?: Partial<AdditionalOptions>
+// }
 
 let table = new transpositionTable();
 
 ///
 /// THE MAIN MOVE GENERATOR
 ///
-const moveGenerator = ( board: number[], history: moveProxy[], army: number[], colour: number, effects : effectProxy[], options: {} = {}  ) => {
+const moveGenerator = ( board: number[], history: moveProxy[], army: number[], colour: number, effects : effectProxy[], hand: string[], options: {} = {}  ) => {
 
     console.log(colour)
 
@@ -45,25 +44,25 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
         history.map( m => new ActualMove( m.from, m.to, m.moving, m.captured, m.specify, m.special )  ),
     )
 
+    if (g.getCurrentTurn() !== colour) g.dangerouslySetCurrentTurn(colour)
+
+    effects.forEach(e => g.addOngoingEffect( new OngoingEffect( e.square, e.name, e.duration, "", e.target )  ))
+
 
     let g_moves_actual = getActualMoves(g.getMoves());
 
-    let randomMoves =  Board.getLegalMoves( g.getBoard(), g_moves_actual, options );
-
-    let legalMoves = filterLegalMoves( randomMoves, g.getBoard(), g_moves_actual, colour, g.getCurrentOngoingEffects() )
-
-    //if ( legalMoves.length === 0 ) return;
+    let parsedHand = hand.map( id => ALL_CARDS[id] );
 
     //BEFORE WE SEARCH FOR ACTUAL MOVES, LET'S EXAMINE THE OPENING BOOK
     console.log("Choosing Opening...")
 
-    if (history.length === 0) {
+    if (history.length === 0 && colour >= 1) {
         //THIS IS OUR FIRST MOVE!
-        let [ opening, openingName ] = queryOpeningBook( g, true );
+        let [ opening ] = queryOpeningBook( g, colour, true );
         if (opening) return opening;
     }
 
-    let [opening, openingName] = queryOpeningBook( g );
+    let [opening, openingName] = queryOpeningBook( g, colour );
     const DEPTH = 2;
 
     if (opening) {
@@ -81,14 +80,25 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
     let counter = () => nodes++
 
     let pieces = Piece.PIECE_OBJECTS;
-    let move = miniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter, undefined, undefined, undefined, pieces, g.getCurrentOngoingEffects() );
+    let move = miniMax( g, DEPTH, colour > 0, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter, undefined, undefined, undefined, pieces, parsedHand, colour );
 
     console.log(`Found a move with value ${move[0]}: ${JSON.stringify(move[1])}`)
     console.log(`Examined ${ nodes } nodes`)
 
     console.log(`Evaulation before move: ${ positionalEngineEvaluation( g.getBoard(), g_moves_actual ) }`)
 
-    g.Move(move[1].move.from, move[1].move.to, move[1].move.special, move[1].additional);
+    if ( (move[1] as promotionMove).move ) {
+        let m = (move[1] as promotionMove).move
+        g.Move(m.from, m.to, m.special, (m as any).additional);
+    }
+    else {
+        //MOVE IS A CARD MOVE
+        let card = move[1] as cardMove;
+        let playableCard = ALL_CARDS[card.id];
+        g.PlayCard( playableCard, card.targets );
+
+    }
+
 
     console.log(`Evaulation after move: ${ positionalEngineEvaluation( g.getBoard(), g_moves_actual ) }`)
 
@@ -142,7 +152,7 @@ const beginBackgroundEvaluation = async ( board: number[], history: moveProxy[],
         history.map( m => new ActualMove( m.from, m.to, m.moving, m.captured, m.specify, m.special )  ),
     )
 
-    let opening = queryOpeningBook( g );
+    let opening = queryOpeningBook( g, -1 );
     if (opening) return;
 
 

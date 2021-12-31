@@ -10,7 +10,7 @@ import InfoBar from "../InfoBar/InfoBar";
 import {materialEvaluation} from "../../helpers/Evaluation";
 import ActualMove from "../../Classes/Move";
 import {SpecialMove} from "../../types";
-import {filterLegalMoves} from "../../helpers/Checks";
+import {filterCardMoves, filterLegalMoves} from "../../helpers/Checks";
 import PiecePromotionUI from "../PiecePromotionUI/PiecePromotionUI";
 import { generateEmptyBoard } from '../../helpers/BoardGenerators';
 import Expendable_Card from "../../Cards/FIDE/Expendable_Card";
@@ -197,7 +197,8 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
             let index = cardTargetsRemaining === 0 ? 0 : currentCard.targets - cardTargetsRemaining;
             let currentFunction = currentCard.getValidTargets[ index ];
             currentFunction = currentFunction as typeof currentFunction || currentCard.getValidTargets[0];
-            return currentFunction as unknown ? currentFunction( board, currentTurn, getActualMoves(moves), currentTargets, game.getCurrentOngoingEffects() )
+            return currentFunction as unknown ?  currentFunction( board, currentTurn, getActualMoves(moves), currentTargets, game.getCurrentOngoingEffects() )
+                .filter( square => filterCardMoves( game, currentCard.id, [ ...currentTargets, square ], currentTurn ) )
                     .map( target =>
                         <TargetingSquare
                             position={target}
@@ -452,7 +453,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
 
             <div id="ChaosValue" title="Chaos Value - the material value of all pieces captured. Must meet a threshold before cards can be played.">
                 <div className="val" id="ChaosValueScore">
-                    { getChaosValue() }
+                    { game.getChaosScore() }
                 </div>
                 <div className="sub">
                     CHAOS VALUE
@@ -464,14 +465,18 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                 setShowDeckOverlay(true);
             }}>
                 <p>{ !rotated ? "Black" : "White" } Deck</p>
-                <p>{ (!rotated ? game.getBlackCurrentDeck() : game.getWhiteCurrentDeck()).length } cards remaining</p>
+                <p>{ (!rotated ? game.getBlackCurrentDeck() : game.getWhiteCurrentDeck()).length } card/s remaining</p>
             </div>
             <div id="WhiteDeck" title="Click to see cards" className="deck" onClick={() => {
                 setDeckShown(!rotated ? "white" : "black");
                 setShowDeckOverlay(true);
             }}>
                 <p>{ !rotated ? "White" : "Black" } Deck</p>
-                <p>{ (!rotated ? game.getWhiteCurrentDeck() : game.getBlackCurrentDeck()).length} cards remaining </p>
+                <p>{ (!rotated ? game.getWhiteCurrentDeck() : game.getBlackCurrentDeck()).length} card/s remaining </p>
+            </div>
+
+            <div id="HandNotice">
+                <p className="hand">Opponent has { !rotated ? game.getBlackHand().length : game.getWhiteHand().length } card/s in hand</p>
             </div>
 
             {

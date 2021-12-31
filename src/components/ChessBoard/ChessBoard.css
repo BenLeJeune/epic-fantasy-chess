@@ -251,6 +251,15 @@ div.allowRotationCheckbox input[type=checkbox]:checked::after {
   background-color: #464B66;
 }
 
+div#HandNotice {
+  position: absolute;
+  left: 100%;
+  margin-left: 1rem;
+  width: 5em;
+  bottom: 16rem;
+  color: #464B66;
+}
+
 @keyframes pieceBubble-entrance {
   0% {
     opacity: 0;

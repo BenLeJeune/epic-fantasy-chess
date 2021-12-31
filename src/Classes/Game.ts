@@ -11,6 +11,8 @@ import Expendable_Card from "../Cards/FIDE/Expendable_Card";
 import {Deck, FIDEDECK} from "../Presets/Decks";
 import {randomFromList} from "../helpers/Utils";
 import OngoingEffect from "./OngoingEffect";
+import {getActualMoves} from "../helpers/MoveFilter";
+import GamePiece from "../Pieces/GamePiece";
 
 export default class Game {
 
@@ -129,12 +131,14 @@ export default class Game {
             })
 
             //WE WANT TO RETURN THE CARD TO THE PLAYER'S HAND
+            let returnedCard = Object.assign({}, ALL_CARDS[move.cardName]);
+            returnedCard.regenerateUUID()
             if ( this.currentTurn < 0 ) {
                 //Undoing a white card move (opposite because currentTurn not yet changed
-                this.whiteHand.push( ALL_CARDS[move.cardName] )
+                this.whiteHand.push( returnedCard )
             }
             else {
-                this.blackHand.push(ALL_CARDS[move.cardName])
+                this.blackHand.push( returnedCard )
             }
 
             //If the card we just un-did wasn't fast, then we change back the turn.
@@ -241,7 +245,7 @@ export default class Game {
             this.gameLength++ //If made a black move, incrementing game length (turn number)
         }
         this.currentTurn = -this.currentTurn;
-        this.checkForCardDraw()
+        this.checkForCardDraw();
         this.ongoingEffects.forEach( e => e.tickDownDuration() )
     }
 
@@ -259,14 +263,16 @@ export default class Game {
 
     private checkForCardDraw = () => {
         if (this.gameLength % 3 === 0 && this.currentTurn > 0) {
-            this.DrawCard(1);
-            this.DrawCard(-1);
+            if ( this.whiteCurrentDeck.length > 0 ) this.DrawCard(1);
+            if ( this.blackCurrentDeck.length > 0 ) this.DrawCard(-1);
         }
     }
     private checkForUndoCardDraw = () => {
-        if ((this.gameLength+1) % 3 === 0 && this.currentTurn < 0) {
-            this.whiteHand.pop();
-            this.blackHand.pop();
+        if ((this.gameLength+1) % 3 === 0 && this.currentTurn < 0 && this.whiteHand.length > 0 && this.blackHand.length > 0) {
+            let whiteCard = this.whiteHand.pop() as Card;
+            let blackCard = this.blackHand.pop() as Card;
+            this.whiteCurrentDeck.push(whiteCard);
+            this.blackCurrentDeck.push(blackCard);
         }
     }
 
@@ -371,6 +377,18 @@ export default class Game {
         // this.whiteHand = TEST_HAND;
         // this.blackHand = TEST_HAND;
 
+
+        this.whiteHand = this.whiteHand.map(c => {
+            let _c = Object.assign({}, c);
+            _c.regenerateUUID();
+            return _c;
+        });
+        this.blackHand = this.blackHand.map(c => {
+            let _c = Object.assign({}, c);
+            _c.regenerateUUID();
+            return _c;
+        });
+
         //ONGOING EFFECTS
         this.ongoingEffects = [];
 
@@ -396,6 +414,9 @@ export default class Game {
     public getBlackHand = () => this.blackHand;
     public getCurrentPlayerHand = () => this.currentTurn > 0 ? this.whiteHand : this.blackHand;
 
+    public getChaosScore = () => getActualMoves(this.moves)
+        .reduce(( chaosScore, m ) => Piece.getPiece(m.captured) ? chaosScore + (Piece.getPiece(m.captured) as GamePiece).materialValue : chaosScore, 0)
+
     public getWhiteCurrentDeck = () => this.whiteCurrentDeck;
     public getBlackCurrentDeck = () => this.blackCurrentDeck;
     public getWhiteDeck = () => this.whiteDeck;
@@ -408,6 +429,8 @@ export default class Game {
     public addOngoingEffect = ( effect: OngoingEffect ) => this.ongoingEffects.push(effect);
 
     public getLastMove = () => this.moves.length > 0 ? this.moves[ this.moves.length - 1 ] : undefined;
+
+    public dangerouslySetCurrentTurn = ( turn: number ) => this.currentTurn = turn;
 
     ///
     /// FOR PLAYING CARDS

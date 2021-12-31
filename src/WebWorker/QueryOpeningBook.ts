@@ -7,12 +7,13 @@ import Piece from "../Classes/Piece";
 import {promotionMove} from "./IncludePromotions";
 import {randomFromList} from "../helpers/Utils";
 import { getActualMoves } from "../helpers/MoveFilter";
+import {sameColour} from "../helpers/DifferentColours";
 
 ///
 /// QUERYING THE OPENING BOOK
 ///
 
-const queryOpeningBook = ( g : Game, firstMove: boolean = false ) => {
+const queryOpeningBook = ( g : Game, col: number = -1, firstMove: boolean = false ) => {
 
     //We want to see if there are any openings left
     let b = g.getBoard();

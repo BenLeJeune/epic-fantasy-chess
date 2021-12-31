@@ -19,6 +19,7 @@ import Envoy_Card from "./CRUSADERS/Envoy_Card";
 import Hallow_Card from "./CRUSADERS/Hallow_Card";
 import Repent_Card from "./CRUSADERS/Repent_Card";
 import Oust_Card from "./CRUSADERS/Oust_Card";
+import Test_Card from "./Test_Card";
 
 const ALL_CARDS : { [ cardId : string ] : Card } = {
     [Advance_Card.id]: new Advance_Card(),
@@ -44,11 +45,6 @@ const ALL_CARDS : { [ cardId : string ] : Card } = {
 };
 
 export const TEST_HAND = [
-    new Adjust_Card(),
-    new Inquisition_Card(),
-    new Envoy_Card(),
-    new Hallow_Card(),
-    new Repent_Card(),
     new Oust_Card()
 ]
 

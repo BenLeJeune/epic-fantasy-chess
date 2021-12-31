@@ -33,7 +33,7 @@ export default class Flee_Card extends Card {
         else {
             board.forEach(( piece, index ) => {
                 if (piece === Piece.None) {
-                    if (adjacentSquares(index).filter( adj => sameColour(colour, board[adj]) ).length > 0) validTargets.push(index);
+                    if (adjacentSquares(index).filter( adj => sameColour(colour, board[adj]) && Math.abs(board[adj]) !== Piece.King ).length > 0) validTargets.push(index);
                 }
             });
         }

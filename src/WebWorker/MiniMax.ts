@@ -6,7 +6,8 @@ import includePromotion, {promotionMove} from "./IncludePromotions";
 import Piece from "../Classes/Piece";
 import GamePiece from "../Pieces/GamePiece";
 import ActualMove from "../Classes/Move";
-import OngoingEffect from "../Classes/OngoingEffect";
+import Card from "../Cards/Card";
+import ALL_CARDS from "../Cards/Cards";
 
 ///
 /// MINIMAX ALGORITHM FOR FINDING MOVES
@@ -19,7 +20,7 @@ import OngoingEffect from "../Classes/OngoingEffect";
 
 let actualMoves = ( moves:any[] ) => moves.filter( m => m instanceof ActualMove );
 
-const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[], e:number, t:number, q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], effects?: OngoingEffect[] ) => {
+const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[], e:number, t:number, q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], hand: Card[], handColour: number ) => {
 
 
     ///Another exit point
@@ -31,14 +32,16 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
 
     let g_board = g.getBoard(), g_moves = g.getMoves();
     let g_moves_actual = actualMoves(g_moves);
+    let effects = g.getCurrentOngoingEffects();
+    let g_chaosScore = g.getChaosScore();
 
     let partialLegalCaptures =  Board.getLegalMoves( g_board, g_moves_actual, { colour: col, mode: "captures" } )
     let partialLegalMoves =  Board.getLegalMoves( g_board, g_moves_actual, { colour: col, mode: "moves" } )
     // let partialLegalMoves = Board.getLegalMoves( g.getBoard(), g.getMoves(), { colour: col } )
-    // let filteredLegalMoves = filterLegalMoves( partialLegalMoves, g.getBoard(), g.getMoves(), col )
-    // let filteredLegalCaptures = filterLegalMoves( partialLegalCaptures, g_board, g.getMoves(), col )
-    let unorderedMoves = includePromotion( g_board, partialLegalMoves, army, col );
-    let unorderedCaptures = includePromotion( g_board, partialLegalCaptures, army, col );
+    let filteredLegalMoves = filterLegalMoves( partialLegalMoves, g_board, g_moves_actual, col, effects );
+    let filteredLegalCaptures = filterLegalMoves( partialLegalCaptures, g_board, g_moves_actual, col, effects );
+    let unorderedMoves = includePromotion( g_board, filteredLegalMoves, army, col );
+    let unorderedCaptures = includePromotion( g_board, filteredLegalCaptures, army, col );
 
     //We want to order our moves.
     let orderedPromotionMoves = [...unorderedMoves, ...unorderedCaptures].filter( m => m.additional?.promotionTo )
@@ -65,7 +68,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
 
     if ( depth === -3 || isCheckMate || ( depth <= 0 && filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col, effects || []).length === 0 )) {
         //We've reached the end! Return the final evaluation
-        let quiescence_quiet =filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col, effects || []).length === 0
+        let quiescence_quiet = filterLegalMoves(oppoonentLegalCaptures, g_board, g_moves_actual, col, effects || []).length === 0
         let ev = positionalEngineEvaluation( g_board, g_moves_actual, pieces );
         hashSet( g_board, ev, g.getMoves().length + depth, quiescence_quiet || isCheckMate ); //Will return quiet if there are no captures available, or if checkmate
         counter()
@@ -75,7 +78,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
         //The evaluation hasn't finished yet!
 
         let value = maximising ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
-        let move = legalMoves[0];
+        let move = legalMoves[0] as promotionMove | cardMove;
         let quiet = false;
         let move_depth = depth;
 
@@ -95,10 +98,6 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
 
         for ( let { move: m, additional } of partFilter ) {
 
-            /// THIS IS WHERE WE CHECK FOR OUR CONDITION
-            /// IF THE CONDITION IS FALSE, OUR TIME IS UP!
-            /// WE WON'T BE USING THE RETURNED VALUE, ONLY UTILISING THE TRANSPOSITION TABLE
-
             g.Move( m.from, m.to, m.special, additional );
 
             if (!isCheck(g.getBoard(), actualMoves(g.getMoves()), col)) {
@@ -117,7 +116,7 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
                     temp_quiet = hashedEval[2]
                 }
                 else {
-                    let minmax = miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces, effects);
+                    let minmax = miniMax(g, depth - 1, !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces, hand, handColour);
                     ev = minmax[0]
 
                     //Here we can do some special evaluations
@@ -157,10 +156,84 @@ const miniMax = (g : Game, depth : number, maximising : boolean, army: number[],
             else g.UnMove()
         }
 
-        return [ value, move, move_depth, quiet ] as [ number, promotionMove, number, boolean ];
+        //We also want to try card moves!
+        if (maximising === (handColour > 0) && depth === 2) {
+            //IT'S OUR TURN - don't know opponent's hand, so can't take it into account.
+            let playable_hand = hand.filter( c => c.cost <= g_chaosScore );
+            if (g.getMoves().length > 10) console.log(g.getMoves(), depth)
+            for ( let index in playable_hand ) {
+                let card = playable_hand[Number.parseInt(index)];
+                let filteredHand = hand.filter((c) => c.getUUID() !== card.getUUID());
+
+                //for every card, we want to get every possible move.
+
+                let targetCombinations: (number[])[] = []
+
+                //Recursively find all targets
+                function getSubsequentTargets( targets: number[] ) {
+                    if (targets.length === card.targets) {
+                        targetCombinations.push(targets);
+                        return;
+                    }
+                    let nextTargets = card.getValidTargets[0]( g_board, col, g_moves_actual, targets );
+                    nextTargets.forEach( target => {
+                        getSubsequentTargets([ ...targets, target ]);
+                    } )
+                }
+
+
+                //CALL THE FUNCTION
+                getSubsequentTargets([]);
+
+                for ( let targets of targetCombinations ) {
+                    //EVALUATE TARGETS GOES HERE
+                    let ev: number = 0;
+                    let temp_quiet = false;
+                    let temp_depth = 0;
+
+                    g.PlayCard( card, targets );
+
+                    // IF WE JUST PLAYED A FAST CARD, THEN WE DON'T HAVE TO CHANGE WHETHER OR NOT WE ARE MAXIMISING
+                    let minmax = miniMax(g, depth - 1, card.fast ? maximising : !maximising, army, hashGet, hashSet, counter, original_depth, alpha, beta, pieces, filteredHand, handColour);
+                    ev = minmax[0];
+                    temp_depth = minmax[2];
+                    temp_quiet = minmax[3];
+
+
+                    g.UnMove();
+
+                    function update() {
+                        value = ev;
+                        move = { id: card.id, targets}
+                        quiet = temp_quiet
+                        move_depth = temp_depth;
+                    }
+
+                    if (maximising) {
+                        if (value <= ev) update()
+                        if (value >= beta) break; //β cutoff
+                        alpha = Math.max(alpha, value);
+                    } else {
+                        if (value >= ev) update()
+                        if (value <= alpha) break; //α cutoff
+                        beta = Math.min(beta, value)
+                    }
+
+
+                }
+
+            }
+        }
+
+        return [ value, move, move_depth, quiet ] as [ number, promotionMove | cardMove, number, boolean ];
 
     }
 
+}
+
+export type cardMove = {
+    id: string,
+    targets: number[]
 }
 
 export default miniMax;

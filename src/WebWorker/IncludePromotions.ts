@@ -1,6 +1,5 @@
 import {legalMove} from "../types";
 import Piece from "../Classes/Piece";
-import {positionalEngineEvaluation} from "../helpers/Evaluation";
 import {AdditionalOptions} from "../Classes/Game";
 
 ///

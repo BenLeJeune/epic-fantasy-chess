@@ -25,6 +25,7 @@ import { getActualMoves } from './helpers/MoveFilter';
 import Card from "./Cards/Card";
 import {Deck, FIDEDECK} from "./Presets/Decks";
 import NavBar from "./components/NavBar/NavBar";
+import {sameColour} from "./helpers/DifferentColours";
 
 
 const CHECKMATE = "via Checkmate",
@@ -166,7 +167,7 @@ function App() {
     else if ( p < 0 ) setWhiteCaptured( prev => [...prev, p] ); //If black piece, add to white's captures
   }
 
-  const isGameOver : ( from : number, col: number ) => void = ( from, col )  => {
+  const isGameOver : ( col: number ) => void = ( col )  => {
 
     let gMoves = game.current.getMoves();
     let gBoard = game.current.getBoard();
@@ -243,7 +244,7 @@ function App() {
 
 
     /// CHECK TO SEE IF THE GAME IS OVER
-    isGameOver( from, col );
+    isGameOver( col );
 
     setMoves( [...game.current.getMoves()] );
     setBoard( [...game.current.getBoard()] );
@@ -273,7 +274,12 @@ function App() {
             .then(
                 ( m ) => {
                   if (!gameOver && m) try {
-                    move(m.move.from, m.move.to, m.move.special, m.additional)
+                    if (m.move) {
+                      move(m.move.from, m.move.to, m.move.special, m.additional)
+                    }
+                    else if ( m.id && m.targets ) {
+                      playCard( m.id, m.targets )
+                    }
                     beginBackgroundEvaluation()
                     //When we make this move, begin performing background calculations
                   }
@@ -388,17 +394,32 @@ function App() {
   const playCard = ( card: string, targets: number []) => {
 
     //Gets the card from the hand
-    let playedCard = currentTurn > 0 ? game.current.getWhiteHand()[cardTargetingIndex||0] : game.current.getBlackHand()[cardTargetingIndex||0];
+    let playedCard;
+    if (cardTargetingIndex) {
+      playedCard = currentTurn > 0 ? game.current.getWhiteHand()[cardTargetingIndex||0] : game.current.getBlackHand()[cardTargetingIndex||0];
+    }
+    else {
+      playedCard = game.current.getCurrentPlayerHand()[ game.current.getCurrentPlayerHand().map( c => c.id ).indexOf(card) ]
+    }
 
 
     //Play the card
     game.current.PlayCard( playedCard, targets );
+    let col = game.current.getCurrentTurn();
+
+
+    /// CHECK TO SEE IF THE GAME IS OVER
+    isGameOver( col );
 
     setMoves(game.current.getMoves());
     setBoard(game.current.getBoard());
 
+    console.log(game.current.getCurrentTurn(), currentTurn)
+    setTimeout(() => {
+      console.log(game.current.getCurrentTurn(), currentTurn)
+    }, 1000)
     //Handles turn switching
-    if (game.current.getCurrentTurn() !== currentTurn) {
+    if (!playedCard.fast) {
       //Set the timer for the next turn to begin
       //If we aren't rotating, then there is no reason for there to be any delay
       if ( !allowRotation ) {
@@ -414,6 +435,32 @@ function App() {
         }, 500);
       }
     }
+    setTimeout(() => {
+      if ( !gameOver
+          && ( game.current.getCurrentTurn() === -playerColour || uuid === "fiesta")
+          && opponent === "COMP" ) {
+        generateRandomMove( game.current.getCurrentTurn() )
+            .then(
+                ( m ) => {
+                  if (!gameOver && m) try {
+                    if (m.move) {
+                      move(m.move.from, m.move.to, m.move.special, m.additional)
+                    }
+                    else if ( m.id && m.targets ) {
+                      playCard( m.id, m.targets )
+                    }
+                    beginBackgroundEvaluation()
+                    //When we make this move, begin performing background calculations
+                  }
+                  catch (e) {
+                    console.log(e);
+                    console.log(m)
+                  }
+                }
+            )
+      }
+
+    }, 0)
   }
 
   ///
@@ -426,12 +473,13 @@ function App() {
   /// HAND DISPLAY
   ///
   const getHandCards = () => {
-    const handSize = currentTurn > 0 ? game.current.getWhiteHand().length : game.current.getBlackHand().length;
+    const hand = opponent === "LOCAL" ? ( currentTurn > 0 ? game.current.getWhiteHand() : game.current.getBlackHand()  ) : (playerColour > 0 ? game.current.getWhiteHand() : game.current.getBlackHand())
+    const handSize = hand.length ;
     const cardMapping = ( card : Card, i : number ) =>
-        <PlayableCard draggable={!moveLockout && getChaosValue() >= card.cost && !isCheck( board, getActualMoves(moves), currentTurn )} card={card}
+        <PlayableCard draggable={!moveLockout && getChaosValue() >= card.cost && !isCheck( board, getActualMoves(moves), currentTurn ) && ( opponent === "LOCAL" || sameColour(playerColour, currentTurn) )} card={card}
                       dragStartCallback={() => dragStartCallback(i)}
                       dragEndCallback={onDragEnd} handPosition={i + 1} handSize={handSize}/>
-    return currentTurn > 0 ? game.current.getWhiteHand().map(cardMapping) : game.current.getBlackHand().map(cardMapping)
+    return hand.map(cardMapping)
   }
 
 

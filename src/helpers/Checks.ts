@@ -9,6 +9,9 @@ import Board from "../Classes/Board";
 import Game from "../Classes/Game";
 import OngoingEffect from "../Classes/OngoingEffect";
 import {sameColour} from "./DifferentColours";
+import CardMove from "../Classes/CardMove";
+import ALL_CARDS from "../Cards/Cards";
+import {getActualMoves} from "./MoveFilter";
 
 ///
 /// IS THIS COLOUR'S KING IN CHECK?
@@ -29,6 +32,32 @@ const isCheck : ( board:number[], history:ActualMove[], colour: number, legalMov
     //Are there any attacks on the king?
     return legalMoves.filter( move => move.to === pos ).length > 0;
 
+}
+
+const filterCardMoves : ( g:Game, id:string, targets:number[], colour:number)=>boolean = ( g, id, targets, colour) => {
+
+    let _g = new Game( g.getBoard(), getActualMoves(g.getMoves()), g.getWhiteDeck(), g.getBlackDeck() )
+    g.getCurrentOngoingEffects().forEach(
+        e => _g.addOngoingEffect( new OngoingEffect( e.getSquare(), e.getName(), e.getDurationRemaining(), "", e.getTarget() ) )
+    )
+
+    let stillInCheck = false;
+    let card = ALL_CARDS[id];
+    if (targets.length === card.targets) {
+        //WE HAVE ENOUGH TARGETS ALREADY
+        _g.PlayCard( ALL_CARDS[id], targets );
+        stillInCheck = isCheck( _g.getBoard(), getActualMoves(_g.getMoves()), colour );
+        _g.UnMove();
+    }
+    else {
+        //SEE IF THERE ARE ANY LEGAL TARGETS FOR THE SUBSEQUENT MOVE
+        let subsequentPossibleTargets = card.getValidTargets[0]( _g.getBoard(), colour, getActualMoves(_g.getMoves()), targets, _g.getCurrentOngoingEffects() );
+        let arePossibleMoves = subsequentPossibleTargets.reduce(( validTargets, current ) => {
+            return filterCardMoves( _g, id, [ ...targets, current ], colour ) || validTargets;
+        }, false)
+        stillInCheck = !arePossibleMoves
+    }
+    return !stillInCheck
 }
 
 const filterLegalMoves : ( moves: legalMove[], board : number[], history:ActualMove[], colour : number, effects : OngoingEffect[] ) => legalMove[]
@@ -93,6 +122,7 @@ const filterLegalMoves : ( moves: legalMove[], board : number[], history:ActualM
 
 export {
     isCheck,
-    filterLegalMoves
+    filterLegalMoves,
+    filterCardMoves
 }
 

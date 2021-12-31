@@ -48,7 +48,7 @@ const positionalEngineEvaluation = ( board : number[], history: ActualMove[], _p
             if ( board[index] > 0 ) {
                 val += value + p.valueGrid[63 - index]
             }
-            else val -= ( value + p.valueGrid[index] )       ;
+            else val -= ( value + p.valueGrid[index] );
         }
         i++
     }
