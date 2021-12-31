@@ -23,39 +23,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0a2fc58-051c-400b-8d88-7bc8758c38f0" name="Default Changelist" comment="Added check restrictions, piece promotion, and animating pieces as they move.">
-      <change afterPath="$PROJECT_DIR$/src/KEYS.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Cards/Test_Card.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/Assets/Pieces/cardinal_black.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/Assets/Pieces/cardinal_black.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cards/Cards.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cards/Cards.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cards/FIDE/Flee_Card.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cards/FIDE/Flee_Card.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Classes/Game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/Game.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Presets/Armies.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presets/Armies.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Routers/PlayRouter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/Routers/PlayRouter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/WebWorker/IncludePromotions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/IncludePromotions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MiniMax.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/MoveGenerator.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/WebWorker/QueryOpeningBook.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/WebWorker/QueryOpeningBook.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/Pieces/cardinal_black.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/Pieces/cardinal_black.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessSquare/ChessSquare.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GameOverUI/GameOverUI.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameOverUI/GameOverUI.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MovesDisplay/MovesDisplay.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/NavBar/NavBar.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar/NavBar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/NiceButton/NiceButton.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NiceButton/NiceButton.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PiecePromotionUI/PiecePromotionUI.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PiecePromotionUI/PiecePromotionUI.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/BoardGenerators.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesBuilderPage/ArmiesBuilderPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/ArmiesPage/ArmiesPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Homepage/Homepage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Homepage/Homepage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.sass" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/PlayPage/PlayPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.sass" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChessBoard/ChessBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/Checks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/Checks.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/Evaluation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/Evaluation.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +75,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/assets/Pieces" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Cards" />
     <property name="list.type.of.created.stylesheet" value="Sass" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -105,24 +88,24 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="ts.external.directory.path" value="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\assets\Pieces" />
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\Cards" />
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\WebWorker" />
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\WebWorker\Classes" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\public\Assets\Pieces" />
-      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject" />
-      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src" />
-      <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\public\Assets\Pieces" />
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\Cards\CRUSADERS" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\public\Assets\Misc" />
+      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\assets\Pieces" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\public\Assets\Sounds" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\GameOverUI" />
       <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\PiecePromotionUI" />
-      <recent name="C:\Users\benja\WebstormProjects\epic-fantasy-chess\src\components\MovesDisplay" />
-      <recent name="C:\Users\Ben Le Jeune\WebstormProjects\chessproject\src\components\ChessSquare" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -211,6 +194,19 @@
       <workItem from="1634926830203" duration="64000" />
       <workItem from="1635007061721" duration="9992000" />
       <workItem from="1635254276735" duration="14687000" />
+      <workItem from="1639504994950" duration="7867000" />
+      <workItem from="1639592728352" duration="3572000" />
+      <workItem from="1639600625588" duration="584000" />
+      <workItem from="1640630788035" duration="4917000" />
+      <workItem from="1640646113882" duration="3851000" />
+      <workItem from="1640693299962" duration="11469000" />
+      <workItem from="1640777996050" duration="8661000" />
+      <workItem from="1640786991242" duration="4637000" />
+      <workItem from="1640804662541" duration="3507000" />
+      <workItem from="1640859535994" duration="16207000" />
+      <workItem from="1640895734435" duration="595000" />
+      <workItem from="1640950970122" duration="531000" />
+      <workItem from="1640951560165" duration="12383000" />
     </task>
     <task id="LOCAL-00001" summary="Added isRidingObstructed function to recursively check piece movement for obstruction.">
       <created>1620989524827</created>
