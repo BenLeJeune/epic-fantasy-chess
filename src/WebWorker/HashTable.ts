@@ -1,9 +1,7 @@
-import Piece from "../Classes/Piece";
 import {arraysAreEqual} from "../helpers/Utils";
 
 const BOARD = 0, EVAL = 1, TURN = 2, QUIET = 3;
 export default class transpositionTable {
-
 
     table : [ number[], number, number, boolean ][][];
     size : number;
@@ -15,7 +13,8 @@ export default class transpositionTable {
 
     //This is for hashing the positions
     hash( board: number[] ) {
-        let arrayHash = [...board].map( (p, i) => [...(p * i).toString()].reduce((acc, next) => acc + next.charCodeAt(0), 0));
+        let arrayHash = [...board].map( (p, i) => [...(p * i).toString()]
+            .reduce((acc, next) => acc + next.charCodeAt(0), 0));
         return arrayHash.reduce((a, n) => a + n) % 4999;
     }
 

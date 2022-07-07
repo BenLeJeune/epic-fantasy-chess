@@ -1,0 +1,21 @@
+@use "../../modules/colours"
+
+div.textInput
+  cursor: text
+  background-color: colours.$darkBlue
+  color: colours.$offLightBlue
+  overflow-y: hidden
+  position: relative
+  border-radius: .5rem
+  div.scrollContainer
+    width: 100%
+    overflow-y: scroll
+    input
+      background: none
+      border: none
+      outline: none
+      display: block
+      padding: 10px
+      color: colours.$offLightBlue
+      font-size: 1rem
+      width: 100%

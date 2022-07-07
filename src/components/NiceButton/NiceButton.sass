@@ -9,10 +9,16 @@ div.niceButtonOuter
   &:hover
     div.niceButtonForeground
       transform: translateY(-0.5rem)
+      &.disabled
+        transform: none
   &:active
     div.niceButtonForeground
       transform: translateY(-0.25rem)
       background-color: colours.$lightSquareBrighter
+      &.disabled
+        transform: none
+        background-color: unset
+
 
   div.niceButtonBackground
     border-radius: 0.5em
@@ -33,6 +39,11 @@ div.niceButtonOuter
     display: inline-block
 
     font-size: 0.75em
+
+    &.disabled
+      opacity: 0.5
+    &.highlight
+      background-color: colours.$lightSquareBrighter
 
     &.small
       padding: 0.5em

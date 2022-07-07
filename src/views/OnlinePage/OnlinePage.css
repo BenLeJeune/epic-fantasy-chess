@@ -1,0 +1,32 @@
+div#ConnectionPopupOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 50;
+}
+div#ConnectionPopupOverlay div#ConnectionBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  opacity: 0.5;
+  background-color: black;
+}
+div#ConnectionPopupOverlay div#ConnectionPopup {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  width: 80%;
+  height: 80%;
+  background-color: #262836;
+}
+div#ConnectionPopupOverlay div#ConnectionPopup h2 {
+  color: #F8DC97;
+  text-align: center;
+}
+
+/*# sourceMappingURL=OnlinePage.css.map */

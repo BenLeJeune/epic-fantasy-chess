@@ -9,11 +9,15 @@ div.buttonsRow {
   width: 50%;
   transform: translateX(50%);
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row;
   align-items: center;
   justify-content: space-evenly;
   justify-items: center;
   align-content: space-around;
+  flex-wrap: wrap;
+}
+div.buttonsRow > a {
+  margin-bottom: 10px;
 }
 @media (max-width: 1000px) {
   div.buttonsRow {

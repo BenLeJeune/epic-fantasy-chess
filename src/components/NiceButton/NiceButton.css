@@ -6,9 +6,16 @@ div.niceButtonOuter {
 div.niceButtonOuter:hover div.niceButtonForeground {
   transform: translateY(-0.5rem);
 }
+div.niceButtonOuter:hover div.niceButtonForeground.disabled {
+  transform: none;
+}
 div.niceButtonOuter:active div.niceButtonForeground {
   transform: translateY(-0.25rem);
   background-color: #5F6EC3;
+}
+div.niceButtonOuter:active div.niceButtonForeground.disabled {
+  transform: none;
+  background-color: unset;
 }
 div.niceButtonOuter div.niceButtonBackground {
   border-radius: 0.5em;
@@ -27,6 +34,12 @@ div.niceButtonOuter div.niceButtonForeground {
   display: inline-block;
   font-size: 0.75em;
   padding: 1em;
+}
+div.niceButtonOuter div.niceButtonForeground.disabled {
+  opacity: 0.5;
+}
+div.niceButtonOuter div.niceButtonForeground.highlight {
+  background-color: #5F6EC3;
 }
 div.niceButtonOuter div.niceButtonForeground.small {
   padding: 0.5em;

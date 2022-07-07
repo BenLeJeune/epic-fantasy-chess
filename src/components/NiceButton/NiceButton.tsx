@@ -5,14 +5,16 @@ import "./NiceButton.css"
 interface NiceButtonProps {
     onClick: string | ( () => void ),
     text: string,
-    buttonStyle?: "small" | "medium" | "large"
+    buttonStyle?: "small" | "medium" | "large",
+    disabled?: boolean,
+    highlight?: boolean
 }
 
-export default function NiceButton({ onClick, text, buttonStyle = "small" }:NiceButtonProps) {
+export default function NiceButton({ onClick, text, buttonStyle = "small", disabled = false, highlight = false }:NiceButtonProps) {
 
     const wrapper = (reactChild:ReactChild) => typeof onClick === "function" ?
 
-        <div className={`niceButtonOuter ${buttonStyle}`} onClick={onClick}>
+        <div className={`niceButtonOuter ${buttonStyle}`} onClick={() => !disabled ? onClick() : null }>
             { reactChild }
         </div>
 
@@ -30,7 +32,7 @@ export default function NiceButton({ onClick, text, buttonStyle = "small" }:Nice
 
             <div className={`niceButtonBackground ${buttonStyle}`}/>
 
-            <div className={`niceButtonForeground ${buttonStyle}`}>
+            <div className={`niceButtonForeground ${buttonStyle} ${ disabled ? "disabled" : "" } ${highlight ? "highlight":""}`}>
                 <p>{ text }</p>
             </div>
 

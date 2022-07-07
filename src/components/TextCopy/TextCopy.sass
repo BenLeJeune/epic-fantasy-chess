@@ -1,0 +1,37 @@
+@use "../../modules/colours"
+
+div.textCopy
+  cursor: copy
+  background-color: colours.$darkBlue
+  color: colours.$offLightBlue
+  overflow-y: hidden
+  position: relative
+  border-radius: .5rem
+  div.scrollContainer
+    overflow-y: scroll
+    padding: 10px calc(10px + 3rem) 10px 10px
+
+  div.icon
+    position: absolute
+    right: 0px
+    height: 100%
+    top: 0px
+    display: flex
+    align-items: center
+    justify-content: center
+    color: colours.$darksquare
+    padding: 0 .5rem
+    div.background
+      height: 100%
+      width: 100%
+      position: absolute
+      top: 0
+      left: 0
+      background-color: colours.$mediumBlue
+      opacity: 1.0
+      z-index: 0
+    span
+      z-index: 5
+    &.hover
+      div.background
+        opacity: 1.0

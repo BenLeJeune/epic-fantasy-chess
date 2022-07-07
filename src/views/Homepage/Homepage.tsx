@@ -26,6 +26,8 @@ export default function Homepage() {
 
             <NiceButton onClick="/play" text="PLAY" buttonStyle="medium"/>
 
+            <NiceButton onClick="/online" text="PLAY ONLINE" buttonStyle="medium"/>
+
             <NiceButton onClick="/armies" text="ARMIES" buttonStyle="medium"/>
 
             <NiceButton onClick="/decks" text="DECKS" buttonStyle="medium"/>

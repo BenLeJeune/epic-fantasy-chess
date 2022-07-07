@@ -1,9 +1,11 @@
-import React, {useLayoutEffect} from 'react';
+import React, {useLayoutEffect, useRef} from 'react';
 import {BrowserRouter as Router, Switch, Route, useRouteMatch, useLocation} from 'react-router-dom';
 import PlayRouter from "./Routers/PlayRouter";
 import ArmiesRouter from "./Routers/ArmiesRouter";
 import Homepage from "./views/Homepage/Homepage";
 import DecksRouter from "./Routers/DecksRouter";
+import OnlineRouter from "./Routers/OnlineRouter";
+import ConnectionContext, {RTC_CONFIG} from './Context/ConnectionContext';
 
 export default function MainRouter() {
 
@@ -16,9 +18,13 @@ export default function MainRouter() {
         else {
             document.body.style.overflow = "auto";
         }
-    }, [location])
+    }, [location]);
 
-    return <Switch>
+    const conn = useRef(new RTCPeerConnection(RTC_CONFIG))
+
+
+    return <ConnectionContext.Provider value={ conn.current }>
+        <Switch>
             <Route path="/" exact>
                 {/*  The Homepage  */}
                 <Homepage/>
@@ -26,6 +32,10 @@ export default function MainRouter() {
             <Route path="/play">
                 {/*  The play router  */}
                 <PlayRouter/>
+            </Route>
+            <Route path="/online">
+                {/*  The online play router  */}
+                <OnlineRouter/>
             </Route>
             <Route path="/armies">
                 {/*  The armies router */}
@@ -36,5 +46,8 @@ export default function MainRouter() {
                 <DecksRouter/>
             </Route>
         </Switch>
+    </ConnectionContext.Provider>
+
+
 
 }

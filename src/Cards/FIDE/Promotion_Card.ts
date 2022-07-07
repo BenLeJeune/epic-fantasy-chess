@@ -25,7 +25,7 @@ export default class Promotion_Card extends Card {
     public getValidTargets = [( board: number[], colour:number, history:ActualMove[], previousTargets?:number[] ) => {
         let validTargets : number[] = [];
         board.forEach(( piece, index ) => {
-            if (piece === Piece.Pawn * colour) validTargets.push(index);
+            if (piece === Piece.Pawn * colour && board[ index + ( 8 * colour ) ] === Piece.None ) validTargets.push(index);
         });
         return validTargets.filter(target => !previousTargets || previousTargets.length === 0 || previousTargets.indexOf(target) === -1);
     }]

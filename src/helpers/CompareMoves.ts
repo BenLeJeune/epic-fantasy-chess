@@ -13,6 +13,9 @@ const areIdenticalMoves = (...moves: (ActualMove|CardMove)[] ) => {
             if ( move.to !== first.to || move.from !== first.from || move.moving !== first.moving ||
                 move.captured !== first.captured || move.special !== first.special ) return false;
         }
+        else if ( move instanceof CardMove && first instanceof CardMove ) {
+            return false;
+        }
     }
 
     return true;

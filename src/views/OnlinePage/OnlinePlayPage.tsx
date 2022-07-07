@@ -1,7 +1,6 @@
-import React, {useContext, useLayoutEffect, useState} from "react";
+import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import { FIDEARMY, CRUSADERSARMY } from "../../Presets/Armies";
-import "./PlayPage.css"
 import {Army} from "../../Presets/Armies"
 import NiceButton from "../../components/NiceButton/NiceButton";
 import { v4 as generateUUID } from "uuid";
@@ -11,15 +10,40 @@ import {ARMY_KEY, DECK_KEY, GAME_KEY} from "../../KEYS";
 import Piece from "../../Classes/Piece";
 import { Link } from "react-router-dom";
 import {CRUSADERSDECK, Deck, FIDEDECK} from "../../Presets/Decks";
-import ConnectionContext from "../../Context/ConnectionContext";
 
-export default function PlayPage() {
+import './OnlinePage.css';
+
+const RTC_CONFIG = { iceServers: [{"urls":"stun:stun.l.google.com:19302"}] };
+
+
+export default function OnlinePlayPage() {
+
+    ///
+    /// CREATING A WebRTC CONNECTION
+    ///
+    const conn = useRef<RTCPeerConnection>(new RTCPeerConnection(RTC_CONFIG));
+    const [ offer, setOffer ] = useState<String>("");
+
+    function generateLocalOffer() {
+        conn.current.createOffer().then(
+            desc => {
+                conn.current.setLocalDescription(desc).then(() => {
+                    setTimeout(() => {
+                        if (conn.current.iceGatheringState === "complete") return;
+                        console.log("After GetherTimeout");
+                        setOffer( JSON.stringify(conn.current.localDescription) );
+                        console.log(btoa( JSON.stringify(conn.current.localDescription) ) )
+                    }, 2000)
+                });
+                console.log("Set local description");
+            }
+        )
+    }
 
     ///
     /// THE AVAILABLE ARMIES
     ///
     const [ armies, setArmies ] = useState<Army[]>([]);
-
     const getArmies = () => {
         //Loading the army from local storage
         let armiesJSON = localStorage.getItem( ARMY_KEY );
@@ -36,7 +60,6 @@ export default function PlayPage() {
     /// THE AVAILABLE DECKS
     ///
     const [ decks, setDecks ] = useState<Deck[]>([]);
-
     const getDecks = () => {
         //Loading the army from local storage
         let decksJSON = localStorage.getItem( DECK_KEY );
@@ -75,13 +98,10 @@ export default function PlayPage() {
     ///
     /// CHOOSING FOR YOURSELF AND YOUR OPPONENT
     ///
-    const [ opponent, setOpponent ] = useState<"COMP" | "LOCAL" | "ONLINE">("LOCAL");
     const [ colour, setColour ] = useState<"WHITE" | "BLACK" | "RANDOM">("WHITE");
     const [ army, setArmy ] = useState<number>(0);
-    const [ opponentArmy, setOpponentArmy ] = useState<number>(0);
 
     const [ deck, setDeck ] = useState<number>(0);
-    const [ opponentDeck, setOpponentDeck ] = useState<number>(0);
 
     ///
     /// LOADING INTO GAME
@@ -91,9 +111,10 @@ export default function PlayPage() {
         // RANDOM SELECTIONS
         let _colour = colour === "RANDOM" ? randomFromList([-1, 1]) : ["BLACK", "", "WHITE"].indexOf(colour) - 1;
         let _army = army === -1 ? randomFromList(armies) : armies[army];
-        let _opponentArmy = opponentArmy === -1 ? randomFromList(armies) : armies[opponentArmy];
         let _deck = deck === -1 ? randomFromList(decks) : decks[deck];
-        let _opponentDeck = opponentDeck === -1 ? randomFromList(decks) : decks[opponentDeck];
+
+        //!TODO No game info yet, temp. while P2P connection not established.
+        let opponent = "LOCAL", _opponentArmy = _army, _opponentDeck = _deck;
 
         const gameInfo = { // Game Info
             uuid,
@@ -117,6 +138,7 @@ export default function PlayPage() {
     ///
     /// WHETHER OR NOT THE EXISTING GAMES ARE GOING TO BE SHOWN
     ///
+    //TODO: Replace with showing existing connections.
     const [ showExistingGames, setShowExistingGames ] = useState<boolean>(false);
     const renderExistingGame = ( g: GameInfo ) => {
 
@@ -134,33 +156,19 @@ export default function PlayPage() {
 
     const getExistingGames = () => games.map( renderExistingGame )
 
-    ///
-    /// ONLINE PLAY
-    ///
-
-    const Conn = useContext(ConnectionContext);
 
     return <div id="PlayPage" className="paddedTop">
 
         <NavBar/>
-    
+
         <h1>Setup your game!</h1>
 
-        <p onClick={() => setShowExistingGames( prev => !prev )} className="toggleExistingGames">
-            { showExistingGames ? "Hide" : "Show" } current games
-        </p>
         <div className="existingGames">
-        {
-            showExistingGames ? getExistingGames() : null
-        }
+            {
+                showExistingGames ? getExistingGames() : null
+            }
         </div>
         <div className="playPageInner">
-            <h3>Who do you want to face?</h3>
-            <SelectionItem item="LOCAL OPPONENT" selected={opponent==="LOCAL"} onPress={()=>setOpponent("LOCAL")}/>
-            <SelectionItem item="COMPUTER OPPONENT" selected={opponent==="COMP"} onPress={()=>setOpponent("COMP")}/>
-            <SelectionItem item="ONLINE" selected={opponent==="ONLINE"} onPress={()=>setOpponent("ONLINE")}
-                           disabled={Conn.connectionState !== 'connected'} toolTip={ONLINE_PLAY_TIP}
-            />
 
             <h3>Which colour do you want to play as?</h3>
             <SelectionItem item="WHITE" selected={colour==="WHITE"} onPress={setColour}/>
@@ -176,16 +184,6 @@ export default function PlayPage() {
             }
             <SelectionItem item="RANDOM" selected={army===-1} onPress={()=>setArmy(-1)}/>
 
-            <h3>Which army do you want your opponent to use?</h3>
-            {
-                armies.map(
-                    ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={opponentArmy===i} onPress={()=>setOpponentArmy(i)}
-                                               disabled={getPointBuyTotal(a.pieces) > 31} toolTip={ARMY_TIP} />
-                )
-            }
-            <SelectionItem item="RANDOM" selected={opponentArmy===-1} onPress={()=>setOpponentArmy(-1)}/>
-
-            
             <h3>Which deck do you want to use?</h3>
             {
                 decks.map(
@@ -195,16 +193,6 @@ export default function PlayPage() {
             }
             <SelectionItem item="RANDOM" selected={deck===-1} onPress={()=>setDeck(-1)}/>
 
-
-            <h3>Which deck do you want your opponent to use?</h3>
-            {
-                decks.map(
-                    ( d, i ) => <SelectionItem item={d.name.toUpperCase()} selected={opponentDeck===i} onPress={()=>setOpponentDeck(i)}
-                                               disabled={ d.cards.length !== 15 } toolTip={DECK_TIP} />
-                )
-            }
-            <SelectionItem item="RANDOM" selected={opponentDeck===-1} onPress={()=>setOpponentDeck(-1)}/>
-
             <div className="centred">
 
                 <NiceButton onClick={() => loadIntoGame()} text="START GAME" buttonStyle="medium" />
@@ -212,14 +200,13 @@ export default function PlayPage() {
             </div>
 
         </div>
-        
+
     </div>
 
 }
 
 const ARMY_TIP = "Army too strong - edit it to play with it.";
 const DECK_TIP = "Your deck has the incorrect number of cards - edit it to play with it."
-const ONLINE_PLAY_TIP = 'You must be connected to another player to play online.';
 
 interface SelectionItemProps<T> {
     selected: boolean,
@@ -233,7 +220,7 @@ interface SelectionItemProps<T> {
 export function SelectionItem<T>({ selected, item, onPress, itemToString = item => item as unknown as string, toolTip, disabled = false }: SelectionItemProps<T>) {
 
     return <div title={disabled ? toolTip : ""} className={`selectionItem ${ selected ? "selected" : "" } ${ disabled ? "disabled" : "" }`}
-        onClick={ disabled ? () => {} : () => onPress(item) }
+                onClick={ disabled ? () => {} : () => onPress(item) }
     >
         { itemToString(item) }
     </div>

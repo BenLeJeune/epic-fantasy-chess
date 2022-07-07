@@ -1,0 +1,76 @@
+div#ConnectingPopup {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  transition: opacity 0.25s ease-in-out;
+  z-index: 10;
+}
+div#ConnectingPopup.shown {
+  opacity: 1;
+  pointer-events: all;
+}
+div#ConnectingPopup.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+div#ConnectingPopup.hidden div#HowToPlayPopupBubble {
+  transform: translateY(10%);
+  transition: transform 0.25s ease-in;
+}
+div#ConnectingPopup div#PopupBackground {
+  background-color: #161823;
+  opacity: 0.5;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+div#ConnectingPopup div#ConnectionPopupBubble {
+  background-color: #262836;
+  position: absolute;
+  top: 5rem;
+  left: 5rem;
+  height: calc(100% - 10rem);
+  width: calc(100% - 10rem);
+  border-radius: 0.25rem;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  transform: translateY(0);
+  transition: transform 0.25s ease-out;
+}
+div#ConnectingPopup div#ConnectionPopupBubble div.section {
+  margin: 0 0 1rem;
+  position: relative;
+  width: 90%;
+}
+div#ConnectingPopup div#ConnectionPopupBubble div.row {
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: space-evenly;
+  justify-content: space-evenly;
+}
+div#ConnectingPopup div#ConnectionPopupBubble div.textArea {
+  background-color: #161823;
+  color: #464B66;
+  overflow-y: hidden;
+  position: relative;
+  border-radius: 0.5rem;
+}
+div#ConnectingPopup div#ConnectionPopupBubble h2 {
+  color: #E2E2E2;
+  margin: 1rem 0 0.5rem;
+}
+div#ConnectingPopup div#ConnectionPopupBubble p {
+  color: #E2E2E2;
+  margin: 0.5rem;
+}
+div#ConnectingPopup h1 {
+  color: #E2E2E2;
+  padding-top: 1rem;
+}
+
+/*# sourceMappingURL=ConnectionWizzard.css.map */
