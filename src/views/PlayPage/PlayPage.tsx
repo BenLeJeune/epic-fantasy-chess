@@ -19,7 +19,6 @@ export default function PlayPage() {
     /// THE AVAILABLE ARMIES
     ///
     const [ armies, setArmies ] = useState<Army[]>([]);
-
     const getArmies = () => {
         //Loading the army from local storage
         let armiesJSON = localStorage.getItem( ARMY_KEY );
@@ -32,6 +31,7 @@ export default function PlayPage() {
         }
         setArmies(armies);
     }
+
     ///
     /// THE AVAILABLE DECKS
     ///
@@ -138,7 +138,7 @@ export default function PlayPage() {
     /// ONLINE PLAY
     ///
 
-    const {Conn} = useContext(ConnectionContext);
+    const { Conn, Channel, setListener, initChannel} = useContext(ConnectionContext);
 
     return <div id="PlayPage" className="paddedTop">
 

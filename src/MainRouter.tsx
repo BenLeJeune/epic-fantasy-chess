@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useRef} from 'react';
+import React, {useLayoutEffect, useRef, useState} from 'react';
 import {BrowserRouter as Router, Switch, Route, useRouteMatch, useLocation} from 'react-router-dom';
 import PlayRouter from "./Routers/PlayRouter";
 import ArmiesRouter from "./Routers/ArmiesRouter";
@@ -21,7 +21,10 @@ export default function MainRouter() {
     }, [location]);
 
     const Conn = useRef(new RTCPeerConnection(RTC_CONFIG));
+    Conn.current.onconnectionstatechange = () => setConnectionState(Conn.current.connectionState)
     const Channel = useRef<RTCDataChannel>(Conn.current.createDataChannel('dataChannel'));
+
+    const [connectionState, setConnectionState] = useState<string>('Not Connected');
 
 
     const initChannel = (remoteChannel?: RTCDataChannel) => {
