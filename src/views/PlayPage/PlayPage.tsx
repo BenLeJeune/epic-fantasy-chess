@@ -138,7 +138,7 @@ export default function PlayPage() {
     /// ONLINE PLAY
     ///
 
-    const Conn = useContext(ConnectionContext);
+    const {Conn} = useContext(ConnectionContext);
 
     return <div id="PlayPage" className="paddedTop">
 

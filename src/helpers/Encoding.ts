@@ -1,9 +1,10 @@
-const encodeOffer = ( offer : string ) => {
-    return btoa( encodeURIComponent( offer ) );
+const encodeOffer = ( offer : string, iceCandidates : string ) => {
+    return btoa( encodeURIComponent( offer ) + '|' + encodeURIComponent(iceCandidates) );
 }
 
-const decodeOffer = ( offer : string ) => {
-    return decodeURIComponent( atob( offer ) );
+const decodeOffer = ( encryptedOfferAndCandidates : string ) => {
+    let uriComponents = atob(encryptedOfferAndCandidates).split('|')
+    return uriComponents.map(uri => decodeURIComponent(uri));
 }
 
 export {

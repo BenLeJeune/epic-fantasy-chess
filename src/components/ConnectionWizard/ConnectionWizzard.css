@@ -42,6 +42,9 @@ div#ConnectingPopup div#ConnectionPopupBubble {
   transform: translateY(0);
   transition: transform 0.25s ease-out;
 }
+div#ConnectingPopup div#ConnectionPopupBubble label {
+  color: #161823;
+}
 div#ConnectingPopup div#ConnectionPopupBubble div.section {
   margin: 0 0 1rem;
   position: relative;

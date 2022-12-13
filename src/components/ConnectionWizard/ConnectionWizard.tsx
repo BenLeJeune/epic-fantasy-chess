@@ -1,4 +1,13 @@
-import React, {ChangeEvent, ChangeEventHandler, Ref, useContext, useState} from 'react';
+import React, {
+    ChangeEvent,
+    ChangeEventHandler,
+    Ref,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState
+} from 'react';
 import "./ConnectionWizzard.css";
 import ConnectionContext from "../../Context/ConnectionContext";
 import NiceButton from "../NiceButton/NiceButton";
@@ -15,7 +24,7 @@ enum initiator  { none = 0, local = 1, remote = 2 };
 
 export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
 
-    const Conn = useContext(ConnectionContext);
+    const { Conn, Channel, setListener, initChannel} = useContext(ConnectionContext);
 
     // whether or not the current user is the initiator.
     const [ connInitiator, setInitiator ] = useState<initiator>(initiator.none);
@@ -27,6 +36,37 @@ export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
         setRemoteOffer(event.target.value);
     }
 
+    // The currently received ice offers
+    const iceCandidates = useRef<RTCIceCandidate[]>([]);
+
+    useEffect(() => {
+        //Adding necessary ICE listeners!
+        Conn.addEventListener('icecandidate', event => {
+            if (event.candidate) {
+                console.log("Found ICE candidate \n", event.candidate);
+                iceCandidates.current.push(event.candidate)
+            }
+        })
+
+        Conn.addEventListener('icegatheringstatechange', e => {
+            console.log("ice gathering state change: \n", Conn.iceGatheringState)
+        });
+
+        Conn.addEventListener('connectionstatechange', e => {
+            console.log("Connection state change: ", Conn.connectionState)
+            if (Conn.connectionState === 'connected') {
+                if (connInitiator === initiator.local) initChannel()
+            }
+        });
+
+        (window as any).DEV_SEND_MSG = (data : String) => {
+            // @ts-ignore
+            Channel.send(data)
+            console.log('sent message ', data)
+        }
+
+    }, [])
+
     const errHandler = (e:Error) => console.log(e);
 
     const offerHandler = ( creating : boolean ) => {
@@ -35,49 +75,65 @@ export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
         Conn.onicecandidate = e => {
             if ( !e.candidate ) {
                 console.log('iceGatheringState complete\n', Conn.localDescription?.sdp)
-                let offer =  JSON.stringify(Conn.localDescription) ;
-                setLocalOffer( encodeOffer(offer) );
+                let offer =  JSON.stringify(Conn.localDescription);
+                let candidates = JSON.stringify(iceCandidates.current)
+                console.log("Candidates: \n", candidates)
+                setLocalOffer( encodeOffer(offer, candidates) );
             }
             else console.log(e.candidate.candidate);
         }
 
-        Conn.createOffer().then( description => {
+        // If we're initiating the connection, generate the offer
+        if (creating) Conn.createOffer().then( description => {
             console.log('createOffer ok');
             Conn.setLocalDescription(description).then(() => {
-                setTimeout(() => {
-                    // WAIT FOR ICE CONNECTION
-                    if ( Conn.iceGatheringState === "complete" ) return;
-                    console.log('after GetherTimeout');
-                    let offer = JSON.stringify(Conn.localDescription);
-                    setLocalOffer( encodeOffer(offer) );
-                })
+                //We actually generate the offer when the ice candidates are connected
             })
         } )
+        else {
+            Conn.ondatachannel = e => {
+                initChannel(e.channel);
+                console.log("Received a data channel")
+            }
+        }
     }
 
     const attemptConnection = () => {
-        let decodedRemoteOffer = decodeOffer( remoteOffer );
+        // Want to generate an answer
+        let [decodedRemoteOffer, decodedIceCandidates] = decodeOffer(remoteOffer);
         let remoteDescription = JSON.parse(decodedRemoteOffer);
         let _remoteOffer = new RTCSessionDescription(remoteDescription);
-        console.log('Remote offer: \n', _remoteOffer);
+        let remoteIceCandidates = JSON.parse(decodedIceCandidates)
+        console.log('Received offer from remote: \n', _remoteOffer);
+        console.log("Received ice candidates: \n", decodedIceCandidates)
 
-        //Set the remote description
+        //Received the offer - now set the remote description, and generate an answer
         Conn.setRemoteDescription(_remoteOffer).then(() => {
-            console.log('Set Remote Description OK');
-            if ( _remoteOffer.type === "offer" ) {
-                Conn.createAnswer().then( description => {
-                    console.log('createAnswer 200 ok \n', description)
-                    Conn.setLocalDescription(description).then(() => {}).catch(errHandler);
-                }).catch(errHandler);
+            console.log("Set the remote description")
+            if (_remoteOffer.type === "offer") {
+                Conn.createAnswer().then( answer => {
+                    console.log('createAnswer ok \n', answer);
+                    Conn.setLocalDescription(answer).then(() => {})
+                } ).catch(errHandler)
             }
-        }).catch(errHandler);
+        }).catch(errHandler)
+        //Now, we want to set the connection ice candidates
+        console.log(remoteIceCandidates)
+        try {
+            (remoteIceCandidates as RTCIceCandidate[]).forEach(candidate => {
+                    Conn.addIceCandidate(candidate).then(() => {console.log("Adding ice candidate: \n", candidate)} )
+                }
+            )
+        }
+        catch (e) { console.log("Failed to assign ice candidates \n", e) }
+
     }
 
 
     return <div className={ shown ? "shown" : "hidden" } id="ConnectingPopup">
         <div id="PopupBackground"/>
             <div id="ConnectionPopupBubble" ref={popupRef}>
-                <h1>Connecting!</h1>
+                <h1>{Conn.connectionState}</h1>
                 <div className="section">
                      <p>In order to play online, you have to connect directly to another server. This can be done by creating an offer.</p>
                       <p>Either player can create the first offer.</p>
@@ -92,10 +148,12 @@ export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
                 {
                     connInitiator !== initiator.local ? null :
                     <div className="section">
+                        <label>Your Offer</label>
                         <TextCopy text={localOffer||"ERROR - view browser console"}/>
                         <p>
                             Copy this string, and send it to your opponent. Ask them to send theirs back, and enter it into the field below!
                         </p>
+                        <label>Remote Offer</label>
                         <TextInput text={remoteOffer} onChange={e => handleRemoteOfferChange(e)}/>
                         <NiceButton disabled={ remoteOffer === "" } onClick={ () => attemptConnection() } text="Connect!"/>
                     </div>
@@ -104,12 +162,14 @@ export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
                 {
                     connInitiator !== initiator.remote ? null :
                         <div className="section">
+                            <label>Remote Offer</label>
                             <TextInput text={remoteOffer} onChange={e => handleRemoteOfferChange(e)}/>
                             <p>
                                 Enter the description you've been given, then send your opponent yours!
                             </p>
+                            <label>Your Offer</label>
                             <TextCopy text={localOffer||"ERROR - view browser console"}/>
-                            <NiceButton disabled={ remoteOffer === "" } onClick={ () => attemptConnection() } text="Connect!"/>
+                            <NiceButton disabled={ remoteOffer === "" } onClick={ () => attemptConnection() } text="Generate Answer"/>
                         </div>
                 }
             </div>

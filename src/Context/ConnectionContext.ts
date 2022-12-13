@@ -2,31 +2,34 @@ import React from "react";
 
 const RTC_CONFIG = { iceServers: [{"urls":"stun:stun.l.google.com:19302"}] };
 
-type OnlineContext = {
-    conn: RTCPeerConnection
+type ConnectContext = {
+    Conn: RTCPeerConnection,
+    Channel : RTCDataChannel,
+    initChannel: (channel?: RTCDataChannel) => void,
+    setListener : ( listener: (e:MessageEvent) => void ) => void
 }
 
 
-const conn = new RTCPeerConnection(RTC_CONFIG);
-let dataChannel : RTCDataChannel;
-
-const initDataChannel = () => {
-    dataChannel = conn.createDataChannel('dataChannel');
-    dataChannel.onopen = () => {
-        console.log('data channel opened!')
-    }
-    dataChannel.onclose = () => {
-        console.log('data channel closed!');
-    }
+const Conn = new RTCPeerConnection(RTC_CONFIG);
+let Channel : RTCDataChannel = Conn.createDataChannel('dataChannel');
+Channel.onopen = () => {
+    console.log('data channel opened!')
 }
-
+Channel.onclose = () => {
+    console.log('data channel closed!');
+}
+const initChannel = () => {}
 const setListener = ( listener: (e:MessageEvent) => void ) => {
-    if (dataChannel) dataChannel.onmessage = listener;
+    if (Channel) Channel.onmessage = listener;
     else console.log("Tried to attach listener but no data channel exists.")
 }
 
-const ConnectionContext = React.createContext<RTCPeerConnection>(
-    conn
+const ConnectionContext = React.createContext<ConnectContext>({
+        Conn,
+        Channel,
+        initChannel,
+        setListener
+    }
 )
 
 export default ConnectionContext;

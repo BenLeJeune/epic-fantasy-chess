@@ -20,10 +20,38 @@ export default function MainRouter() {
         }
     }, [location]);
 
-    const conn = useRef(new RTCPeerConnection(RTC_CONFIG))
+    const Conn = useRef(new RTCPeerConnection(RTC_CONFIG));
+    const Channel = useRef<RTCDataChannel>(Conn.current.createDataChannel('dataChannel'));
 
 
-    return <ConnectionContext.Provider value={ conn.current }>
+    const initChannel = (remoteChannel?: RTCDataChannel) => {
+        if (remoteChannel) { //If we're receiving, set it to the received channel
+            Channel.current = remoteChannel
+        }
+        else { //If we're not receiving, we've got to create the channel ourselves
+            Channel.current = Conn.current.createDataChannel('dataChannel');
+        }
+        Channel.current.onopen = () => {
+            console.log('data channel opened!')
+        }
+        Channel.current.onclose = () => {
+            console.log('data channel closed!');
+        }
+        Channel.current.onmessage = e => console.log("MESSAGE RECEIVED: ", e)
+    }
+
+    const setListener = ( listener: (e:MessageEvent) => void ) => {
+        if (Channel.current) Channel.current.onmessage = listener;
+        else console.log("Tried to attach listener but no data channel exists.")
+    }
+
+
+    return <ConnectionContext.Provider value={{
+        Conn: Conn.current,
+        Channel: Channel.current,
+        initChannel,
+        setListener
+    }}>
         <Switch>
             <Route path="/" exact>
                 {/*  The Homepage  */}

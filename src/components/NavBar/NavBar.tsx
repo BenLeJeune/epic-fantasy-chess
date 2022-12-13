@@ -10,7 +10,7 @@ interface props {
 
 export default function NavBar({fixed = true}: props) {
 
-    const Conn = useContext(ConnectionContext);
+    const {Conn} = useContext(ConnectionContext);
     const connectionState = () => {
         switch (Conn.connectionState) {
             case "new":
