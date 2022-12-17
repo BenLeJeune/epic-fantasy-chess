@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useRef, useState} from 'react';
-import {BrowserRouter as Router, Switch, Route, useRouteMatch, useLocation} from 'react-router-dom';
+import {Route, Switch, useLocation} from 'react-router-dom';
 import PlayRouter from "./Routers/PlayRouter";
 import ArmiesRouter from "./Routers/ArmiesRouter";
 import Homepage from "./views/Homepage/Homepage";
@@ -22,36 +22,54 @@ export default function MainRouter() {
 
     const Conn = useRef(new RTCPeerConnection(RTC_CONFIG));
     Conn.current.onconnectionstatechange = () => setConnectionState(Conn.current.connectionState)
-    const Channel = useRef<RTCDataChannel>(Conn.current.createDataChannel('dataChannel'));
+    //const Channel = useRef<RTCDataChannel|null>(/*Conn.current.createDataChannel('original data channel')*/null);
 
+    const [ Channel, setChannel ] = useState<RTCDataChannel|null>(null);
+
+    // Slightly cheating to make sure the connection state stays up to date
     const [connectionState, setConnectionState] = useState<string>('Not Connected');
 
 
     const initChannel = (remoteChannel?: RTCDataChannel) => {
         if (remoteChannel) { //If we're receiving, set it to the received channel
-            Channel.current = remoteChannel
+            console.log(`Adding remote channel ${remoteChannel.id}`)
+            console.log("Current channel: \n", Channel)
+            console.log("Received channel: \n", remoteChannel)
+            //Channel.current = remoteChannel?
+            setChannel(remoteChannel)
+            console.log("Added remote channel: \n ", Channel)
         }
         else { //If we're not receiving, we've got to create the channel ourselves
-            Channel.current = Conn.current.createDataChannel('dataChannel');
+            let newDataChannel = Conn.current.createDataChannel('data channel')
+            setChannel(newDataChannel);
+            console.log("Created channel " + newDataChannel.id)
         }
-        Channel.current.onopen = () => {
-            console.log('data channel opened!')
+        let id = Channel?.id;
+        if (Channel) {
+            Channel.onopen = () => {
+                console.log(`Data channel ${Channel?.id} opened!`)
+            }
+            Channel.onclose = () => {
+                console.log(`Data channel ${id} closed!`);
+            }
+            Channel.onmessage = e => {
+                console.log(`MESSAGE RECEIVED on channel ${id} (Currently listening on ${Channel?.id}:`, e)
+            }
         }
-        Channel.current.onclose = () => {
-            console.log('data channel closed!');
-        }
-        Channel.current.onmessage = e => console.log("MESSAGE RECEIVED: ", e)
     }
 
     const setListener = ( listener: (e:MessageEvent) => void ) => {
-        if (Channel.current) Channel.current.onmessage = listener;
+        if (Channel) {
+            Channel.onmessage = listener;
+            console.log("Updated event listener")
+        }
         else console.log("Tried to attach listener but no data channel exists.")
     }
 
 
     return <ConnectionContext.Provider value={{
         Conn: Conn.current,
-        Channel: Channel.current,
+        Channel: Channel,
         initChannel,
         setListener
     }}>

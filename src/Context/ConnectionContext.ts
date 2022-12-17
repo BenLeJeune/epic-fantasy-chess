@@ -4,14 +4,14 @@ const RTC_CONFIG = { iceServers: [{"urls":"stun:stun.l.google.com:19302"}] };
 
 type ConnectContext = {
     Conn: RTCPeerConnection,
-    Channel : RTCDataChannel,
+    Channel : RTCDataChannel|null,
     initChannel: (channel?: RTCDataChannel) => void,
     setListener : ( listener: (e:MessageEvent) => void ) => void
 }
 
 
 const Conn = new RTCPeerConnection(RTC_CONFIG);
-let Channel : RTCDataChannel = Conn.createDataChannel('dataChannel');
+let Channel : RTCDataChannel | null  = Conn.createDataChannel('dataChannel');
 Channel.onopen = () => {
     console.log('data channel opened!')
 }

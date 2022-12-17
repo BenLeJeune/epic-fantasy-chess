@@ -1,4 +1,4 @@
-import React, {useContext, useLayoutEffect, useState} from "react";
+import React, {useContext, useEffect, useLayoutEffect, useState} from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import { FIDEARMY, CRUSADERSARMY } from "../../Presets/Armies";
 import "./PlayPage.css"
@@ -12,6 +12,7 @@ import Piece from "../../Classes/Piece";
 import { Link } from "react-router-dom";
 import {CRUSADERSDECK, Deck, FIDEDECK} from "../../Presets/Decks";
 import ConnectionContext from "../../Context/ConnectionContext";
+import {SetupChoice_Message} from "../../Messages";
 
 export default function PlayPage() {
 
@@ -140,6 +141,58 @@ export default function PlayPage() {
 
     const { Conn, Channel, setListener, initChannel} = useContext(ConnectionContext);
 
+    useEffect(() => {
+        if (opponent === "ONLINE" && Channel) {
+            console.log(`Adding event listener to channel ${Channel.id}`)
+            Channel.addEventListener('message', message => {
+                let msg = JSON.parse(message.data);
+                console.log(msg)
+                if (msg instanceof SetupChoice_Message ) {
+                    switch (msg.payload.choice) {
+                        case "army":
+                            break;
+                        case "deck":
+                            break;
+                        case "colour":
+                            setColour(msg.payload.data as "WHITE" | "BLACK" | "RANDOM")
+                            break;
+                        default:
+                            console.log("Reached default case, choice wasn't one of three options.")
+                    }
+                }
+            })
+        }
+        else if (opponent === "ONLINE") console.log("Online, but Channel not currently defined: \n", Channel )
+
+    }, [opponent, Channel])
+
+    //Wrappers - we'll want to inform our opponent of our choice, so they can load the game properly
+    const updateArmy = (i:number) => {
+        //If we aren't online, just do as before:
+        setArmy(i);
+        if (opponent !== "ONLINE") return;
+        if (!Channel) return;
+
+
+        // We're online, so we need to send a message!
+        let data = {pieces: armies[i].pieces, name: armies[i].name}
+        let choice = "army" as "army"
+        let msg = new SetupChoice_Message({choice, data});
+        Channel?.send(JSON.stringify(msg)) //Telling the opponent which army we want to use!
+    }
+
+    const updateColor = (col: "WHITE" | "BLACK" | "RANDOM") => {
+        setColour(col);
+        if (opponent !== "ONLINE" || !Channel) return;
+        //We're online, so we need to send a message!
+        let data = col;
+        let choice = "colour" as "colour"
+        let msg = new SetupChoice_Message({choice, data});
+        console.log(`Sending a message via channel ${Channel.id}!`)
+        Channel.send(JSON.stringify(msg))
+
+    }
+
     return <div id="PlayPage" className="paddedTop">
 
         <NavBar/>
@@ -163,28 +216,31 @@ export default function PlayPage() {
             />
 
             <h3>Which colour do you want to play as?</h3>
-            <SelectionItem item="WHITE" selected={colour==="WHITE"} onPress={setColour}/>
-            <SelectionItem item="BLACK" selected={colour==="BLACK"} onPress={setColour}/>
-            <SelectionItem item="RANDOM" selected={colour==="RANDOM"} onPress={setColour}/>
+            <SelectionItem item="WHITE" selected={colour==="WHITE"} onPress={updateColor}/>
+            <SelectionItem item="BLACK" selected={colour==="BLACK"} onPress={updateColor}/>
+            <SelectionItem item="RANDOM" selected={colour==="RANDOM"} onPress={updateColor}/>
 
             <h3>Which army do you want to use?</h3>
             {
                 armies.map(
-                    ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={army===i} onPress={()=>setArmy(i)}
+                    ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={army===i} onPress={()=>updateArmy(i)}
                                                disabled={getPointBuyTotal(a.pieces) > 31} toolTip={ARMY_TIP} />
                 )
             }
             <SelectionItem item="RANDOM" selected={army===-1} onPress={()=>setArmy(-1)}/>
-
-            <h3>Which army do you want your opponent to use?</h3>
             {
-                armies.map(
-                    ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={opponentArmy===i} onPress={()=>setOpponentArmy(i)}
-                                               disabled={getPointBuyTotal(a.pieces) > 31} toolTip={ARMY_TIP} />
-                )
+                 opponent === "ONLINE" ? null :
+                     <>
+                        <h3>Which army do you want your opponent to use?</h3>
+                            {
+                                armies.map(
+                                ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={opponentArmy===i} onPress={()=>setOpponentArmy(i)}
+                                disabled={getPointBuyTotal(a.pieces) > 31} toolTip={ARMY_TIP} />
+                                )
+                            }
+                        <SelectionItem item="RANDOM" selected={opponentArmy===-1} onPress={()=>setOpponentArmy(-1)}/>
+                     </>
             }
-            <SelectionItem item="RANDOM" selected={opponentArmy===-1} onPress={()=>setOpponentArmy(-1)}/>
-
             
             <h3>Which deck do you want to use?</h3>
             {
@@ -195,15 +251,18 @@ export default function PlayPage() {
             }
             <SelectionItem item="RANDOM" selected={deck===-1} onPress={()=>setDeck(-1)}/>
 
-
-            <h3>Which deck do you want your opponent to use?</h3>
             {
-                decks.map(
-                    ( d, i ) => <SelectionItem item={d.name.toUpperCase()} selected={opponentDeck===i} onPress={()=>setOpponentDeck(i)}
-                                               disabled={ d.cards.length !== 15 } toolTip={DECK_TIP} />
-                )
+                opponent === "ONLINE" ? null : <>
+                    <h3>Which deck do you want your opponent to use?</h3>
+                    {
+                        decks.map(
+                        ( d, i ) => <SelectionItem item={d.name.toUpperCase()} selected={opponentDeck===i} onPress={()=>setOpponentDeck(i)}
+                        disabled={d.cards.length !== 15} toolTip={DECK_TIP} />
+                        )
+                    }
+                    <SelectionItem item="RANDOM" selected={opponentDeck===-1} onPress={()=>setOpponentDeck(-1)}/>
+                </>
             }
-            <SelectionItem item="RANDOM" selected={opponentDeck===-1} onPress={()=>setOpponentDeck(-1)}/>
 
             <div className="centred">
 

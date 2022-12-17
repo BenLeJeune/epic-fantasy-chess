@@ -54,9 +54,6 @@ export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
 
         Conn.addEventListener('connectionstatechange', e => {
             console.log("Connection state change: ", Conn.connectionState)
-            if (Conn.connectionState === 'connected') {
-                if (connInitiator === initiator.local) initChannel()
-            }
         });
 
         (window as any).DEV_SEND_MSG = (data : String) => {
@@ -65,7 +62,7 @@ export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
             console.log('sent message ', data)
         }
 
-    }, [])
+    }, [Channel, Conn])
 
     const errHandler = (e:Error) => console.log(e);
 
@@ -74,27 +71,33 @@ export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
         // CREATE THE ACTUAL OFFER
         Conn.onicecandidate = e => {
             if ( !e.candidate ) {
-                console.log('iceGatheringState complete\n', Conn.localDescription?.sdp)
+                console.log('iceGatheringState complete\n', Conn.localDescription?.sdp);
                 let offer =  JSON.stringify(Conn.localDescription);
-                let candidates = JSON.stringify(iceCandidates.current)
-                console.log("Candidates: \n", candidates)
+                let candidates = JSON.stringify(iceCandidates.current);
+                console.log("Candidates: \n", candidates);
                 setLocalOffer( encodeOffer(offer, candidates) );
             }
             else console.log(e.candidate.candidate);
         }
 
         // If we're initiating the connection, generate the offer
-        if (creating) Conn.createOffer().then( description => {
-            console.log('createOffer ok');
-            Conn.setLocalDescription(description).then(() => {
-                //We actually generate the offer when the ice candidates are connected
+        if (creating) {
+            initChannel() // Create a data channel before generating the offer
+            Conn.createOffer().then(description => {
+                console.log('createOffer ok');
+                Conn.setLocalDescription(description).then(() => {
+                    //initChannel()
+                    //We actually generate the offer when the ice candidates are connected
+                })
             })
-        } )
-        else {
-            Conn.ondatachannel = e => {
-                initChannel(e.channel);
-                console.log("Received a data channel")
-            }
+        }
+
+        Conn.ondatachannel = e => {
+            console.group(`Received Channel: ${e.channel.id}`)
+            console.log(`Currently channel ${Channel?.id}: \n`, Channel)
+            initChannel(e.channel)
+            console.groupEnd()
+
         }
     }
 
