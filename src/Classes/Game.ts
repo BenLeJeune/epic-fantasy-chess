@@ -432,6 +432,10 @@ export default class Game {
 
     public dangerouslySetCurrentTurn = ( turn: number ) => this.currentTurn = turn;
 
+    // These are to be used when playing online - each client acts as a source of authority on its own hand and deck.
+    public setWhiteHand = ( cb:(wh:Card[])=>Card[] ) => this.whiteHand = cb(this.whiteHand);
+    public setBlackHand = ( cb:(bh:Card[])=>Card[] ) => this.blackHand = cb(this.blackHand);
+
     ///
     /// FOR PLAYING CARDS
     /// We want to be able to directly access the game board, so we'll do this

@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import ChessBoard from "./components/ChessBoard/ChessBoard";
 import Game, {AdditionalOptions} from "./Classes/Game";
 import MovesDisplay from "./components/MovesDisplay/MovesDisplay";
@@ -25,6 +25,9 @@ import Card from "./Cards/Card";
 import {Deck, FIDEDECK} from "./Presets/Decks";
 import NavBar from "./components/NavBar/NavBar";
 import {sameColour} from "./helpers/DifferentColours";
+import ConnectionContext from "./Context/ConnectionContext";
+import Message, {CardMove_Message, PieceMove_Message} from "./Messages";
+import ALL_CARDS from "./Cards/Cards";
 
 
 const CHECKMATE = "via Checkmate",
@@ -71,8 +74,8 @@ function App() {
   ///  THE REFERENCE FOR THE GAME
   const game = useRef( playerColour > 0 ? new Game(generateBoardFromArmies(army, opponentArmy), undefined, deck, opponentDeck) :
                         new Game(generateBoardFromArmies(opponentArmy, army), undefined, opponentDeck, deck));
-  /// THE OPPONENT
 
+  /// THE OPPONENT
   const worker = useRef<any>()
 
   useLayoutEffect(() => {
@@ -167,6 +170,48 @@ function App() {
     return await moveGenerator( [...gBoard], parsedMoves, opponentArmy.pieces, col, parsedEffects, parsedHand, { colour: col })
   }
 
+
+  ///
+  /// ONLINE OPPONENT
+  ///
+
+  const {Channel, Conn} = useContext(ConnectionContext);
+
+  useEffect(() => {
+    if (opponent === "ONLINE" && Channel) {
+      Channel.addEventListener("message", onMessage)
+    }
+  }, [Channel, Conn])
+
+  const onMessage = (msgEvent:MessageEvent) => {
+    let msg = JSON.parse(msgEvent.data) as Message;
+    switch (msg.msgType) {
+      case "piece_move":
+        console.log("Made a piece move!\n", msg.payload);
+        let {from, to, special} = (msg as PieceMove_Message).payload.move;
+        try {
+          move(from, to, special, msg.payload.additional )
+        }
+        catch (e) {
+          console.log(e);
+        }
+        break;
+      case "card_move":
+        console.log("Made a card move!\n", msg.payload);
+        let {id, targets} = (msg as CardMove_Message).payload;
+        try {
+          playCard(id, targets);
+        }
+        catch (e) {
+          console.log(e);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+
   ///
   /// GAME STATE - CAPTURES, MOVES, GAME OVER
   ///
@@ -235,7 +280,7 @@ function App() {
   const move = ( from : number, to : number, special?: SpecialMove, additional:  Partial<AdditionalOptions> = {} ) => {
     //When we make our move, stop performing background calculations
 
-    let col = game.current.getBoard()[from] > 0 ? 1 : -1;
+    let col = game.current.getBoard()[from] > 0 ? 1 : -1; // The colour of the piece that was just moved
     if ( col === playerColour ) endBackgroundEvaluation();
 
     ///PLAYS AUDIO
@@ -258,6 +303,17 @@ function App() {
 
     setMoves( [...game.current.getMoves()] );
     setBoard( [...game.current.getBoard()] );
+
+    // If we're playing online and WE just made a move, send it to the opponent
+    if ( opponent === "ONLINE" && col === playerColour && Channel ) {
+      let data = {
+        move: { from, to, special },
+        additional
+      };
+      let msg = new PieceMove_Message(data);
+      Channel.send(JSON.stringify(msg));
+    }
+
 
     //Set the timer for the next turn to begin
     //If we aren't rotating, then there is no reason for there to be any delay
@@ -411,8 +467,20 @@ function App() {
       playedCard = game.current.getCurrentPlayerHand()[ game.current.getCurrentPlayerHand().map( c => c.id ).indexOf(card) ]
     }
 
+    if (opponent === "ONLINE" && currentTurn !== playerColour) {
+      playedCard = ALL_CARDS[card]; // We don't know what the opponent's hand is in this case, so get it from the IDs
+      //Remove a card from the opponent's hand. Doesn't matter which, only used for tracking hand size.
+      if (currentTurn > 0) game.current.setWhiteHand( hand => {
+          return hand.filter((card, i) => i !== 0); //Removes the first card.
+        })
+
+      else game.current.setBlackHand( hand => {
+          return hand.filter((card, i) => i !== 0); //Removes the first card.
+        })
+    }
 
     //Play the card
+    let cardPlayerCol = currentTurn;
     game.current.PlayCard( playedCard, targets );
     let col = game.current.getCurrentTurn();
 
@@ -422,6 +490,18 @@ function App() {
 
     setMoves(game.current.getMoves());
     setBoard(game.current.getBoard());
+
+    // If we're playing online and WE just played a card, send it to the opponent!
+    console.log(opponent, col, playerColour, Channel);
+    if ( opponent === "ONLINE" && Channel && cardPlayerCol === playerColour ) {
+      let data = {
+        id: card,
+        targets
+      };
+      console.log("Sending a card message!")
+      let msg = new CardMove_Message(data);
+      Channel.send(JSON.stringify(msg))
+    }
 
     console.log(game.current.getCurrentTurn(), currentTurn)
     setTimeout(() => {
@@ -503,7 +583,7 @@ function App() {
                   whiteCaptured={ whiteCaptured } blackCaptured={ blackCaptured } capturePiece={ capturePiece }
                   whiteArmy={ playerColour > 0 ? army.pieces : opponentArmy.pieces } blackArmy={ playerColour < 0 ? army.pieces : opponentArmy.pieces }
                   playerColour={ playerColour } cardTargetingIndex={cardTargetingIndex} game={game.current}
-                  opponentActive={ opponent === "COMP"} gameUUID={ uuid }
+                  opponent={opponent} gameUUID={ uuid }
                   allowRotation={allowRotation} setAllowRotation={ v => setAllowRotation(v) } moveLockout={moveLockout}
                   playCard={appendCardTarget} cardTargetsRemaining={cardTargetsRemaining} currentTargets={cardTargets}
       />

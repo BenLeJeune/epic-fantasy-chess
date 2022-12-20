@@ -2,6 +2,8 @@
 /// The General Message Class
 ///
 import {GameInfo} from "./types";
+import {promotionMove} from "./WebWorker/IncludePromotions";
+import {cardMove} from "./WebWorker/MiniMax";
 
 export default abstract class Message {
     public abstract msgType: MessageType
@@ -55,7 +57,26 @@ export class GameStartResponse_Message extends Message {
     }
 }
 
+export class PieceMove_Message extends Message {
+    public msgType = "piece_move" as MessageType
+    public payload: promotionMove
+    constructor(_payload: promotionMove) {
+        super();
+        this.payload = _payload;
+    }
+}
+
+export class CardMove_Message extends Message {
+    public msgType = "card_move" as MessageType
+    public payload: cardMove
+    constructor(_payload: cardMove) {
+        super();
+        this.payload = _payload;
+    }
+}
+
 export type MessageType = "ready" | "move" | "card" | "setup_choice" | "game_start_request"
+    | "piece_move" | "card_move"
 
 type SetupChoiceData = "WHITE" | "BLACK" | "RANDOM" | {
     name: string,

@@ -34,7 +34,7 @@ interface Props {
     whiteArmy: number[], //White's starting army
     blackArmy: number[], //Black's starting army
     playerColour : number, //"Player 1"'s player colour
-    opponentActive : boolean, //true for computer opponent, false for local opponent
+    opponent: "COMP" | "LOCAL" | "ONLINE",
     gameUUID: string, //game UUID
     moveLockout: boolean, //Whether or not moves are currently locked out - for ensuring smooth transitions between turns
     allowRotation: boolean,
@@ -46,13 +46,13 @@ interface Props {
 }
 
 export default function ChessBoard({ board, currentTurn, game, move, unMove, moves, whiteCaptured, blackCaptured, capturePiece,
-       whiteArmy, blackArmy, playerColour, opponentActive, gameUUID, moveLockout, allowRotation, setAllowRotation,
+       whiteArmy, blackArmy, playerColour, opponent, gameUUID, moveLockout, allowRotation, setAllowRotation,
        cardTargetingIndex, playCard, cardTargetsRemaining, currentTargets } : Props) {
 
     ///
     /// BOARD ROTATING
     ///
-    const rotated = ( (playerColour === -1 && opponentActive) || ( currentTurn === -1 && !opponentActive ) ) && gameUUID !== "dev-playground" && allowRotation;
+    const rotated = ( (playerColour === -1 && opponent !== "LOCAL") || ( currentTurn === -1 && opponent === "LOCAL" ) ) && gameUUID !== "dev-playground" && allowRotation;
 
     const [DEV_MODE_ENABLED] = useState(gameUUID === "dev-playground");
 
@@ -157,8 +157,8 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                     key={ getPieceKey( piece, pos ) }
                     piece={ piece }
                     id={ getPieceKey( piece, pos ) }
-                    draggable={ (((currentTurn > 0 && piece > 0 && (playerColour > 0 || !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) )) && !moveLockout) || DEV_MODE_ENABLED }
-                    clickable={ (((currentTurn > 0 && piece > 0 && (playerColour > 0 || !opponentActive)) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || !opponentActive) )) && !moveLockout) || DEV_MODE_ENABLED }
+                    draggable={ (((currentTurn > 0 && piece > 0 && (playerColour > 0 || opponent === "LOCAL")) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || opponent === "LOCAL") )) && !moveLockout) || DEV_MODE_ENABLED }
+                    clickable={ (((currentTurn > 0 && piece > 0 && (playerColour > 0 || opponent === "LOCAL")) || ( currentTurn < 0 && piece < 0 && (playerColour < 0 || opponent === "LOCAL") )) && !moveLockout) || DEV_MODE_ENABLED }
                     target={ source => target([ piece, pos ], source)  }
                     unTarget={ source => target([ 0, -1 ], source) }
                     onHover={ () => setHoveringPos(pos) }
