@@ -143,7 +143,7 @@ const moveGenerator = ( board: number[], history: moveProxy[], army: number[], c
 ///
 
 let backgroundEvaluating = false;
-let backgroundCalculations = 0;
+// let backgroundCalculations = 0;
 
 const beginBackgroundEvaluation = async ( board: number[], history: moveProxy[], army: number[], options: {} = {} ) => {
 
@@ -159,12 +159,12 @@ const beginBackgroundEvaluation = async ( board: number[], history: moveProxy[],
     console.log("Background evaluation started - the AI is evaluating moves while you think about your turn.")
 
     //WE WANT TO START EVALUATING MOVES IN THE BACKGROUND
-    backgroundCalculations = 0;
+//    backgroundCalculations = 0;
     backgroundEvaluating = true;
 
-    const DEPTH = 0;
+//    const DEPTH = 0;
     let nodes = 0;
-    const counter = () => nodes++;
+//    const counter = () => nodes++;
 
 
     // let move = miniMax( g, DEPTH, false, army, (b) => table.get(b), (b, e, t, q) => table.set(b, e, t, q), counter );

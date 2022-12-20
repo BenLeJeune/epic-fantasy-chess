@@ -1,13 +1,15 @@
 ///
 /// The General Message Class
 ///
+import {GameInfo} from "./types";
+
 export default abstract class Message {
     public abstract msgType: MessageType
     public abstract payload: any
 }
 
-export class WaitingFor_Message extends Message {
-    public msgType =  "waiting_for" as MessageType
+export class ReadyMessage extends Message {
+    public msgType =  "ready" as MessageType
     public payload = {}
 }
 
@@ -26,7 +28,34 @@ export class SetupChoice_Message extends Message {
     }
 }
 
-export type MessageType = "waiting_for" | "move" | "card" | "setup_choice"
+export class GameStartRequest_Message extends Message {
+    public msgType = "game_start_request" as MessageType
+    public payload: {
+        army: {
+            name: string,
+            pieces: number[]
+        },
+        deck: {
+            name: string,
+            cards: string[]
+        }
+    }
+    constructor(_payload: { army: { name: string, pieces: number[] }, deck: { name: string, cards: string[] } }) {
+        super();
+        this.payload = _payload;
+    }
+}
+
+export class GameStartResponse_Message extends Message {
+    public msgType = "game_start_response" as MessageType;
+    public payload: GameInfo
+    constructor(_payload: GameInfo) {
+        super();
+        this.payload = _payload;
+    }
+}
+
+export type MessageType = "ready" | "move" | "card" | "setup_choice" | "game_start_request"
 
 type SetupChoiceData = "WHITE" | "BLACK" | "RANDOM" | {
     name: string,

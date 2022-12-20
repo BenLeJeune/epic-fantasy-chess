@@ -96,14 +96,6 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
     }
 
     ///
-    /// THIS TRACKS THE NUMBER OF TARGETS REMAINING
-    ///
-
-    const appendCardTarget = ( target: number ) => {
-
-    }
-
-    ///
     /// PROMOTING
     ///
     const onPromotion = ( pieceFrom : number, pieceTo : number, positionFrom : number, positionTo : number ) => {
@@ -341,12 +333,13 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
 
     }
 
+    // HANDLES POSITION OF PIECE INFO POPUP
     useLayoutEffect(() => {
         //We're gonna resize the element!
         let pieceEl = document.getElementById(pieceInfoId);
         let infoBubble = document.getElementById("PieceInfoBubble");
         if (infoBubble && pieceEl) {
-            //That means we've just re-rendered the popul!
+            //That means we've just re-rendered the popup!
             let { x: pieceX, y: pieceY, height: pieceHeight, width: pieceWidth } = pieceEl.getBoundingClientRect();
             let { height: bubbleHeight, width: bubbleWidth } = infoBubble.getBoundingClientRect();
 

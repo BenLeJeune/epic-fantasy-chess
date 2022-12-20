@@ -3,9 +3,9 @@ import ChessBoard from "./components/ChessBoard/ChessBoard";
 import Game, {AdditionalOptions} from "./Classes/Game";
 import MovesDisplay from "./components/MovesDisplay/MovesDisplay";
 import ActualMove from "./Classes/Move";
-import {GameInfo, legalMove, Move, SpecialMove} from "./types";
+import {GameInfo, SpecialMove} from "./types";
 import {filterLegalMoves, isCheck} from "./helpers/Checks";
-import {generateBoardFromArmies, generateTestBoard} from "./helpers/BoardGenerators";
+import {generateBoardFromArmies} from "./helpers/BoardGenerators";
 import Board from "./Classes/Board";
 import GameOverUI from "./components/GameOverUI/GameOverUI";
 import "./App.css"
@@ -19,9 +19,8 @@ import {useParams} from "react-router-dom";
 import {GAME_KEY} from "./KEYS";
 import {Army, FIDEARMY} from "./Presets/Armies";
 import PlayableCard from "./components/PlayableCard/PlayableCard";
-import Expendable_Card from "./Cards/FIDE/Expendable_Card";
 import CardMove from './Classes/CardMove';
-import { getActualMoves } from './helpers/MoveFilter';
+import {getActualMoves} from './helpers/MoveFilter';
 import Card from "./Cards/Card";
 import {Deck, FIDEDECK} from "./Presets/Decks";
 import NavBar from "./components/NavBar/NavBar";
@@ -69,6 +68,7 @@ function App() {
   // const [ opponent ] = useState(false); //THIS DISABLES THE AI AND LETS YOU MOVE BOTH COLOUR PIECES
 
 
+  ///  THE REFERENCE FOR THE GAME
   const game = useRef( playerColour > 0 ? new Game(generateBoardFromArmies(army, opponentArmy), undefined, deck, opponentDeck) :
                         new Game(generateBoardFromArmies(opponentArmy, army), undefined, opponentDeck, deck));
   /// THE OPPONENT
@@ -76,13 +76,22 @@ function App() {
   const worker = useRef<any>()
 
   useLayoutEffect(() => {
+    // If we're against a computer opponent, creates the webworker
+    if ( opponent === "COMP" ) {
+      // Creates the WebWorker
+      const _worker = new Worker('./WebWorker', { name: 'opponent-webworker', type: 'module' });
+      worker.current = Comlink.wrap<import('./WebWorker').opponentWebWorker>(_worker);
 
-    const _worker = new Worker('./WebWorker', { name: 'opponent-webworker', type: 'module' });
-    const workerApi = Comlink.wrap<import('./WebWorker').opponentWebWorker>(_worker);
-
-    worker.current = workerApi;
-
-    console.log("Creating worker!");
+      console.log("Creating worker!");
+    }
+    else {
+      console.log("Not against a computer opponent")
+    }
+    //We also want to do this. Don't ask why, otherwise shit breaks.
+    document.body.style.display = "none";
+    setTimeout(() => {
+      document.body.style.display = "unset";
+    }, 0)
   }, [])
 
   //The Game
@@ -95,6 +104,7 @@ function App() {
   const [ gameOver, setGameOver ] = useState<boolean>(false);
   const [ gameOverMsg, setGameOverMsg ] = useState<string>(STALEMATE);
 
+  // Plays an audio effect when the game ends
   useEffect(() => {
     if (gameOver) {
       ///PLAYS AUDIO
@@ -305,7 +315,6 @@ function App() {
   /// OPPONENT MAKING THE FIRST MOVE
   ///
   useEffect(() => {
-
     if ( opponent === "COMP" && playerColour === -1 ) {
       //We're playing as black against a computer - computer must make the first move!
       console.log("Generating opening move");
@@ -314,7 +323,7 @@ function App() {
           m => {
             if (m) try {
               move( m.move.from, m.move.to, m.move.special, m.additional );
-              beginBackgroundEvaluation();
+              beginBackgroundEvaluation().then(() => {});
             }
             catch (e) {
               console.log(e);

@@ -9,10 +9,15 @@ import {GameInfo} from "../../types";
 import {randomFromList} from "../../helpers/Utils";
 import {ARMY_KEY, DECK_KEY, GAME_KEY} from "../../KEYS";
 import Piece from "../../Classes/Piece";
-import { Link } from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {CRUSADERSDECK, Deck, FIDEDECK} from "../../Presets/Decks";
 import ConnectionContext from "../../Context/ConnectionContext";
-import {SetupChoice_Message} from "../../Messages";
+import Message, {
+    GameStartRequest_Message,
+    GameStartResponse_Message,
+    ReadyMessage,
+    SetupChoice_Message
+} from "../../Messages";
 
 export default function PlayPage() {
 
@@ -123,17 +128,22 @@ export default function PlayPage() {
 
         let playerArmy = JSON.parse(g.army) as Army;
         let opponentArmy = JSON.parse(g.opponentArmy) as Army;
+        let opponentType = {
+            ["ONLINE"]: "Online Opponent",
+            ["LOCAL"]: "Local Opponent",
+            ["COMP"]: "Computer Opponent"
+        }[g.opponent]
 
         return <Link to={`/play/game/${g.uuid}`}>
             <div title={ `Game ${g.uuid}` } className="existingGame">
                 <p>{g.colour > 0 ? playerArmy.name : opponentArmy.name},</p>
                 <p>{g.colour < 0 ? playerArmy.name : opponentArmy.name}</p>
-                <p>vs { g.opponent === "LOCAL" ? "Local Opponent" : "Computer Opponent" }</p>
+                <p>vs { opponentType }</p>
             </div>
         </Link>
     }
 
-    const getExistingGames = () => games.map( renderExistingGame )
+    const getExistingGames = () => games.map( renderExistingGame );
 
     ///
     /// ONLINE PLAY
@@ -141,46 +151,158 @@ export default function PlayPage() {
 
     const { Conn, Channel, setListener, initChannel} = useContext(ConnectionContext);
 
+    const [ opponentReady, setOpponentReady ] = useState<boolean>(false);
+    const [ ready, setReady ] = useState<boolean>(false);
+
+    // ALLOWS FOR PROGRAMMATIC CHANGES TO ROUTE
+    const history = useHistory()
+
+    const onlineReady = () => {
+        if (!Channel) {
+            console.warn("Tried to ready, but not connected!");
+            return;
+        }
+        setReady(true); //Letting our opponent know we're ready
+        // If our opponent isn't ready, then we tell them we're ready:
+        if (!opponentReady) {
+            let msg = new ReadyMessage();
+            Channel.send(JSON.stringify(msg));
+            return;
+        }
+
+        // If the opponent is ready, then we want to start the game!
+        // We send them a signal with our selected army and decks
+        let data = {
+            army: armies[army],
+            deck: decks[deck]
+        }
+        // This data is sent correctly
+        let msg = new GameStartRequest_Message(data);
+        Channel.send(JSON.stringify(msg));
+    }
+
+    const requestLoadIntoGame = ( msg: GameStartRequest_Message ) => {
+        if (!Channel) {
+            console.warn("TRIED TO LOAD INTO GAME, BUT NO DATA CHANNEL!");
+            return;
+        }
+        const uuid = generateUUID(); // GENERATE UUID
+
+        // Our opponent has just told us the game is starting
+        // GET DECKS AND ARMIES
+
+        //Because it's weird for whatever reason, we have to do this.
+        let _colour = 1;
+        let _army = armies[0];
+        let _deck = decks[0]
+        setColour(colour => {
+            _colour = colour === "RANDOM" ? randomFromList([-1, 1]) : ["BLACK", "", "WHITE"].indexOf(colour) - 1;
+            return colour;
+        })
+        setArmy( army => {
+            _army = army === -1 ? randomFromList(armies) : armies[army];
+            return army;
+        } )
+        setDeck( deck => {
+            _deck = deck === -1 ? randomFromList(decks) : decks[deck];
+            return deck;
+        } )
+
+
+        let _opponentArmy = msg.payload.army;
+        let _opponentDeck = msg.payload.deck;
+
+        const gameInfo = { // Game Info
+            uuid,
+            opponent,
+            colour: _colour,
+            army: JSON.stringify(_army),
+            opponentArmy: JSON.stringify(_opponentArmy),
+            deck: JSON.stringify(_deck),
+            opponentDeck: JSON.stringify(_opponentDeck)
+        } as GameInfo
+
+        // Now, we want to send a message to the opponent with this game data//
+        // so they can load into it as well!
+
+        /// TODO: THIS MESSAGE IS WRONG SOMEHOW - PUTS FIDE ARMY AND DECK FOR BOTH PLAYERS
+        /// TODO: SO WHAT'S GOING ON IS ANY CHANGE TO ARMY OR OPPONENT_ARMY AFTER "ONLINE" IS SELECTED ISN'T GOING THROUGH. WHY???
+        let newMsg = new GameStartResponse_Message(gameInfo);
+        Channel.send(JSON.stringify(newMsg));
+
+        const gamesData = localStorage.getItem(GAME_KEY) || "{}"; //Get existing game information
+        const parsedGamesData = JSON.parse(gamesData) as { [uuid:string]: GameInfo };
+        parsedGamesData[uuid] = gameInfo; //Adding the new info
+        localStorage.setItem(GAME_KEY, JSON.stringify(parsedGamesData)); //Set the data
+        console.log("Loading into game with the following game data \n", gameInfo)
+        history.push(`/play/game/${uuid}`); //Redirect to the game playing page
+    }
+
+    const responseLoadIntoGame = ( msg: GameStartResponse_Message ) => {
+        let temp_gameInfo = msg.payload, uuid = generateUUID();
+        let gameInfo = {
+            uuid,
+            opponent: temp_gameInfo.opponent,
+            army: temp_gameInfo.opponentArmy,
+            opponentArmy: temp_gameInfo.army,
+            deck: temp_gameInfo.opponentDeck,
+            opponentDeck: temp_gameInfo.deck,
+            colour: temp_gameInfo.colour === -1 ? 1 : -1
+        } as GameInfo
+        const gamesData = localStorage.getItem(GAME_KEY) || "{}"; //Get existing game information
+        const parsedGamesData = JSON.parse(gamesData) as { [uuid:string]: GameInfo };
+        parsedGamesData[uuid] = gameInfo; //Adding the new info
+        localStorage.setItem(GAME_KEY, JSON.stringify(parsedGamesData)); //Set the data
+        console.log("Received the following game data\n", temp_gameInfo);
+        console.log("Loading into game with the following game data\n", gameInfo);
+        history.push(`/play/game/${uuid}`); //Redirect to the game playing page
+    }
+
+    // Sets up channel listeners
     useEffect(() => {
         if (opponent === "ONLINE" && Channel) {
             console.log(`Adding event listener to channel ${Channel.id}`)
-            Channel.addEventListener('message', message => {
-                let msg = JSON.parse(message.data);
-                console.log(msg)
-                if (msg instanceof SetupChoice_Message ) {
-                    switch (msg.payload.choice) {
-                        case "army":
-                            break;
-                        case "deck":
-                            break;
-                        case "colour":
-                            setColour(msg.payload.data as "WHITE" | "BLACK" | "RANDOM")
-                            break;
-                        default:
-                            console.log("Reached default case, choice wasn't one of three options.")
-                    }
-                }
-            })
+            Channel.addEventListener('message', messageListener )
         }
         else if (opponent === "ONLINE") console.log("Online, but Channel not currently defined: \n", Channel )
 
     }, [opponent, Channel])
 
-    //Wrappers - we'll want to inform our opponent of our choice, so they can load the game properly
-    const updateArmy = (i:number) => {
-        //If we aren't online, just do as before:
-        setArmy(i);
-        if (opponent !== "ONLINE") return;
-        if (!Channel) return;
+    const messageListener = ( message : MessageEvent ) => {
+        let msg = JSON.parse(message.data);
+        console.log(msg)
+        switch (msg.msgType) {
+            case 'setup_choice':
+                console.log('received a setup choice')
+                let col = msg.payload.data as "WHITE" | "BLACK" | "RANDOM";
+                switch (col) {
+                    case "WHITE":
+                        setColour("BLACK"); //We're the opposite of whatever colour the opponent has picked for themselves.
+                        break;
+                    case "BLACK":
+                        setColour("WHITE");
+                        break;
+                    default:
+                        setColour("RANDOM");
+                }
+                break;
+            case 'ready':
+                console.log("Your opponent has signalled they are ready!");
+                setOpponentReady(true);
+                break;
+            case 'game_start_request':
+                console.log("Your opponent has sent a request to start the game");
+                requestLoadIntoGame(msg as GameStartRequest_Message)
+                break;
+            case 'game_start_response':
+                console.log("Response received from opponent - game ready to start");
+                responseLoadIntoGame(msg as GameStartResponse_Message)
+                break;
 
-
-        // We're online, so we need to send a message!
-        let data = {pieces: armies[i].pieces, name: armies[i].name}
-        let choice = "army" as "army"
-        let msg = new SetupChoice_Message({choice, data});
-        Channel?.send(JSON.stringify(msg)) //Telling the opponent which army we want to use!
+        }
     }
 
+    //Wrappers - we'll want to inform our opponent of our choice, so they can load the game properly
     const updateColor = (col: "WHITE" | "BLACK" | "RANDOM") => {
         setColour(col);
         if (opponent !== "ONLINE" || !Channel) return;
@@ -209,25 +331,25 @@ export default function PlayPage() {
         </div>
         <div className="playPageInner">
             <h3>Who do you want to face?</h3>
-            <SelectionItem item="LOCAL OPPONENT" selected={opponent==="LOCAL"} onPress={()=>setOpponent("LOCAL")}/>
-            <SelectionItem item="COMPUTER OPPONENT" selected={opponent==="COMP"} onPress={()=>setOpponent("COMP")}/>
+            <SelectionItem item="LOCAL OPPONENT" selected={opponent==="LOCAL"} onPress={()=>setOpponent("LOCAL")} disabled={ready}/>
+            <SelectionItem item="COMPUTER OPPONENT" selected={opponent==="COMP"} onPress={()=>setOpponent("COMP")} disabled={ready}/>
             <SelectionItem item="ONLINE" selected={opponent==="ONLINE"} onPress={()=>setOpponent("ONLINE")}
-                           disabled={Conn.connectionState !== 'connected'} toolTip={ONLINE_PLAY_TIP}
+                           disabled={Conn.connectionState !== 'connected' || ready} toolTip={ONLINE_PLAY_TIP}
             />
 
             <h3>Which colour do you want to play as?</h3>
-            <SelectionItem item="WHITE" selected={colour==="WHITE"} onPress={updateColor}/>
-            <SelectionItem item="BLACK" selected={colour==="BLACK"} onPress={updateColor}/>
-            <SelectionItem item="RANDOM" selected={colour==="RANDOM"} onPress={updateColor}/>
+            <SelectionItem item="WHITE" selected={colour==="WHITE"} onPress={updateColor} disabled={ready}/>
+            <SelectionItem item="BLACK" selected={colour==="BLACK"} onPress={updateColor} disabled={ready}/>
+            <SelectionItem item="RANDOM" selected={colour==="RANDOM"} onPress={updateColor} disabled={ready}/>
 
             <h3>Which army do you want to use?</h3>
             {
                 armies.map(
-                    ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={army===i} onPress={()=>updateArmy(i)}
-                                               disabled={getPointBuyTotal(a.pieces) > 31} toolTip={ARMY_TIP} />
+                    ( a, i ) => <SelectionItem item={a.name.toUpperCase()} selected={army===i} onPress={() => setArmy(i)}
+                                               disabled={getPointBuyTotal(a.pieces) > 31 || ready} toolTip={ARMY_TIP} />
                 )
             }
-            <SelectionItem item="RANDOM" selected={army===-1} onPress={()=>setArmy(-1)}/>
+            <SelectionItem item="RANDOM" selected={army===-1} onPress={()=>setArmy(-1)} disabled={ready}/>
             {
                  opponent === "ONLINE" ? null :
                      <>
@@ -246,10 +368,10 @@ export default function PlayPage() {
             {
                 decks.map(
                     ( d, i ) => <SelectionItem item={d.name.toUpperCase()} selected={deck===i} onPress={()=>setDeck(i)}
-                                               disabled={ d.cards.length !== 15 } toolTip={DECK_TIP} />
+                                               disabled={ d.cards.length !== 15 || ready} toolTip={DECK_TIP} />
                 )
             }
-            <SelectionItem item="RANDOM" selected={deck===-1} onPress={()=>setDeck(-1)}/>
+            <SelectionItem item="RANDOM" selected={deck===-1} onPress={()=>setDeck(-1)} disabled={ready}/>
 
             {
                 opponent === "ONLINE" ? null : <>
@@ -265,9 +387,12 @@ export default function PlayPage() {
             }
 
             <div className="centred">
-
-                <NiceButton onClick={() => loadIntoGame()} text="START GAME" buttonStyle="medium" />
-
+                {
+                    opponent !== "ONLINE" ?
+                    <NiceButton onClick={() => loadIntoGame()} text="START GAME" buttonStyle="medium"/>
+                        :
+                    <NiceButton onClick={() => onlineReady()} text={!ready ? "I'm Ready!" : !opponentReady ? "Waiting for opponent" : "Getting into game..."} buttonStyle="medium" disabled={ready}/>
+                }
             </div>
 
         </div>

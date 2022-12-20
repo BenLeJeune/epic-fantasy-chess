@@ -25,7 +25,7 @@ export type tag = "Major" | "Minor" | "Castler" | "Colour-bound" | "Knight" | "B
 
 export interface GameInfo {
     uuid: string,
-    opponent: "LOCAL" | "COMP",
+    opponent: "LOCAL" | "COMP" | "ONLINE",
     army: string,
     opponentArmy: string,
     deck: string,
