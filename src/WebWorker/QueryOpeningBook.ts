@@ -1,5 +1,5 @@
 import Game from "../Classes/Game";
-import OpeningBook from "./openings.json";
+import OpeningBook from "./openings.json"
 import {legalMove} from "../types";
 import Board from "../Classes/Board";
 import {filterLegalMoves} from "../helpers/Checks";
@@ -7,7 +7,6 @@ import Piece from "../Classes/Piece";
 import {promotionMove} from "./IncludePromotions";
 import {randomFromList} from "../helpers/Utils";
 import { getActualMoves } from "../helpers/MoveFilter";
-import {sameColour} from "../helpers/DifferentColours";
 
 ///
 /// QUERYING THE OPENING BOOK

@@ -34,11 +34,14 @@ export default class Expendable_Card extends Card {
 
     public playCard = ( targets: number[], game: Game ) => {
         // let targetSquare = targets[0]; //Only have one target
-        game.updateGameBoard( board => {
-            //board[targetSquare] = Piece.Pawn * game.getCurrentTurn() > 0 ? 1 : -1
-            targets.forEach(target => {
-                board[target] = Piece.Pawn * game.getCurrentTurn() > 0 ? 1 : -1
-            })
-        });
+        // game.updateGameBoard( board => {
+        //     //board[targetSquare] = Piece.Pawn * game.getCurrentTurn() > 0 ? 1 : -1
+        //     targets.forEach(target => {
+        //         board[target] = Piece.Pawn * game.getCurrentTurn() > 0 ? 1 : -1
+        //     })
+        // });
+        targets.forEach( targetSquare => {
+            game.Move(targetSquare, targetSquare, "PROMOTION", {isCardMove: true, promotionTo: Piece.Pawn * game.getCurrentTurn()})
+        } )
     }
 }

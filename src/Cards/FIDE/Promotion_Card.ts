@@ -36,12 +36,17 @@ export default class Promotion_Card extends Card {
             const rider = getLegalRiderMoves( game.getBoard(), target, game.getBoard()[target], [
                 p => p + ( 8 * game.getCurrentTurn() )
             ], "moves" );
-            let final = rider[rider.length - 1];
-            if ( (Piece.getRank(final.to) === 7 && game.getCurrentTurn() > 0)
-                || (Piece.getRank(final.to) === 0 && game.getCurrentTurn() < 0) ) {
-                game.Move(target, final.to, "PROMOTION", {isCardMove: true, promotionTo: Piece.Rook * game.getCurrentTurn()})
+            if (rider.length >= 1) { // If at least 1 rider move is generated (otherwise get an error in final.to
+                let final = rider[rider.length - 1];
+                if ( (Piece.getRank(final.to) === 7 && game.getCurrentTurn() > 0)
+                    || (Piece.getRank(final.to) === 0 && game.getCurrentTurn() < 0) ) {
+                    game.Move(target, final.to, "PROMOTION", {isCardMove: true, promotionTo: Piece.Rook * game.getCurrentTurn()})
+                }
+                else game.Move(target, final.to, undefined, {isCardMove: true})
             }
-            else game.Move(target, final.to, undefined, {isCardMove: true})
+            else {
+                console.log("RIDER RETURNED 0 RIDER MOVES");
+            }
         } )
     }
 }

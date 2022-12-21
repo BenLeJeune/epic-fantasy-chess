@@ -123,17 +123,27 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
         //UNLESS it has been moved
         //WE LOOK THROUGH THE MOVES TO FIND IT'S LAST MOVE
         let startingPos = pos;
+        let firstSeen = 1
         if ( moves.length > 0 ) {
             let inverseMoves = [...moves].reverse();
             //GO THROUGH EACH MOVE, AND TRACK THE POSITION OF THIS PIECE
-            startingPos = inverseMoves.reduce( ( p, m ) => {
-                if ( m instanceof ActualMove ) return m.to === p && m.moving === piece ? m.from : p
+            let found = false; // This is set to true if we've found when the piece was 'created' (e.g if it was created via promotion or by a card)
+            startingPos = inverseMoves.reduce( ( p, m, i ) => {
+                firstSeen = inverseMoves.length - i
+                // p is the current position of the piece
+                if ( m instanceof ActualMove ) {
+                    // If there was a promotion move to the last known location, then this was where the piece was created!
+                    if (m.to === p && m.special === "PROMOTION" && m.additional.promotionTo === piece) found = true
+                    // If there's nothing funny going on, we track the piece to its previous move
+                    return (m.to === p && m.moving === piece) && !found ? m.from : p
+                }
                 else return p
             } , pos );
 
+
             if ( Math.abs( piece ) === Piece.Rook || Math.abs( piece ) === Piece.Bede ) { //If a rook, we also want to retain it for castling
                 startingPos = inverseMoves.reduce(
-                    ( p, m ) => {
+                    ( p, m, i ) => {
                         if (m instanceof ActualMove) {
                             let regularMove = ( m.to === p && m.moving === piece );
                             let castle = ( m.special === "CASTLE" && ( m.to === p + 1 || m.to === p - 1 ) );
@@ -149,7 +159,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
 
         }
 
-        return `${ startingPos }-${ piece }`
+        return `${ startingPos }-${ piece }-${ firstSeen }`
     }
 
     const getPieces = () => board.map( ( piece, pos ) => piece === 0 ? null :

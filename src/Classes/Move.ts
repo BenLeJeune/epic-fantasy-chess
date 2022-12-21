@@ -22,7 +22,12 @@ export default class ActualMove {
 
     public getMoveName : () => string = () => {
         //If there was no capture
-        if ( Piece.getPiece(this.moving) === null ) return "ERR";
+        if ( Piece.getPiece(this.moving) === null ) {
+            if (this.additional.isCardMove && this.special === "PROMOTION" && this.additional.promotionTo) {
+                return `${FILES[Piece.getFile(this.to)] + Piece.getRank(this.to)}+${Piece.getPiece(this.additional.promotionTo)?.shortName}`
+            }
+            return "ERR";
+        }
         let mPiece = Piece.getPiece(this.moving) as GamePiece;
 
         //Getting strings

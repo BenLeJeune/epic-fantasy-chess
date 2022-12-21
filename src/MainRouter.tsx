@@ -4,7 +4,6 @@ import PlayRouter from "./Routers/PlayRouter";
 import ArmiesRouter from "./Routers/ArmiesRouter";
 import Homepage from "./views/Homepage/Homepage";
 import DecksRouter from "./Routers/DecksRouter";
-import OnlineRouter from "./Routers/OnlineRouter";
 import ConnectionContext, {RTC_CONFIG} from './Context/ConnectionContext';
 
 export default function MainRouter() {
@@ -81,10 +80,6 @@ export default function MainRouter() {
             <Route path="/play">
                 {/*  The play router  */}
                 <PlayRouter/>
-            </Route>
-            <Route path="/online">
-                {/*  The online play router  */}
-                <OnlineRouter/>
             </Route>
             <Route path="/armies">
                 {/*  The armies router */}

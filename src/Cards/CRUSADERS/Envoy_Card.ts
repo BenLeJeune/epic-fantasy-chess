@@ -2,7 +2,7 @@ import Card from "../Card";
 import Piece from "../../Classes/Piece";
 import ActualMove from "../../Classes/Move";
 import Game from "../../Classes/Game";
-import {differentColours, sameColour} from "../../helpers/DifferentColours";
+import {sameColour} from "../../helpers/DifferentColours";
 import {adjacentSquares} from "../../helpers/Adjacency";
 import {CRUSADER_EXPANSION} from "../Expansions";
 

@@ -78,6 +78,7 @@ function App() {
   /// THE OPPONENT
   const worker = useRef<any>()
 
+  // Webworker setup
   useLayoutEffect(() => {
     // If we're against a computer opponent, creates the webworker
     if ( opponent === "COMP" ) {
@@ -180,6 +181,9 @@ function App() {
   useEffect(() => {
     if (opponent === "ONLINE" && Channel) {
       Channel.addEventListener("message", onMessage)
+      return () => {
+          Channel.removeEventListener("message", onMessage);
+      }
     }
   }, [Channel, Conn])
 
@@ -200,7 +204,8 @@ function App() {
         console.log("Made a card move!\n", msg.payload);
         let {id, targets} = (msg as CardMove_Message).payload;
         try {
-          playCard(id, targets);
+          // We want to play the card, but not send a message! (Since the opponent played the card once, we don't want to tell them we just played it)
+          playCard(id, targets, false);
         }
         catch (e) {
           console.log(e);
@@ -456,7 +461,7 @@ function App() {
     if (hand) hand.className = "";
   }
 
-  const playCard = ( card: string, targets: number []) => {
+  const playCard = ( card: string, targets: number [], sendMessage:boolean = true) => {
 
     //Gets the card from the hand
     let playedCard;
@@ -467,7 +472,7 @@ function App() {
       playedCard = game.current.getCurrentPlayerHand()[ game.current.getCurrentPlayerHand().map( c => c.id ).indexOf(card) ]
     }
 
-    if (opponent === "ONLINE" && currentTurn !== playerColour) {
+    if (opponent === "ONLINE" && !sendMessage) {
       playedCard = ALL_CARDS[card]; // We don't know what the opponent's hand is in this case, so get it from the IDs
       //Remove a card from the opponent's hand. Doesn't matter which, only used for tracking hand size.
       if (currentTurn > 0) game.current.setWhiteHand( hand => {
@@ -487,20 +492,21 @@ function App() {
 
     /// CHECK TO SEE IF THE GAME IS OVER
     isGameOver( col );
+    isGameOver( -col );
 
     setMoves(game.current.getMoves());
     setBoard(game.current.getBoard());
 
     // If we're playing online and WE just played a card, send it to the opponent!
     console.log(opponent, col, playerColour, Channel);
-    if ( opponent === "ONLINE" && Channel && cardPlayerCol === playerColour ) {
-      let data = {
-        id: card,
-        targets
-      };
-      console.log("Sending a card message!")
-      let msg = new CardMove_Message(data);
-      Channel.send(JSON.stringify(msg))
+    if ( opponent === "ONLINE" && Channel &&  sendMessage ) {
+        let data = {
+         id: card,
+         targets
+        };
+        console.log("Sending a card message!")
+        let msg = new CardMove_Message(data);
+        Channel.send(JSON.stringify(msg))
     }
 
     console.log(game.current.getCurrentTurn(), currentTurn)
@@ -565,7 +571,7 @@ function App() {
     const hand = opponent === "LOCAL" ? ( currentTurn > 0 ? game.current.getWhiteHand() : game.current.getBlackHand()  ) : (playerColour > 0 ? game.current.getWhiteHand() : game.current.getBlackHand())
     const handSize = hand.length ;
     const cardMapping = ( card : Card, i : number ) =>
-        <PlayableCard draggable={!moveLockout && getChaosValue() >= card.cost && !isCheck( board, getActualMoves(moves), currentTurn ) && ( opponent === "LOCAL" || sameColour(playerColour, currentTurn) )} card={card}
+        <PlayableCard draggable={!moveLockout && (getChaosValue() >= card.cost || uuid === "dev-playground") && !isCheck( board, getActualMoves(moves), currentTurn ) && ( opponent === "LOCAL" || sameColour(playerColour, currentTurn) )} card={card}
                       dragStartCallback={() => dragStartCallback(i)}
                       dragEndCallback={onDragEnd} handPosition={i + 1} handSize={handSize}/>
     return hand.map(cardMapping)
