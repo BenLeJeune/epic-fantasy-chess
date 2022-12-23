@@ -17,12 +17,12 @@ import * as Comlink from 'comlink';
 
 import {useParams} from "react-router-dom";
 import {GAME_KEY} from "./KEYS";
-import {Army, FIDEARMY} from "./Presets/Armies";
+import {Army, DEV_ARMY, FIDEARMY} from "./Presets/Armies";
 import PlayableCard from "./components/PlayableCard/PlayableCard";
 import CardMove from './Classes/CardMove';
 import {getActualMoves} from './helpers/MoveFilter';
 import Card from "./Cards/Card";
-import {Deck, FIDEDECK} from "./Presets/Decks";
+import {Deck, DEV_DECK, FIDEDECK} from "./Presets/Decks";
 import NavBar from "./components/NavBar/NavBar";
 import {sameColour} from "./helpers/DifferentColours";
 import ConnectionContext from "./Context/ConnectionContext";
@@ -58,10 +58,10 @@ function App() {
     return thisGame as GameInfo & { army : Army, opponentArmy : Army, deck: Deck, opponentDeck: Deck } || {
       colour: 1,
       opponent: uuid === "fiesta" ? "COMP" : "LOCAL",
-      army: FIDEARMY,
-      opponentArmy: FIDEARMY,
-      deck: FIDEDECK,
-      opponentDecl: FIDEARMY
+      army: uuid === "dev-playground" ? DEV_ARMY : FIDEARMY,
+      opponentArmy: uuid === "dev-playground" ? DEV_ARMY : FIDEARMY,
+      deck: "dev-playground" ? DEV_DECK : FIDEDECK,
+      opponentDecl: "dev-playground" ? DEV_DECK : FIDEDECK
     }
   })
 

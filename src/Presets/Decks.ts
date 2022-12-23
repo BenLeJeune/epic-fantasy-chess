@@ -67,3 +67,10 @@ export const CRUSADERSDECK = new Deck([
     Clergy_Card.id,
     Convert_Card.id
 ], "Colourbound Crusaders Deck");
+
+export const DEV_DECK = new Deck([
+    Reposition_Card.id,
+    Reposition_Card.id,
+    Deception_Card.id,
+    Deception_Card.id,
+], "FIDE Deck");

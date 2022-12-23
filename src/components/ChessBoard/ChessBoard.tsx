@@ -129,6 +129,7 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
             //GO THROUGH EACH MOVE, AND TRACK THE POSITION OF THIS PIECE
             let found = false; // This is set to true if we've found when the piece was 'created' (e.g if it was created via promotion or by a card)
             startingPos = inverseMoves.reduce( ( p, m, i ) => {
+                if (found) return p;
                 firstSeen = inverseMoves.length - i
                 // p is the current position of the piece
                 if ( m instanceof ActualMove ) {
@@ -137,7 +138,11 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
                     // If there's nothing funny going on, we track the piece to its previous move
                     return (m.to === p && m.moving === piece) && !found ? m.from : p
                 }
-                else return p
+                else  {
+                    // If the move was a card move, then we use the TrackPiece function.
+                    // By default, this returns the position.
+                    return ALL_CARDS[m.cardName].trackPiece(p, m.targets);
+                }
             } , pos );
 
 

@@ -41,4 +41,15 @@ export default class Deception_Card extends Card {
             board[square2] = piece1;
         })
     }
+
+    public trackPiece = ( square: number, targets: number[] ) => {
+        if (targets.length === this.targets) {
+            let [target1, target2] = targets;
+            // If the square was either one of the squares we targeted, then we do this!
+            if (square === target1) return target2;
+            else if (square === target2) return target1;
+        }
+
+        return square;
+    }
 }

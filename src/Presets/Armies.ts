@@ -35,3 +35,14 @@ export const CRUSADERSARMY = new Army([
     Piece.Waffle,
     Piece.Bede
 ], "Colourbound Crusaders")
+
+export const DEV_ARMY = new Army([
+    Piece.Wizard,
+    Piece.Jester,
+    Piece.Champion,
+    Piece.Queen,
+    Piece.King,
+    Piece.Champion,
+    Piece.Jester,
+    Piece.Wizard
+], "dev-army")

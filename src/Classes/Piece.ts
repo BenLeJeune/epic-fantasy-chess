@@ -8,18 +8,18 @@ import GamePiece from "../Pieces/GamePiece";
 import {FILES} from "../types";
 
 //IMPORTING PIECE IMAGES
-import w_pawn from "../assets/Pieces/pawn_white.svg";
-import b_pawn from "../assets/Pieces/pawn_black.svg";
-import w_knight from "../assets/Pieces/knight_white.svg";
-import b_knight from "../assets/Pieces/knight_black.svg";
-import w_bishop from "../assets/Pieces/bishop_white.svg";
-import b_bishop from "../assets/Pieces/bishop_black.svg";
-import w_rook from "../assets/Pieces/rook_white.svg";
-import b_rook from "../assets/Pieces/rook_black.svg";
-import w_queen from "../assets/Pieces/queen_white.svg";
-import b_queen from "../assets/Pieces/queen_black.svg";
-import w_king from "../assets/Pieces/king_white.svg";
-import b_king from "../assets/Pieces/king_black.svg";
+import w_pawn from "../assets/Pieces/FIDE/pawn_white.svg";
+import b_pawn from "../assets/Pieces/FIDE/pawn_black.svg";
+import w_knight from "../assets/Pieces/FIDE/knight_white.svg";
+import b_knight from "../assets/Pieces/FIDE/knight_black.svg";
+import w_bishop from "../assets/Pieces/FIDE/bishop_white.svg";
+import b_bishop from "../assets/Pieces/FIDE/bishop_black.svg";
+import w_rook from "../assets/Pieces/FIDE/rook_white.svg";
+import b_rook from "../assets/Pieces/FIDE/rook_black.svg";
+import w_queen from "../assets/Pieces/FIDE/queen_white.svg";
+import b_queen from "../assets/Pieces/FIDE/queen_black.svg";
+import w_king from "../assets/Pieces/FIDE/king_white.svg";
+import b_king from "../assets/Pieces/FIDE/king_black.svg";
 
 //COLOURBOUND CLOBBERERS
 import Waffle from "../Pieces/COLBOUND/Waffle";
@@ -28,25 +28,38 @@ import Warbishop from "../Pieces/COLBOUND/Warbishop";
 import Cardinal from "../Pieces/COLBOUND/Cardinal";
 import DummyPawn from "../Pieces/OTHER/DummyPawn";
 
-import w_bede from "../assets/Pieces/bede_white.svg";
-import b_bede from "../assets/Pieces/bede_black.svg";
-import w_waffle from "../assets/Pieces/waffle_white.svg";
-import b_waffle from "../assets/Pieces/waffle_black.svg";
-import w_warbishop from "../assets/Pieces/warbishop_white.svg";
-import b_warbishop from "../assets/Pieces/warbishop_black.svg";
-import w_cardinal from "../assets/Pieces/cardinal_white.svg";
-import b_cardinal from "../assets/Pieces/cardinal_black.svg";
-import w_dummyPawn from "../assets/Pieces/dummy_pawn_white.svg";
-import b_dummyPawn from "../assets/Pieces/dummy_pawn_black.svg";
+import w_bede from "../assets/Pieces/COL/bede_white.svg";
+import b_bede from "../assets/Pieces/COL/bede_black.svg";
+import w_waffle from "../assets/Pieces/COL/waffle_white.svg";
+import b_waffle from "../assets/Pieces/COL/waffle_black.svg";
+import w_warbishop from "../assets/Pieces/COL/warbishop_white.svg";
+import b_warbishop from "../assets/Pieces/COL/warbishop_black.svg";
+import w_cardinal from "../assets/Pieces/COL/cardinal_white.svg";
+import b_cardinal from "../assets/Pieces/COL/cardinal_black.svg";
+import w_dummyPawn from "../assets/Pieces/COL/dummy_pawn_white.svg";
+import b_dummyPawn from "../assets/Pieces/COL/dummy_pawn_black.svg";
+
+// OMEGA CHESS
+import Champion from "../Pieces/OMEGA/Champion";
+import Wizard from "../Pieces/OMEGA/Wizard";
+import Jester from "../Pieces/OMEGA/Jester";
+
+import w_champion from "../assets/Pieces/OMEGA/champion_white.svg";
+import b_champion from "../assets/Pieces/OMEGA/champion_black.svg";
+import w_wizard from "../assets/Pieces/OMEGA/wizard_white.svg";
+import b_wizard from "../assets/Pieces/OMEGA/wizard_black.svg";
+import w_jester from "../assets/Pieces/OMEGA/jester_white.svg";
+import b_jester from "../assets/Pieces/OMEGA/jester_black.svg";
 
 
 
 export default class Piece {
 
-    public static PIECES = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ];
+    public static PIECES = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ];
     public static PIECE_OBJECTS = [
         null, new Pawn(), new Knight(), new Bishop(), new Rook(), new Queen(), new King(),
-        new Waffle(), new Warbishop(), new Bede(), new Cardinal(), new DummyPawn()
+        new Waffle(), new Warbishop(), new Bede(), new Cardinal(), new DummyPawn(),
+        new Champion(), new Wizard(), new Jester()
     ]
 
     ///
@@ -68,6 +81,13 @@ export default class Piece {
     public static Bede = 9;
     public static Cardinal = 10;
     public static DummyPawn = 11; //TOKEN FOR CRUSADERS CARD
+
+    ///
+    /// OMEGA CHESS VALUES
+    ///
+    public static Champion = 12;
+    public static Wizard = 13;
+    public static Jester = 14;
 
     public static isWhite = ( piece : number ) => piece > 0;
     public static isBlack = ( piece : number ) => piece < 0;
@@ -108,6 +128,12 @@ export default class Piece {
                 return piece > 0 ? w_cardinal : b_cardinal;
             case Piece.DummyPawn:
                 return piece > 0 ? w_dummyPawn : b_dummyPawn;
+            case Piece.Champion:
+                return piece > 0 ? w_champion : b_champion;
+            case Piece.Wizard:
+                return piece > 0 ? w_wizard : b_wizard;
+            case Piece.Jester:
+                return piece > 0 ? w_jester : b_jester;
         }
     }
     public static getPiece : ( piece : number ) => GamePiece | null = (piece ) => Piece.PIECE_OBJECTS[ Math.abs(piece) ]

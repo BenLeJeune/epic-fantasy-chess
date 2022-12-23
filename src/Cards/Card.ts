@@ -38,6 +38,10 @@ export default abstract class Card {
     // Resolves the playing of the card
     public abstract playCard : ( targets: number[], game: Game ) => void;
 
+    // Tracks pieces moved by the card. Only needed for cards that move pieces in non-conventional ways (e.g swapping)
+    public trackPiece : ( square : number, targets: number[] ) => number = square => square;
+
+
     //
     /// TRACKING THE CARD
     ///

@@ -11,7 +11,7 @@ export default class Reposition_Card extends Card {
     public readonly cardName = "Reposition";
     public readonly description = "Swap 2 adjacent friendly pieces";
 
-    public readonly targets = 2; //Simply choose a square
+    public readonly targets = 2; //Choose two pieces
     public readonly fast = false;
     public readonly cost = 8;
 
@@ -46,5 +46,16 @@ export default class Reposition_Card extends Card {
             board[square1] = piece2;
             board[square2] = piece1;
         })
+    }
+
+    public trackPiece = ( square: number, targets: number[] ) => {
+        if (targets.length === this.targets) {
+            let [target1, target2] = targets;
+            // If the square was either one of the squares we targeted, then we do this!
+            if (square === target1) return target2;
+            else if (square === target2) return target1;
+        }
+
+        return square;
     }
 }

@@ -23,7 +23,7 @@ export default class Rook extends GamePiece {
         "If this starts on the first or eighth file, neither pieces have moved, and this doesn't cause the king to move through check, can \"castle\" with the king."
     ]
     public notes = "";
-    public categories = [ "Minor", "Rook", "Castler", "FIDE" ] as tag[];
+    public categories = [ "Major", "Rook", "Castler", "FIDE" ] as tag[];
 
     public getLegalMoves : ( position : number,  board : number[], mode : "all" | "moves" | "captures", colour : number) => legalMove[] = ( position, board, mode, colour = 1 ) => {
         //Let's use this as a test for the legal rider moves

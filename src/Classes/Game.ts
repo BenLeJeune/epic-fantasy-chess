@@ -299,7 +299,7 @@ export default class Game {
         let boardBefore = [ ...this.board ];
 
         //Now we create the card move
-        let cardMove = new CardMove( card.id, boardBefore );
+        let cardMove = new CardMove( card.id, boardBefore, targets );
         this.moves.push( cardMove );
 
         card.playCard( targets, this );

@@ -43,7 +43,8 @@ export default class Clergy_Card extends Card {
         game.updateGameBoard( board => {
             //board[targetSquare] = Piece.Pawn * game.getCurrentTurn() > 0 ? 1 : -1
             targets.forEach(target => {
-                board[target] = Piece.Pawn * game.getCurrentTurn() > 0 ? 1 : -1
+                //board[target] = Piece.Pawn * game.getCurrentTurn() > 0 ? 1 : -1
+                game.Move(target, target, "PROMOTION", {isCardMove: true, promotionTo: Piece.Pawn * game.getCurrentTurn()})
             })
         });
     }
