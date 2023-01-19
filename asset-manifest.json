@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/epic-fantasy-chess/static/css/main.73cf93d1.chunk.css",
-    "main.js": "/epic-fantasy-chess/static/js/main.cfb3bc36.chunk.js",
-    "main.js.map": "/epic-fantasy-chess/static/js/main.cfb3bc36.chunk.js.map",
+    "main.js": "/epic-fantasy-chess/static/js/main.e51ac5b9.chunk.js",
+    "main.js.map": "/epic-fantasy-chess/static/js/main.e51ac5b9.chunk.js.map",
     "runtime-main.js": "/epic-fantasy-chess/static/js/runtime-main.0dd2407c.js",
     "runtime-main.js.map": "/epic-fantasy-chess/static/js/runtime-main.0dd2407c.js.map",
     "static/js/2.bfc51459.chunk.js": "/epic-fantasy-chess/static/js/2.bfc51459.chunk.js",
@@ -47,6 +47,6 @@
     "static/js/runtime-main.0dd2407c.js",
     "static/js/2.bfc51459.chunk.js",
     "static/css/main.73cf93d1.chunk.css",
-    "static/js/main.cfb3bc36.chunk.js"
+    "static/js/main.e51ac5b9.chunk.js"
   ]
 }
