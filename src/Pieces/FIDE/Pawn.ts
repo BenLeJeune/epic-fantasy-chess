@@ -70,7 +70,6 @@ export default class Pawn extends GamePiece {
 
             }
 
-
         }
 
         return moves;

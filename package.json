@@ -1,6 +1,7 @@
 {
   "name": "chessproject",
   "version": "0.1.0",
+  "homepage": "https://github.com/BenLeJeune/epic-fantasy-chess/tree/gh-pages/",
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.3",
@@ -42,6 +43,7 @@
     "eslint-webpack-plugin": "^2.5.2",
     "file-loader": "6.1.1",
     "fs-extra": "^9.0.1",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "4.5.0",
     "identity-obj-proxy": "3.0.0",
     "jest": "26.6.0",
@@ -87,7 +89,9 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "compile-sass": "sass ./src",
-    "heroku-postbuild": "npm run compile-sass && npm run build"
+    "heroku-postbuild": "npm run compile-sass && npm run build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
