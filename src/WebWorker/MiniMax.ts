@@ -19,7 +19,20 @@ import Card from "../Cards/Card";
 
 let actualMoves = ( moves: any[] ) => moves.filter( m => m instanceof ActualMove );
 
-const miniMax = (g : Game, depth : number, maximising : boolean, army: number[], hashGet:(b:number[])=>[number, number, boolean]|null, hashSet:(b:number[], e:number, t:number, q:boolean)=>void, counter:()=>void, original_depth:number = depth, alpha:number = -Infinity, beta:number = Infinity, pieces: (GamePiece | null)[], hand: Card[], handColour: number ) => {
+const miniMax = (
+    g : Game,
+    depth : number,
+    maximising : boolean,
+    army: number[],
+    hashGet: (b:number[])=>[number, number, boolean]|null,
+    hashSet: (b:number[], e:number, t:number, q:boolean)=>void,
+    counter: ()=>void,
+    original_depth :number = depth,
+    alpha:number = -Infinity,
+    beta:number = Infinity,
+    pieces: (GamePiece | null)[],
+    hand: Card[],
+    handColour: number ) => {
 
 
     ///Another exit point

@@ -20,13 +20,13 @@ type WizardProps = {
     popupRef: Ref<HTMLDivElement> | undefined
 }
 
-enum initiator  { none = 0, local = 1, remote = 2 };
+enum initiator  { none = 0, local = 1, remote = 2 }
 
 export default function ConnectionWizard({ shown, popupRef }: WizardProps) {
 
     const { Conn, Channel, setListener, initChannel} = useContext(ConnectionContext);
 
-    // whether or not the current user is the initiator.
+    // whether the current user is the initiator.
     const [ connInitiator, setInitiator ] = useState<initiator>(initiator.none);
 
     const [ localOffer, setLocalOffer ] = useState<string>();

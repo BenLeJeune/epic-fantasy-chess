@@ -10,7 +10,12 @@ export default function TextCopy({text}:Props) {
     const onClick = (e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault();
         e.stopPropagation();
-        navigator.clipboard.writeText(text);
+        if(navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+        }
+        else{
+            alert(text);
+        }
     }
 
     return <div title="Click to Copy" className="textCopy" onClick={e => onClick(e)}>

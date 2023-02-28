@@ -8,7 +8,7 @@ export default function ArmiesRouter() {
     const { url } = useRouteMatch()
 
     return <Switch>
-
+o
         <Route path={`${url}`} exact>
             <ArmiesPage/>
         </Route>

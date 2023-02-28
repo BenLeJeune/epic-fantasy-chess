@@ -121,7 +121,7 @@ export default function PlayPage() {
     const getPointBuyTotal = ( armyPieces : number[] ) => armyPieces.filter( p => p !== 6 ).reduce((prev, next) => (Piece.getPiece(next)?.materialValue || 0) + prev, 0 );
 
     ///
-    /// WHETHER OR NOT THE EXISTING GAMES ARE GOING TO BE SHOWN
+    /// WHETHER THE EXISTING GAMES ARE GOING TO BE SHOWN
     ///
     const [ showExistingGames, setShowExistingGames ] = useState<boolean>(false);
     const renderExistingGame = ( g: GameInfo ) => {
@@ -129,9 +129,9 @@ export default function PlayPage() {
         let playerArmy = JSON.parse(g.army) as Army;
         let opponentArmy = JSON.parse(g.opponentArmy) as Army;
         let opponentType = {
-            ["ONLINE"]: "Online Opponent",
-            ["LOCAL"]: "Local Opponent",
-            ["COMP"]: "Computer Opponent"
+            "ONLINE": "Online Opponent",
+            "LOCAL": "Local Opponent",
+            "COMP": "Computer Opponent"
         }[g.opponent]
 
         return <Link to={`/play/game/${g.uuid}`}>
@@ -141,6 +141,11 @@ export default function PlayPage() {
                 <p>vs { opponentType }</p>
             </div>
         </Link>
+    }
+
+    const deleteGame = ( id: string ) => {
+        let confirmDelete = window.confirm("Are you sure you want to delete this game? This action cannot be undone.")
+        if (confirmDelete) localStorage.removeItem(id)
     }
 
     const getExistingGames = () => games.map( renderExistingGame );
@@ -402,22 +407,22 @@ export default function PlayPage() {
 }
 
 const ARMY_TIP = "Army too strong - edit it to play with it.";
-const DECK_TIP = "Your deck has the incorrect number of cards - edit it to play with it."
-const ONLINE_PLAY_TIP = 'You must be connected to another player to play online.';
+            const DECK_TIP = "Your deck has the incorrect number of cards - edit it to play with it."
+            const ONLINE_PLAY_TIP = 'You must be connected to another player to play online.';
 
-interface SelectionItemProps<T> {
-    selected: boolean,
-    item: T
-    onPress: ( item : T ) => void,
-    itemToString?: ( item : T ) => String,
-    disabled?: boolean,
-    toolTip?: string
-}
+            interface SelectionItemProps<T> {
+            selected: boolean,
+            item: T
+            onPress: ( item : T ) => void,
+            itemToString?: ( item : T ) => String,
+            disabled?: boolean,
+            toolTip?: string
+        }
 
-export function SelectionItem<T>({ selected, item, onPress, itemToString = item => item as unknown as string, toolTip, disabled = false }: SelectionItemProps<T>) {
+            export function SelectionItem<T>({ selected, item, onPress, itemToString = item => item as unknown as string, toolTip, disabled = false }: SelectionItemProps<T>) {
 
-    return <div title={disabled ? toolTip : ""} className={`selectionItem ${ selected ? "selected" : "" } ${ disabled ? "disabled" : "" }`}
-        onClick={ disabled ? () => {} : () => onPress(item) }
+            return <div title={disabled ? toolTip : ""} className={`selectionItem ${ selected ? "selected" : "" } ${ disabled ? "disabled" : "" }`}
+            onClick={ disabled ? () => {} : () => onPress(item) }
     >
         { itemToString(item) }
     </div>
