@@ -13,6 +13,7 @@ import {randomFromList} from "../helpers/Utils";
 import OngoingEffect from "./OngoingEffect";
 import {getActualMoves} from "../helpers/MoveFilter";
 import GamePiece from "../Pieces/GamePiece";
+import {min} from "lodash";
 
 export default class Game {
 
@@ -329,9 +330,11 @@ export default class Game {
     /// DRAWING CARDS
     ///
     public DrawCard = ( colour: number, quantity: number = 1 ) => {
+        let remaining_cards = colour > 0 ? this.whiteCurrentDeck.length : this.blackCurrentDeck.length
+        let num_to_draw = min([remaining_cards, quantity]) as Number
         if ( colour > 0 ) {
             //Drawn for white
-            for (let i = 0; i < quantity; i++) {
+            for (let i = 0; i < num_to_draw; i++) {
                 let drawn = Number.parseInt(randomFromList( Object.keys(this.whiteCurrentDeck) ));
                 this.whiteHand.push( this.whiteCurrentDeck[drawn] );
                 this.whiteCurrentDeck = this.whiteCurrentDeck.filter((c, i) => i !== drawn);
@@ -339,7 +342,7 @@ export default class Game {
         }
         else {
             //Drawn for black
-            for (let i = 0; i < quantity; i++) {
+            for (let i = 0; i < num_to_draw; i++) {
                 let drawn = Number.parseInt(randomFromList( Object.keys(this.blackCurrentDeck) ));
                 this.blackHand.push( this.blackCurrentDeck[drawn] );
                 this.blackCurrentDeck = this.blackCurrentDeck.filter((c, i) => i !== drawn);

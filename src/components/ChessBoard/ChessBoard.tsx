@@ -359,26 +359,28 @@ export default function ChessBoard({ board, currentTurn, game, move, unMove, mov
             let { height: bubbleHeight, width: bubbleWidth } = infoBubble.getBoundingClientRect();
 
             let topMin = 10; //min top is 0
-            let topMax = window.window.visualViewport.height - bubbleHeight / 2 //effectively touching the bottom
-            //Align centre with centre of piece - pieceX + pieceHeight/2 = top + bubbleHeight/2
-            let idealTop = pieceY + ( pieceHeight / 2 ) - ( bubbleHeight / 2 );
-            let boundedTop = Math.min( topMax, Math.max( topMin, idealTop ) );
-            infoBubble.style.top = `${boundedTop}px`
+            if (window.visualViewport && window.window.visualViewport) {
+                let topMax = window.window.visualViewport.height - bubbleHeight / 2 //effectively touching the bottom
+                //Align centre with centre of piece - pieceX + pieceHeight/2 = top + bubbleHeight/2
+                let idealTop = pieceY + ( pieceHeight / 2 ) - ( bubbleHeight / 2 );
+                let boundedTop = Math.min( topMax, Math.max( topMin, idealTop ) );
+                infoBubble.style.top = `${boundedTop}px`
 
 
-            let leftSide = pieceX + 20 < window.innerWidth / 2
+                let leftSide = pieceX + 20 < window.innerWidth / 2
 
-            let distMin = 0, distMax = window.innerHeight - ( bubbleWidth / 2 );
-            let idealDist = leftSide ? pieceX - bubbleWidth - 10 : window.visualViewport.width - pieceX - pieceWidth - bubbleWidth -10
-            let bounded = Math.min( distMax, Math.max( distMin, idealDist ) );
+                let distMin = 0, distMax = window.innerHeight - ( bubbleWidth / 2 );
+                let idealDist = leftSide ? pieceX - bubbleWidth - 10 : window.visualViewport.width - pieceX - pieceWidth - bubbleWidth -10
+                let bounded = Math.min( distMax, Math.max( distMin, idealDist ) );
 
-            if ( leftSide) {
-                infoBubble.style.left = `${bounded}px`;
-                infoBubble.style.right = "";
-            }
-            else {
-                infoBubble.style.right = `${bounded}px`
-                infoBubble.style.left = "";
+                if ( leftSide) {
+                    infoBubble.style.left = `${bounded}px`;
+                    infoBubble.style.right = "";
+                }
+                else {
+                    infoBubble.style.right = `${bounded}px`
+                    infoBubble.style.left = "";
+                }
             }
 
         }
